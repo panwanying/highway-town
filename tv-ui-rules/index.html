@@ -83,6 +83,7 @@ button.danger { background: #b63c32; }
 }
 .main {
   padding: 34px 38px 70px;
+  min-width: 0;
 }
 .hero {
   padding: 30px 34px;
@@ -161,6 +162,7 @@ button.danger { background: #b63c32; }
   padding: 20px;
   margin: 18px 0;
   box-shadow: 12px 14px 0 rgba(221, 202, 160, .38);
+  min-width: 0;
 }
 .screen-title {
   display: flex;
@@ -178,12 +180,14 @@ button.danger { background: #b63c32; }
   grid-template-columns: minmax(300px, 500px) minmax(320px, 1fr);
   gap: 22px;
   align-items: start;
+  min-width: 0;
 }
 .image-stage {
   background: #f8f1e5;
   border: 1px solid #e3d1ad;
   border-radius: 10px;
   padding: 16px;
+  min-width: 0;
 }
 .image-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
 .image-tabs button { padding: 6px 10px; background: #e9edf0; color: #2f4050; }
@@ -229,6 +233,7 @@ button.danger { background: #b63c32; }
 .rule-panel {
   display: grid;
   gap: 12px;
+  min-width: 0;
 }
 .rule-toolbar {
   display: flex;
@@ -283,6 +288,7 @@ button.danger { background: #b63c32; }
   background: #fff;
   border-radius: 10px;
   padding: 14px;
+  min-width: 0;
 }
 .rule-card.active {
   background: #fff3cf;
@@ -547,6 +553,7 @@ body.view-only select {
 }
 body.view-only .rule-card textarea {
   min-height: 96px;
+  overflow: hidden;
 }
 </style>
 </head>
@@ -1727,7 +1734,12 @@ document.addEventListener("paste", handlePasteImage);
   try { localStorage.removeItem('tv-ui-rules-html-prototype-v15'); } catch (error) {}
   function applyViewOnlyMode(){
     document.body.classList.add('view-only');
-    document.querySelectorAll('textarea').forEach(function(el){ el.readOnly = true; });
+    document.querySelectorAll('textarea').forEach(function(el){
+      el.readOnly = true;
+      el.style.height = 'auto';
+      el.style.height = Math.max(el.scrollHeight, 96) + 'px';
+      el.style.overflow = 'hidden';
+    });
     document.querySelectorAll('input').forEach(function(el){ if (el.type !== 'file') el.readOnly = true; });
     document.querySelectorAll('select').forEach(function(el){ el.disabled = true; });
     document.querySelectorAll('.canvas-panel .hint').forEach(function(el){
