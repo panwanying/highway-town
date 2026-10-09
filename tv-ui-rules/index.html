@@ -163,6 +163,9 @@ button.danger { background: #b63c32; }
   margin: 18px 0;
   box-shadow: 12px 14px 0 rgba(221, 202, 160, .38);
   min-width: 0;
+  width: max-content;
+  min-width: 100%;
+  box-sizing: border-box;
 }
 .screen-title {
   display: flex;
@@ -181,6 +184,8 @@ button.danger { background: #b63c32; }
   gap: 22px;
   align-items: start;
   min-width: 0;
+  background: var(--paper);
+  border-radius: 12px;
 }
 .image-stage {
   background: #f8f1e5;
@@ -515,6 +520,7 @@ button.danger { background: #b63c32; }
 @media (max-width: 680px) {
   .app { grid-template-columns: 1fr; }
   .sidebar { position: relative; height: auto; }
+  .screen-block { width: 100%; }
   .workspace { grid-template-columns: 1fr; }
   .main { padding: 20px; }
 }
