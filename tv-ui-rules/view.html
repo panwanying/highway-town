@@ -131,12 +131,22 @@ button.danger { background: #b63c32; }
   white-space: nowrap;
 }
 .thumb-strip { display: flex; gap: 8px; overflow: hidden; height: 150px; margin: 12px 0; }
-.thumb-strip img {
+.overview-thumb {
+  height: 150px;
+  width: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  overflow: hidden;
+}
+.overview-thumb img {
   height: 150px;
   width: auto;
   border-radius: 8px;
   border: 1px solid #dce3e5;
   background: #f3f5f5;
+  display: block;
 }
 .empty-thumb {
   display: grid;
@@ -368,7 +378,7 @@ button.danger { background: #b63c32; }
 }
 .action-row {
   display: grid;
-  grid-template-columns: minmax(120px, .6fr) minmax(260px, 1.4fr) auto auto auto;
+  grid-template-columns: minmax(120px, .6fr) minmax(260px, 1.4fr) auto auto;
   gap: 8px;
   align-items: stretch;
 }
@@ -949,7 +959,7 @@ function renderOverview() {
   const grid = byId("overviewGrid");
   grid.innerHTML = state.interfaces.map(screen => {
     const thumbs = screen.images.length
-      ? screen.images.map(img => '<img src="' + img.src + '" alt="' + escapeAttr(screen.name) + '" />').join("")
+      ? screen.images.map((img, index) => '<button class="overview-thumb" data-overview-preview="' + escapeAttr(screen.id) + '" data-image-index="' + index + '" title="查看大图"><img src="' + escapeAttr(img.src) + '" alt="' + escapeAttr(screenTitle(screen) + " / " + (img.label || ("界面" + (index + 1)))) + '" /></button>').join("")
       : '<div class="empty-thumb">待补图</div>';
     return '<article class="overview-card" data-screen="' + escapeAttr(screen.id) + '">' +
       '<h3>' + escapeHtml(screenTitle(screen)) + '</h3>' +
@@ -959,6 +969,17 @@ function renderOverview() {
     '</article>';
   }).join("");
   grid.querySelectorAll("[data-screen]").forEach(card => card.addEventListener("click", () => openDetail(card.dataset.screen)));
+  grid.querySelectorAll("[data-overview-preview]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const screen = state.interfaces.find(item => item.id === btn.dataset.overviewPreview);
+      const imageIndex = Number(btn.dataset.imageIndex);
+      const image = screen?.images?.[imageIndex];
+      if (!screen || !image) return;
+      openImagePreview(image.src, screenTitle(screen) + " / " + (image.label || ("界面" + (imageIndex + 1))) + " · " + (image.role || "正式界面"));
+    });
+  });
 }
 
 function openDetail(screenId) {
@@ -1038,7 +1059,6 @@ function renderImageWorkspace(screen, image) {
           '<select data-action-target="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">' + buildTargetImageOptions(action.targetImageId || "") + '</select>' +
           renderActionTargetPreview(target, marker.id, index) +
         '</div>' +
-        '<button class="ghost" data-preview-action="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">大图</button>' +
         '<button class="ghost" data-jump-action="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">查看</button>' +
         '<button class="danger" data-delete-action="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">删除</button>' +
       '</div>';
