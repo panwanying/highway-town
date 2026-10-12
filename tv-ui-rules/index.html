@@ -368,9 +368,9 @@ button.danger { background: #b63c32; }
 }
 .action-row {
   display: grid;
-  grid-template-columns: minmax(120px, .7fr) minmax(180px, 1.3fr) auto auto;
+  grid-template-columns: minmax(120px, .6fr) minmax(260px, 1.4fr) auto auto auto;
   gap: 8px;
-  align-items: center;
+  align-items: stretch;
 }
 .action-row input,
 .action-row select {
@@ -380,6 +380,106 @@ button.danger { background: #b63c32; }
   padding: 8px 10px;
   background: #fff;
   color: var(--ink);
+}
+.action-target-cell {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) minmax(160px, 1.05fr);
+  gap: 8px;
+  align-items: stretch;
+}
+.action-target-card {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+  padding: 6px;
+  border: 1px solid #d5dde1;
+  border-radius: 8px;
+  background: #fff;
+}
+.action-target-thumb {
+  width: 42px;
+  height: 54px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #d5dde1;
+  border-radius: 6px;
+  background: #eef2f5;
+}
+.action-target-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.action-target-title {
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.action-target-meta {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+  margin-top: 2px;
+}
+.action-target-empty {
+  display: flex;
+  align-items: center;
+  min-height: 54px;
+  color: #7b8794;
+  font-size: 13px;
+}
+.jump-origin {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid #f1c77f;
+  border-radius: 10px;
+  background: #fff2cf;
+  color: #5d4820;
+}
+.image-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(20, 28, 38, .72);
+}
+.image-modal-card {
+  width: min(980px, 96vw);
+  max-height: 92vh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+.image-modal-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.image-modal-body {
+  overflow: auto;
+  padding: 12px;
+  background: #f5f6f3;
+}
+.image-modal-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
 }
 .action-empty {
   color: #7b8794;
@@ -601,7 +701,7 @@ body.view-only .rule-card textarea {
   </main>
 </div>
 <script>
-const seedData = {"systemName":"【V0.2】小镇电视台","generatedAt":"2026-10-10T01:39:23.036Z","interfaces":[{"id":"1.0.0","name":"电视台主界面","groupId":"TV-1","groupName":"电视台主界面","note":"归入 TV-1：电视台主界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"1.0.0-img-1","label":"界面1","role":"正式界面","width":720,"height":1280,"src":"assets/screen-001.png","entryRule":"1. 主入口：\n   1. 入口来源：从主场景点击【小镇电视台】建筑或电视台系统入口进入。\n   2. 进入条件：电视台系统已解锁时可进入。\n   3. 未解锁时，入口按系统解锁规则显示锁定态或隐藏；点击锁定入口时显示解锁条件提示。","annotations":[{"id":"01","x":49.86,"y":4,"title":"顶部系统与资源区","rule":"1. 系统名称：显示【小镇电视台】。\n2. 详情按钮：点击后打开【系统详情】弹窗。\n3. 资源栏：\n   1. 阅历资源：\n      - 显示当前数量；\n      - 点击加号打开【道具不足】弹窗。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":77.14,"y":4.19,"title":"电视台等级区","rule":"1. 等级徽章：\n   1. 显示规则：显示当前电视台等级。\n   2. 点击规则：点击打开【勋章界面】弹窗。\n2. 经验进度条：\n   1. 显示规则：当前值 / 升级所需值。\n   2. 状态规则：达到升级条件时，显示光效。","extraImages":[],"linkActions":[{"label":"点击等级徽章","targetImageId":"1.1.0::1.1.0-img-1"}],"targetImageId":"1.1.0::1.1.0-img-1"},{"id":"03","x":48,"y":55,"title":"主持人展示区","rule":"1. 显示内容\n   1. 主持人形象：根据频道和制作品质，显示对应的主持人的角色形象。\n   2. 奖励气泡：显示核心奖励道具，根据道具品质显示不同的气泡颜色\n   3. 节目卡片：显示节目名称、节目包装图和品质星级表现。\n   4. 光圈：主持人脚下根据制作品质显示不同颜色的光圈\n2. 点击规则：\n   1. 点击主持人区域或节目卡片，可选中节目提案，并展开【节目提案详情】弹窗\n   2. 选中态：当前选中节目显示高亮态；未选中节目保持普通态\n3. 刷新规则：\n   1. 提案演播完成或点击刷新规则时，主持人展示区会进行刷新\n   2. 刷新表现：统一从左侧上场，右侧下场","extraImages":[],"linkActions":[{"label":"点击主持人","targetImageId":"1.0.0::1.0.0-img-2"}],"targetImageId":"1.0.0::1.0.0-img-2"},{"id":"04","x":80.22,"y":64.87,"title":"收视收益入口","rule":"1. 点击规则：\n   - 有累计奖励时：点击后领取当前累计收益，飘字显示获得的累计道具。\n   - 无累计奖励时：点击打开【电视台信息】弹窗\n2. 状态规则：存在可领取收益时显示高亮提示；无可领取收益时显示普通态。\n3. 动画表现：每间隔2秒晃动一次","extraImages":[],"linkActions":[{"label":"点击电台收益","targetImageId":"1.0.1::1.0.1-img-1"}],"targetImageId":"1.0.1::1.0.1-img-1"},{"id":"05","x":80.59,"y":79.68,"title":"右侧功能入口","rule":"1. 制作组入口：点击后进入【演播难度】界面。\n2. 主持人入口：点击后进入【主持人】界面。\n3.节目单入口：点击后进入【频道节目】界面。\n4. 解锁状态：功能未解锁时，入口按锁定、置灰或隐藏规则展示。","extraImages":[],"linkActions":[{"label":"点击制作组","targetImageId":"1.2.0::1.2.0-img-1"},{"label":"点击主持人","targetImageId":"1.3.0::1.3.0-img-1"},{"label":"点击节目单","targetImageId":"2.0.0::2.0.0-img-1"}],"targetImageId":"1.2.0::1.2.0-img-1"},{"id":"06","x":50.22,"y":86.51,"title":"刷新操作区","rule":"1. 刷新消耗：\n   1. 显示规则：显示本次刷新所需道具数量和当前拥有数量。\n      - 道具不足时，红色文本\n      - 道具足够时，正常文本。\n2. 刷新按钮：\n   1. 道具充足时，点击后刷新当前3个主持人。\n   2. 道具不足时，点击后不执行刷新，并弹出【道具不足】弹窗。\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"07","x":9.6,"y":88.3,"title":"返回按钮","rule":"1. 返回按钮：点击后关闭电视台主界面，返回进入前界面。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"IhNkb1I10omE7MxlYkQc6A1Lntg","sourceUpdatedAt":"2026-10-10T01:34:48.184Z"},{"id":"1.0.0-img-2","label":"界面2","role":"状态图","width":941,"height":1672,"src":"assets/screen-002.png","entryRule":"状态图：仅用于展示当前界面的状态差异。重复区域不重新标点；只在新增或变化区域手动补充标点。","annotations":[{"id":"01","x":68.85,"y":31.68,"title":"节目提案详情","rule":"1. 显示条件\n   1. 点击主持人：展开主持人对应提案详情\n   2. 当前有未完成的演播：自动展开未完成演播的提案详情，且无法点击其他主持人进行切换\n2. 显示内容\n   1. 标题：提案详情\n   2. 频道名称：根据当前提案显示频道名称\n   3. 品质：根据当前提案显示品质名称\n   4. 阅历倍率：根据当前提案品质显示对应倍率数值\n   5. 预计阅历收益：根据公式显示预估数值\n   6. 奖励预览：根据配置的奖励进行显示\n   7. 按钮：\n      1. 接受提案按钮：\n         - 无正在演播的提案时，显示接受提案按钮\n         - 点击按钮，接取当前提案，并进入演播界面\n      2. 演播按钮：\n         - 当前提案正在演播中，显示演播按钮\n         - 点击按钮，进入演播界面","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"BcH0bfO8MohWCMxAt2kcW2XInpg","sourceUpdatedAt":"2026-10-10T01:18:49.624Z"},{"id":"1.0.0-img-3","label":"界面3","role":"参考图","width":627,"height":1076,"src":"assets/screen-003.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"R8jkbGgiRodRZoxVPbhcE74pnwm","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"},{"id":"1.0.0-img-4","label":"界面4","role":"参考图","width":628,"height":1077,"src":"assets/screen-004.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"UIrRb6eJLo9qD2xnWZKcQaONnLg","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"1.0.1","name":"电视台信息","groupId":"TV-1","groupName":"电视台主界面","note":"归入 TV-1：电视台主界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"1.0.1-img-1","label":"界面1","role":"正式界面","width":630,"height":1073,"src":"assets/screen-005.png","entryRule":"1. 详情入口：\n   1. 入口来源：点击【电台收益】","annotations":[{"id":"01","x":26.17,"y":28.42,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示【电视台信息】标题。\n2. 关闭按钮：点击后关闭弹窗并返回打开弹窗前的界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":21.7,"y":42.5,"title":"建筑展示区","rule":"1. 建筑图片：显示当前建筑图片。\n2. 建筑名称：显示当前建筑名称。\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":23.67,"y":61.19,"title":"信息区","rule":"1. 挂机速度：显示当前建筑挂机速度。\n2. 挂机上限：显示当前可累计的最大挂机时长。\n","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"T3NDbEQxAoyLazxrjowcZxpqnff","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"1.1.0","name":"勋章界面","groupId":"TV-1","groupName":"电视台主界面","note":"归入 TV-1：电视台主界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"1.1.0-img-1","label":"界面1","role":"正式界面","width":629,"height":1074,"src":"assets/screen-006.png","entryRule":"1. 主入口：\n   1. 入口来源：点击电视台主界面【勋章】按钮进入。\n","annotations":[{"id":"01","x":36.45,"y":2.79,"title":"顶部标题区","rule":"1. 界面标题：显示【小镇电视台】标题。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":55.74,"y":12.31,"title":"主列表/节点区","rule":"1. 节点排序规则：从下到到上，按等级从低到高的顺序展示节点。\n2. 节点显示内容：\n   1. 勋章图标：显示勋章图标和等级\n   2. 展示图片：根据系统显示该系统对应等级的插画图片\n   3. 等级效果：根据配置显示全局效果和系统勋章专属效果\n   4. 其他信息：\n      - 生效中标记：只在当前生效等级对应的节点显示\n      - 解锁条件： 只在未解锁的等级对应的节点显示\n      - 点击解锁提示：只在待解锁的等级对应的节点显示\n3. 节点状态：\n   1. 未解锁状态：勋章图标和展示图片置灰，增加显示解锁条件\n   2. 已解锁状态：正常显示\n   3. 生效中状态：增加显示生效中标记\n   4. 待解锁状态：勋章图标和展示图片置灰，增加显示点击解锁提示\n4. 点击效果：仅在待解锁状态下可进行点击，整个节点区域都可点击，点击后显示【升级成功】弹窗","extraImages":[{"src":"assets/extra-007.png","note":"未解锁状态"},{"src":"assets/extra-008.png","note":"已解锁状态"},{"src":"assets/extra-009.png","note":"生效中状态"},{"src":"assets/extra-010.png","note":"待解锁状态"}],"linkActions":[],"targetImageId":""},{"id":"03","x":81.8,"y":94.83,"title":"升级条件","rule":"1. 显示当前系统的升级条件及相关数值\n   - 电台影响力：影响力总值","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":13.88,"y":97.79,"title":"返回按钮","rule":"1. 返回按钮：点击返回上一级界面","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"RF2PblNYDoCUIEx7sZKcn5lNnxh","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"1.2.0","name":"演播难度","groupId":"TV-1","groupName":"电视台主界面","note":"归入 TV-1：电视台主界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"1.2.0-img-1","label":"界面1","role":"正式界面","width":629,"height":1075,"src":"assets/screen-011.png","entryRule":"1. 说明入口：\n   1. 入口来源：从电视台主界面点击难度、等级或订单等级说明入口进入。\n   2. 进入条件：当前说明入口已解锁且处于可查看状态。","annotations":[{"id":"01","x":50,"y":10,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示当前说明弹窗标题。\n2. 关闭按钮：点击后关闭弹窗，返回进入前界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":50,"y":38,"title":"等级/难度列表","rule":"1. 列表项：\n   1. 显示规则：显示等级或难度名称、颜色标识、概率信息和关联数值。\n   2. 排序规则：按配置顺序展示；若配置定义等级高低，则按等级顺序展示。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":50,"y":64,"title":"规则说明区","rule":"1. 说明文本：显示等级、难度、概率或刷新规则说明。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":50,"y":86,"title":"确认按钮","rule":"1. 确认按钮：点击后关闭当前弹窗。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"VSPcbubp2oFMPnxKWn8cmH2gnhc","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"1.3.0","name":"主持人升级","groupId":"TV-1","groupName":"电视台主界面","note":"归入 TV-1：电视台主界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"1.3.0-img-1","label":"界面1","role":"正式界面","width":628,"height":1077,"src":"assets/screen-012.png","entryRule":"1. 主持人入口：\n   1. 入口来源：从【主持人】按钮进入，默认进入【升级】页签对应界面\n   2. 入口来源：点击【升级】页签","annotations":[{"id":"01","x":36.36,"y":21.67,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示【主持人】标题。\n2. 关闭按钮：点击后关闭弹窗","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":11.33,"y":28.16,"title":"主持人信息区","rule":"1. 主持人形象：\n   1. 形象：根据主持人阶级显示对应形象。\n   2. 阶级名称：显示主持人阶级名称\n   3. 底框：根据阶级显示对应的颜色底框\n2. 主持人信息：根据配置表显示对应信息\n   1. 名称\n   2. 工龄\n   3. 擅长界面\n   4. 简介","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":12.64,"y":53.76,"title":"加成信息区","rule":"1. 主持人等级：显示当前等级\n2. 等级效果：根据配置显示对应的等级消耗\n   1. 左侧显示当前等级，右侧显示下一等级\n   2. 效果\n      - 演播阅历收益\n      - 演播金钱消耗","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":19.18,"y":75.25,"title":"升级操作区","rule":"1. 升级条件：赚速达到（当前数值/要求数值）后可升级\n2. 升级按钮：\n   1. 条件满足时，点击显示【升级成功】弹窗。\n   2. 条件不足时，点击后tips提示“未达到升级条件”。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"05","x":48.03,"y":84.26,"title":"页签","rule":"1. 页签内容：\n   1. 升级\n   2. 进阶\n2. 默认：每次进入默认选中升级页签\n3. 点击效果：点击可选中并切换页签","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"HKgtb5jNgoSPKsx2cp2cMBgen0b","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"1.3.1","name":"主持人进阶","groupId":"TV-1","groupName":"电视台主界面","note":"归入 TV-1：电视台主界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"1.3.1-img-1","label":"界面1","role":"正式界面","width":629,"height":1074,"src":"assets/screen-013.png","entryRule":"1. 进阶入口：\n   1. 入口来源：点击【进阶】页签切换界面","annotations":[{"id":"01","x":32.45,"y":23.39,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示【主持人】标题。\n2. 关闭按钮：点击后关闭弹窗。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":14.86,"y":34.18,"title":"进阶前信息","rule":"1. 显示内容：左侧显示当前形象，右侧显示下一阶级形象。\n2. 主持人形象：\n   1. 形象：根据主持人阶级显示对应形象。\n   2. 阶级名称：显示主持人阶级名称\n   3. 底框：根据阶级显示对应的颜色底框\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":14.21,"y":55.1,"title":"进阶后预览","rule":"1. 标题：进阶效果\n2. 效果：根据配置显示效果\n   1. 左侧显示当前等级，右侧显示下一等级\n   2. 效果：所有频道演播阅历加成","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":14.05,"y":74.39,"title":"进阶操作区","rule":"1. 进阶条件：\n   1. 身份等级达到要求等级（当前等级/要求等级）\n   2. 主持人等级达到要求等级（当前等级/要求等级）\n2. 条件状态\n   1. 条件不足显示为红色\n   2. 条件达到正常显示。\n3. 进阶按钮：\n   1. 条件满足时，点击后执行进阶，显示【进阶成功】弹窗。\n   2. 条件不足时，点击后不执行进阶，tips提示“未达到进阶条件”。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"05","x":46.95,"y":85.19,"title":"页签","rule":"1. 页签内容：\n   1. 升级\n   2. 进阶\n2. 默认：每次进入默认选中升级页签\n3. 点击效果：点击可选中并切换页签","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"GvQRbLqQgo4TnMxn4IpckFCHnYc","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"2.0.0","name":"频道节目","groupId":"TV-2","groupName":"节目库界面","note":"归入 TV-2：节目库界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"2.0.0-img-1","label":"界面1","role":"正式界面","width":720,"height":1280,"src":"assets/screen-014.png","entryRule":"1. 节目单入口：\n   1. 入口来源：从电视台主界面点击【节目单】进入。\n   2. 进入条件：节目库功能已解锁时可进入。\n   3. 功能未解锁时，入口显示锁定态或隐藏。","annotations":[{"id":"01","x":55,"y":5,"title":"顶部体力与标题区","rule":"1. 体力资源：显示当前体力 / 体力上限；点击加号打开体力获取或购买入口。\n2. 界面标题：显示【节目库】标题。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":50,"y":17,"title":"栏目加成区","rule":"1. 加成标题：显示当前栏目或频道加成标题。\n2. 加成数值：\n   1. 显示规则：显示当前栏目或频道带来的热度加成。\n   2. 刷新规则：切换频道或栏目后同步刷新。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":50,"y":42,"title":"节目分类列表","rule":"1. 分类标题：显示节目分类名称。\n2. 节目项：\n   1. 显示规则：显示节目图标、节目名称、节目等级和解锁状态。\n   2. 排序规则：按分类内配置顺序展示。\n   3. 点击规则：已解锁节目打开节目详情；未解锁节目打开解锁提示。\n3. 节目状态：已解锁节目显示普通态；未解锁节目显示锁定态和解锁条件；可升级节目显示升级提示。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":50,"y":78,"title":"频道页签","rule":"1. 频道页签：点击页签切换频道，并刷新节目分类列表。\n2. 选中态：当前频道页签显示高亮态，其余页签显示未选中态。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"05","x":34,"y":90,"title":"节目解锁进度","rule":"1. 解锁进度文本：\n   1. 显示规则：显示已解锁节目数量 / 节目总数量。\n   2. 刷新规则：节目解锁后同步刷新。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"06","x":72,"y":90,"title":"升级按钮","rule":"1. 升级按钮：\n   1. 点击后进入可升级节目或节目升级界面。\n   2. 存在可升级节目时显示红点；无可升级节目时显示普通态。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"07","x":8,"y":94,"title":"返回按钮","rule":"1. 返回按钮：点击后关闭节目库，返回电视台主界面。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"LcmpbEw8ZoDLfTx6YBKc38MdnFe","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"},{"id":"2.0.0-img-2","label":"界面2","role":"参考图","width":619,"height":1056,"src":"assets/screen-015.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"MxoqbZEF0oe7t1xmLxhc23qgnth","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"2.0.1","name":"解锁新界面","groupId":"TV-2","groupName":"节目库界面","note":"归入 TV-2：节目库界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"2.0.1-img-1","label":"界面1","role":"正式界面","width":617,"height":1056,"src":"assets/screen-016.png","entryRule":"1. 自动弹出：\n   1. 入口来源：节目达到解锁条件后自动弹出。\n   2. 进入条件：服务端返回节目解锁结果。\n2. 手动触发：\n   1. 入口来源：从节目库点击未解锁节目触发。\n   2. 进入条件：当前节目存在可展示的解锁说明。","annotations":[{"id":"01","x":50,"y":12,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示解锁新节目或解锁提示标题。\n2. 关闭按钮：点击后关闭弹窗，返回节目库。","extraImages":[]},{"id":"02","x":50,"y":36,"title":"解锁对象展示区","rule":"1. 节目图标：显示新解锁节目的图标。\n2. 节目名称：显示新解锁节目名称。\n3. 节目类型/品质：显示节目类型、品质或频道归属信息。","extraImages":[]},{"id":"03","x":50,"y":62,"title":"解锁效果区","rule":"1. 效果说明：\n   1. 显示规则：显示解锁后新增的节目效果、收益或可用范围。\n   2. 显示规则：内容按节目配置展示。","extraImages":[]},{"id":"04","x":50,"y":84,"title":"确认按钮","rule":"1. 确认按钮：点击后关闭弹窗，并刷新节目库解锁状态。","extraImages":[]}],"sourceImageToken":"LvCFbw5MIo2VsuxdCsccNmZFnOc","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"2.1.0","name":"节目升级","groupId":"TV-2","groupName":"节目库界面","note":"归入 TV-2：节目库界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"2.1.0-img-1","label":"界面1","role":"正式界面","width":941,"height":1672,"src":"assets/screen-017.png","entryRule":"1. 节目详情入口：\n   1. 入口来源：从节目库点击已解锁节目进入。\n   2. 进入条件：节目已解锁，且节目升级功能已开放。\n   3. 节目未解锁时，不进入本界面，改为显示解锁提示。","annotations":[{"id":"01","x":50,"y":5,"title":"顶部体力与标题区","rule":"1. 体力资源：显示当前体力 / 体力上限；点击加号打开体力获取或购买入口。\n2. 界面标题：显示【节目升级】标题。","extraImages":[]},{"id":"02","x":50,"y":25,"title":"节目主信息区","rule":"1. 节目图片：显示当前节目图片。\n2. 节目名称：显示当前节目名称。\n3. 类型标签：显示节目所属类型或频道标签。\n4. 说明文本：显示节目说明文本。","extraImages":[]},{"id":"03","x":50,"y":46,"title":"播放收益区","rule":"1. 播放量：显示当前节目播放量。\n2. 电台收益：\n   1. 显示规则：显示当前节目带来的电台收益。\n   2. 刷新规则：节目等级变化后同步刷新。","extraImages":[]},{"id":"04","x":50,"y":64,"title":"升级属性区","rule":"1. 当前属性：显示当前等级下的节目影响力、频道阅历收益和商铺赚速。\n2. 升级预览：\n   1. 显示规则：显示升级后的属性变化。\n   2. 刷新规则：预览值按下一等级配置计算。","extraImages":[]},{"id":"05","x":50,"y":82,"title":"升级操作区","rule":"1. 升级材料：\n   1. 显示规则：显示升级所需材料数量 / 当前拥有数量。\n   2. 材料不足时，数量按不足状态显示。\n2. 升级按钮：\n   1. 材料充足时，点击后发起升级请求。\n   2. 材料不足或等级已达上限时，点击后不执行升级，并显示对应提示。","extraImages":[]},{"id":"06","x":50,"y":93,"title":"底部频道与返回","rule":"1. 频道页签：\n   1. 显示规则：显示当前频道分类。\n   2. 点击规则：切换频道并返回该频道节目列表。\n2. 返回按钮：点击后返回节目列表。","extraImages":[]}],"sourceImageToken":"WU3wbMmPuoItfmx2GkMcKwMInde","sourceUpdatedAt":"2026-10-10T01:34:48.184Z"},{"id":"2.1.0-img-2","label":"界面2","role":"参考图","width":627,"height":1074,"src":"assets/screen-018.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"ZhyzbtORyoZGPXxS7nKcrDZpn7e","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"},{"id":"2.1.0-img-3","label":"界面3","role":"参考图","width":615,"height":1058,"src":"assets/screen-019.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"NWU0b7InZoRy0yxYmd5c33GHnfc","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"2.1.1","name":"升级成功弹窗","groupId":"TV-2","groupName":"节目库界面","note":"归入 TV-2：节目库界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"2.1.1-img-1","label":"界面1","role":"正式界面","width":629,"height":1074,"src":"assets/screen-020.png","entryRule":"1. 自动弹出：\n   1. 入口来源：节目升级成功后自动弹出。\n   2. 进入条件：升级请求成功，且服务端返回升级结果。","annotations":[{"id":"01","x":50,"y":12,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示【升级成功】标题。\n2. 关闭按钮：点击后关闭弹窗，返回节目详情或节目库。","extraImages":[]},{"id":"02","x":50,"y":34,"title":"升级对象区","rule":"1. 节目图标：显示本次升级的节目图标。\n2. 节目名称：显示本次升级的节目名称。\n3. 等级变化：显示升级前等级和升级后等级。","extraImages":[]},{"id":"03","x":50,"y":58,"title":"属性提升区","rule":"1. 属性变化列表：\n   1. 显示规则：显示升级后提升的属性、收益或加成。\n   2. 排序规则：按升级结果返回顺序或配置顺序展示。","extraImages":[]},{"id":"04","x":50,"y":82,"title":"确认操作区","rule":"1. 确认按钮：点击后关闭弹窗，并刷新节目等级与属性显示。","extraImages":[]}],"sourceImageToken":"Qg1ibiI7loD3GexL1OBcLkpfn5e","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"},{"id":"2.1.1-img-2","label":"界面2","role":"状态图","width":631,"height":1074,"src":"assets/screen-021.png","entryRule":"状态图：仅用于展示当前界面的状态差异。重复区域不重新标点；只在新增或变化区域手动补充标点。","annotations":[],"sourceImageToken":"RIIhbtmezoHrngxUeCyc10OEnhg","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"2.1.2","name":"未解锁二次确认弹窗","groupId":"TV-2","groupName":"节目库界面","note":"归入 TV-2：节目库界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"2.1.2-img-1","label":"界面1","role":"正式界面","width":628,"height":1074,"src":"assets/screen-022.png","entryRule":"1. 二次确认触发：\n   1. 入口来源：从未解锁节目、条件不足操作或高风险操作点击后弹出。\n   2. 进入条件：当前操作需要玩家二次确认。","annotations":[{"id":"01","x":50,"y":14,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示提示或确认标题。\n2. 关闭按钮：点击后关闭弹窗，不执行原操作。","extraImages":[]},{"id":"02","x":50,"y":42,"title":"确认说明区","rule":"1. 说明文本：显示当前操作的确认内容、消耗、风险或条件说明。","extraImages":[]},{"id":"03","x":35,"y":78,"title":"取消按钮","rule":"1. 取消按钮：点击后关闭弹窗，不执行原操作。","extraImages":[]},{"id":"04","x":65,"y":78,"title":"确认按钮","rule":"1. 确认按钮：\n   1. 点击后执行原操作。\n   2. 操作成功后关闭弹窗并刷新相关界面。\n   3. 操作失败时停留弹窗并显示失败提示。","extraImages":[]}],"sourceImageToken":"QJlbbSiP3o4240xBjLxcOAT0nYb","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"3.0.0","name":"演播界面","groupId":"TV-3","groupName":"演播界面","note":"归入 TV-3：演播界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"3.0.0-img-1","label":"界面1","role":"正式界面","width":720,"height":1280,"src":"assets/screen-023.png","entryRule":"1. 演播入口：\n   1. 入口来源：从电视台主界面选择节目后点击演播入口进入。\n   2. 进入条件：当前节目已解锁，主持人配置有效，演播消耗满足开始条件。\n   3. 条件不足时不进入演播界面，并显示对应提示。","annotations":[{"id":"01","x":35,"y":5,"title":"顶部资源区","rule":"1. 演播资源：显示当前资源、体力或演播相关消耗；点击加号打开对应资源获取或购买入口。","extraImages":[]},{"id":"02","x":68,"y":12,"title":"节目信息区","rule":"1. 频道名称：显示当前节目所属频道。\n2. 节目名称：显示当前演播节目名称。\n3. 档期与倍率：显示当前档期和收益倍率。","extraImages":[]},{"id":"03","x":50,"y":42,"title":"演播主视觉区","rule":"1. 演播画面：\n   1. 显示规则：显示当前节目演播主视觉和舞台表现。\n   2. 状态规则：演播操作触发后可播放对应反馈表现。","extraImages":[]},{"id":"04","x":35,"y":76,"title":"体力次数与进度区","rule":"1. 演播消耗：显示当前体力或操作次数。\n2. 演播进度：\n   1. 显示规则：显示当前演播进度。\n   2. 刷新规则：执行演播操作后同步刷新剩余次数和进度。","extraImages":[]},{"id":"05","x":72,"y":76,"title":"热度结果区","rule":"1. 热度变化：\n   1. 显示规则：显示本次操作带来的热度变化。\n   2. 计算规则：根据选择的操作卡和当前加成计算。\n2. 结果提示：操作完成后显示本次结果提示。","extraImages":[]},{"id":"06","x":50,"y":90,"title":"操作卡牌区","rule":"1. 操作卡牌：\n   1. 显示规则：显示可选择的演播操作、消耗和收益预览。\n   2. 点击规则：点击后消耗对应次数或资源，并执行该操作。\n   3. 状态规则：条件不足时卡牌置灰或点击后显示不足提示。","extraImages":[]},{"id":"07","x":8,"y":94,"title":"返回按钮","rule":"1. 返回按钮：点击后退出演播界面，返回进入前界面。","extraImages":[]}],"sourceImageToken":"A7ZObK6fGoHCYwxQxNCcI3SInzS","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"},{"id":"3.0.0-img-2","label":"界面2","role":"参考图","width":630,"height":1076,"src":"assets/screen-024.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"PV7cbWqnAoLVhgxImkMckOdunqc","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"3.1.0","name":"演播结算","groupId":"TV-3","groupName":"演播界面","note":"归入 TV-3：演播界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"3.1.0-img-1","label":"界面1","role":"正式界面","width":720,"height":1280,"src":"assets/screen-025.png","entryRule":"1. 自动弹出：\n   1. 入口来源：演播流程完成后自动弹出。\n   2. 进入条件：当前演播达到结算节点，且服务端返回结算结果。","annotations":[{"id":"01","x":50,"y":12,"title":"结算标题与关闭","rule":"1. 结算标题：显示【演播完成】标题。\n2. 关闭按钮：点击后关闭结算弹窗，返回演播前界面或电视台主界面。","extraImages":[]},{"id":"02","x":50,"y":32,"title":"评价与热度区","rule":"1. 演播评价：\n   1. 显示规则：显示本次演播评级。\n   2. 计算规则：根据结算分数或热度区间计算。\n2. 最终热度：显示本次演播最终热度值。","extraImages":[]},{"id":"03","x":50,"y":55,"title":"奖励预览区","rule":"1. 奖励列表：\n   1. 显示规则：显示本次演播获得的资源、道具或材料数量。\n   2. 排序规则：按结算结果返回顺序或奖励配置顺序展示。","extraImages":[]},{"id":"04","x":50,"y":76,"title":"阅历与连击区","rule":"1. 阅历收益：显示本次获得阅历。\n2. 连击信息：\n   1. 显示规则：显示本次连击次数或额外加成结果。\n   2. 计算规则：根据本次演播操作结果计算。","extraImages":[]},{"id":"05","x":50,"y":92,"title":"背景遮罩","rule":"1. 背景遮罩：\n   1. 显示规则：结算弹窗出现时，背景界面压暗。\n   2. 点击规则：系统配置允许点击遮罩关闭时，点击遮罩关闭弹窗；未配置时不响应。","extraImages":[]}],"sourceImageToken":"ZOnnbaGSaoHk4kxr5NscPT61nqd","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"},{"id":"3.1.0-img-2","label":"界面2","role":"参考图","width":630,"height":1073,"src":"assets/screen-026.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"G8gTbwihmodZwfxhLzMc0Xcvntg","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"4.0.0","name":"使用道具弹窗","groupId":"TV-4","groupName":"通用界面","note":"归入 TV-4：通用界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"4.0.0-img-1","label":"界面1","role":"正式界面","width":630,"height":1074,"src":"assets/screen-027.png","entryRule":"1. 道具入口：\n   1. 入口来源：从需要消耗道具的功能按钮、材料不足提示或背包道具入口打开。\n   2. 进入条件：当前操作存在可使用道具，且玩家拥有该道具。\n   3. 没有可用道具时不打开弹窗，并显示获取提示或不足提示。","annotations":[{"id":"01","x":50,"y":12,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示【使用道具】标题。\n2. 关闭按钮：点击后关闭弹窗，返回进入前界面。","extraImages":[]},{"id":"02","x":50,"y":32,"title":"道具信息区","rule":"1. 道具图标：显示当前使用道具图标。\n2. 道具名称：显示当前使用道具名称。\n3. 道具说明：显示道具用途和效果说明。","extraImages":[]},{"id":"03","x":50,"y":54,"title":"数量选择区","rule":"1. 当前数量：显示当前选择使用数量。\n2. 减少按钮：\n   1. 点击规则：点击后减少使用数量。\n   2. 状态规则：数量达到下限时按钮置灰。\n3. 增加按钮：\n   1. 点击规则：点击后增加使用数量。\n   2. 状态规则：数量达到拥有上限或使用上限时按钮置灰。","extraImages":[]},{"id":"04","x":50,"y":78,"title":"使用按钮","rule":"1. 使用按钮：\n   1. 数量有效且道具充足时，点击后使用道具，并刷新使用结果。\n   2. 数量无效或道具不足时，点击后不使用，并显示对应提示。","extraImages":[]},{"id":"05","x":50,"y":92,"title":"背景遮罩","rule":"1. 背景遮罩：\n   1. 显示规则：弹窗开启时背景压暗。\n   2. 点击规则：系统配置允许点击遮罩关闭时，点击遮罩关闭弹窗；未配置时不响应。","extraImages":[]}],"sourceImageToken":"UpJJb8RSdox1klx4xvPcErKznhc","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]}],"ruleContentVersion":"mapping-sync-2026-10-10-v2-baseline","savedAt":"2026-10-10T07:38:11.788Z"};
+const seedData = {"systemName":"【V0.2】小镇电视台","generatedAt":"2026-10-10T01:39:23.036Z","interfaces":[{"id":"1.0.0","name":"电视台主界面","groupId":"TV-1","groupName":"电视台主界面","note":"归入 TV-1：电视台主界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"1.0.0-img-1","label":"界面1","role":"正式界面","width":720,"height":1280,"src":"assets/screen-001.png","entryRule":"1. 主入口：\n   1. 入口来源：从主场景点击【小镇电视台】建筑或电视台系统入口进入。\n   2. 进入条件：电视台系统已解锁时可进入。\n   3. 未解锁时，入口按系统解锁规则显示锁定态或隐藏；点击锁定入口时显示解锁条件提示。","annotations":[{"id":"01","x":49.86,"y":4,"title":"顶部系统与资源区","rule":"1. 系统名称：显示【小镇电视台】。\n2. 详情按钮：点击后打开【系统详情】弹窗。\n3. 资源栏：\n   1. 阅历资源：\n      - 显示当前数量；\n      - 点击加号打开【道具不足】弹窗。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":77.14,"y":4.19,"title":"电视台等级区","rule":"1. 等级徽章：\n   1. 显示规则：显示当前电视台等级。\n   2. 点击规则：点击打开【勋章界面】弹窗。\n2. 经验进度条：\n   1. 显示规则：当前值 / 升级所需值。\n   2. 状态规则：达到升级条件时，显示光效。","extraImages":[],"linkActions":[{"label":"点击等级徽章","targetImageId":"1.1.0::1.1.0-img-1"}],"targetImageId":"1.1.0::1.1.0-img-1"},{"id":"03","x":48,"y":55,"title":"主持人展示区","rule":"1. 显示内容\n   1. 主持人形象：根据频道和制作品质，显示对应的主持人的角色形象。\n   2. 奖励气泡：显示核心奖励道具，根据道具品质显示不同的气泡颜色\n   3. 节目卡片：显示节目名称、节目包装图和品质星级表现。\n   4. 光圈：主持人脚下根据制作品质显示不同颜色的光圈\n2. 点击规则：\n   1. 点击主持人区域或节目卡片，可选中节目提案，并展开【节目提案详情】弹窗\n   2. 选中态：当前选中节目显示高亮态；未选中节目保持普通态\n3. 刷新规则：\n   1. 提案演播完成或点击刷新规则时，主持人展示区会进行刷新\n   2. 刷新表现：统一从左侧上场，右侧下场","extraImages":[],"linkActions":[{"label":"点击主持人","targetImageId":"1.0.0::1.0.0-img-2"}],"targetImageId":"1.0.0::1.0.0-img-2"},{"id":"04","x":80.22,"y":64.87,"title":"收视收益入口","rule":"1. 点击规则：\n   - 有累计奖励时：点击后领取当前累计收益，飘字显示获得的累计道具。\n   - 无累计奖励时：点击打开【电视台信息】弹窗\n2. 状态规则：存在可领取收益时显示高亮提示；无可领取收益时显示普通态。\n3. 动画表现：每间隔2秒晃动一次","extraImages":[],"linkActions":[{"label":"点击电台收益","targetImageId":"1.0.1::1.0.1-img-1"}],"targetImageId":"1.0.1::1.0.1-img-1"},{"id":"05","x":80.59,"y":79.68,"title":"右侧功能入口","rule":"1. 制作组入口：点击后进入【演播难度】界面。\n2. 主持人入口：点击后进入【主持人】界面。\n3.节目单入口：点击后进入【频道节目】界面。\n4. 解锁状态：功能未解锁时，入口按锁定、置灰或隐藏规则展示。","extraImages":[],"linkActions":[{"label":"点击制作组","targetImageId":"1.2.0::1.2.0-img-1"},{"label":"点击主持人","targetImageId":"1.3.0::1.3.0-img-1"},{"label":"点击节目单","targetImageId":"2.0.0::2.0.0-img-1"}],"targetImageId":"1.2.0::1.2.0-img-1"},{"id":"06","x":50.22,"y":86.51,"title":"刷新操作区","rule":"1. 刷新消耗：\n   1. 显示规则：显示本次刷新所需道具数量和当前拥有数量。\n      - 道具不足时，红色文本\n      - 道具足够时，正常文本。\n2. 刷新按钮：\n   1. 道具充足时，点击后刷新当前3个主持人。\n   2. 道具不足时，点击后不执行刷新，并弹出【道具不足】弹窗。\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"07","x":9.6,"y":88.3,"title":"返回按钮","rule":"1. 返回按钮：点击后关闭电视台主界面，返回进入前界面。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"IhNkb1I10omE7MxlYkQc6A1Lntg","sourceUpdatedAt":"2026-10-10T01:34:48.184Z"},{"id":"1.0.0-img-2","label":"界面2","role":"状态图","width":941,"height":1672,"src":"assets/screen-002.png","entryRule":"状态图：仅用于展示当前界面的状态差异。重复区域不重新标点；只在新增或变化区域手动补充标点。","annotations":[{"id":"01","x":68.85,"y":31.68,"title":"节目提案详情","rule":"1. 显示条件\n   1. 点击主持人：展开主持人对应提案详情\n   2. 当前有未完成的演播：自动展开未完成演播的提案详情，且无法点击其他主持人进行切换\n2. 显示内容\n   1. 标题：提案详情\n   2. 频道名称：根据当前提案显示频道名称\n   3. 品质：根据当前提案显示品质名称\n   4. 阅历倍率：根据当前提案品质显示对应倍率数值\n   5. 预计阅历收益：根据公式显示预估数值\n   6. 奖励预览：根据配置的奖励进行显示\n   7. 按钮：\n      1. 接受提案按钮：\n         - 无正在演播的提案时，显示接受提案按钮\n         - 点击按钮，接取当前提案，并进入演播界面\n      2. 演播按钮：\n         - 当前提案正在演播中，显示演播按钮\n         - 点击按钮，进入演播界面","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"BcH0bfO8MohWCMxAt2kcW2XInpg","sourceUpdatedAt":"2026-10-10T01:18:49.624Z"},{"id":"1.0.0-img-3","label":"界面3","role":"参考图","width":627,"height":1076,"src":"assets/screen-003.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"R8jkbGgiRodRZoxVPbhcE74pnwm","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"},{"id":"1.0.0-img-4","label":"界面4","role":"参考图","width":628,"height":1077,"src":"assets/screen-004.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"UIrRb6eJLo9qD2xnWZKcQaONnLg","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"1.0.1","name":"电视台信息","groupId":"TV-1","groupName":"电视台主界面","note":"归入 TV-1：电视台主界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"1.0.1-img-1","label":"界面1","role":"正式界面","width":630,"height":1073,"src":"assets/screen-005.png","entryRule":"1. 详情入口：\n   1. 入口来源：点击【电台收益】","annotations":[{"id":"01","x":26.17,"y":28.42,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示【电视台信息】标题。\n2. 关闭按钮：点击后关闭弹窗并返回打开弹窗前的界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":21.7,"y":42.5,"title":"建筑展示区","rule":"1. 建筑图片：显示当前建筑图片。\n2. 建筑名称：显示当前建筑名称。\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":23.67,"y":61.19,"title":"信息区","rule":"1. 挂机速度：显示当前建筑挂机速度。\n2. 挂机上限：显示当前可累计的最大挂机时长。\n","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"T3NDbEQxAoyLazxrjowcZxpqnff","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"1.1.0","name":"勋章界面","groupId":"TV-1","groupName":"电视台主界面","note":"归入 TV-1：电视台主界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"1.1.0-img-1","label":"界面1","role":"正式界面","width":629,"height":1074,"src":"assets/screen-006.png","entryRule":"1. 主入口：\n   1. 入口来源：点击电视台主界面【勋章】按钮进入。\n","annotations":[{"id":"01","x":36.45,"y":2.79,"title":"顶部标题区","rule":"1. 界面标题：显示【小镇电视台】标题。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":55.74,"y":12.31,"title":"主列表/节点区","rule":"1. 节点排序规则：从下到到上，按等级从低到高的顺序展示节点。\n2. 节点显示内容：\n   1. 勋章图标：显示勋章图标和等级\n   2. 展示图片：根据系统显示该系统对应等级的插画图片\n   3. 等级效果：根据配置显示全局效果和系统勋章专属效果\n   4. 其他信息：\n      - 生效中标记：只在当前生效等级对应的节点显示\n      - 解锁条件： 只在未解锁的等级对应的节点显示\n      - 点击解锁提示：只在待解锁的等级对应的节点显示\n3. 节点状态：\n   1. 未解锁状态：勋章图标和展示图片置灰，增加显示解锁条件\n   2. 已解锁状态：正常显示\n   3. 生效中状态：增加显示生效中标记\n   4. 待解锁状态：勋章图标和展示图片置灰，增加显示点击解锁提示\n4. 点击效果：仅在待解锁状态下可进行点击，整个节点区域都可点击，点击后显示【升级成功】弹窗","extraImages":[{"src":"assets/extra-007.png","note":"未解锁状态"},{"src":"assets/extra-008.png","note":"已解锁状态"},{"src":"assets/extra-009.png","note":"生效中状态"},{"src":"assets/extra-010.png","note":"待解锁状态"}],"linkActions":[],"targetImageId":""},{"id":"03","x":81.8,"y":94.83,"title":"升级条件","rule":"1. 显示当前系统的升级条件及相关数值\n   - 电台影响力：影响力总值","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":13.88,"y":97.79,"title":"返回按钮","rule":"1. 返回按钮：点击返回上一级界面","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"RF2PblNYDoCUIEx7sZKcn5lNnxh","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"1.1.1","name":"勋章升级成功弹窗","groupId":"TV-1","groupName":"电视台主界面","note":"","status":"","remark":"","images":[{"id":"1.1.1-img-1","label":"界面1","role":"正式界面","width":619,"height":1057,"src":"assets/screen-011.png","entryRule":"入口规则待补充。","annotations":[],"sourceImageToken":"Z5L1bNrlAobajNxqEzocGOBWnKh","sourceUpdatedAt":"2026-10-10T10:02:43.029Z"}]},{"id":"1.2.0","name":"制作组等级","groupId":"TV-1","groupName":"电视台主界面","note":"归入 TV-1：电视台主界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"1.2.0-img-1","label":"界面1","role":"正式界面","width":629,"height":1075,"src":"assets/screen-012.png","entryRule":"1. 说明入口：\n   1. 入口来源：从电视台主界面点击难度、等级或订单等级说明入口进入。\n   2. 进入条件：当前说明入口已解锁且处于可查看状态。","annotations":[{"id":"01","x":50,"y":10,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示当前说明弹窗标题。\n2. 关闭按钮：点击后关闭弹窗，返回进入前界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":50,"y":38,"title":"等级/难度列表","rule":"1. 列表项：\n   1. 显示规则：显示等级或难度名称、颜色标识、概率信息和关联数值。\n   2. 排序规则：按配置顺序展示；若配置定义等级高低，则按等级顺序展示。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":50,"y":64,"title":"规则说明区","rule":"1. 说明文本：显示等级、难度、概率或刷新规则说明。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":50,"y":86,"title":"确认按钮","rule":"1. 确认按钮：点击后关闭当前弹窗。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"VSPcbubp2oFMPnxKWn8cmH2gnhc","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"1.3.0","name":"主持人升级","groupId":"TV-1","groupName":"电视台主界面","note":"归入 TV-1：电视台主界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"1.3.0-img-1","label":"界面1","role":"正式界面","width":628,"height":1077,"src":"assets/screen-013.png","entryRule":"1. 主持人入口：\n   1. 入口来源：从【主持人】按钮进入，默认进入【升级】页签对应界面\n   2. 入口来源：点击【升级】页签","annotations":[{"id":"01","x":36.36,"y":21.67,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示【主持人】标题。\n2. 关闭按钮：点击后关闭弹窗","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":11.33,"y":28.16,"title":"主持人信息区","rule":"1. 主持人形象：\n   1. 形象：根据主持人阶级显示对应形象。\n   2. 阶级名称：显示主持人阶级名称\n   3. 底框：根据阶级显示对应的颜色底框\n2. 主持人信息：根据配置表显示对应信息\n   1. 名称\n   2. 工龄\n   3. 擅长界面\n   4. 简介","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":12.64,"y":53.76,"title":"加成信息区","rule":"1. 主持人等级：显示当前等级\n2. 等级效果：根据配置显示对应的等级消耗\n   1. 左侧显示当前等级，右侧显示下一等级\n   2. 效果\n      - 演播阅历收益\n      - 演播金钱消耗","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":19.18,"y":75.25,"title":"升级操作区","rule":"1. 升级条件：赚速达到（当前数值/要求数值）后可升级\n2. 升级按钮：\n   1. 条件满足时，点击显示【升级成功】弹窗。\n   2. 条件不足时，点击后tips提示“未达到升级条件”。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"05","x":48.03,"y":84.26,"title":"页签","rule":"1. 页签内容：\n   1. 升级\n   2. 进阶\n2. 默认：每次进入默认选中升级页签\n3. 点击效果：点击可选中并切换页签","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"HKgtb5jNgoSPKsx2cp2cMBgen0b","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"1.3.1","name":"主持人进阶","groupId":"TV-1","groupName":"电视台主界面","note":"归入 TV-1：电视台主界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"1.3.1-img-1","label":"界面1","role":"正式界面","width":629,"height":1074,"src":"assets/screen-014.png","entryRule":"1. 进阶入口：\n   1. 入口来源：点击【进阶】页签切换界面","annotations":[{"id":"01","x":32.45,"y":23.39,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示【主持人】标题。\n2. 关闭按钮：点击后关闭弹窗。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":14.86,"y":34.18,"title":"进阶前信息","rule":"1. 显示内容：左侧显示当前形象，右侧显示下一阶级形象。\n2. 主持人形象：\n   1. 形象：根据主持人阶级显示对应形象。\n   2. 阶级名称：显示主持人阶级名称\n   3. 底框：根据阶级显示对应的颜色底框\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":14.21,"y":55.1,"title":"进阶后预览","rule":"1. 标题：进阶效果\n2. 效果：根据配置显示效果\n   1. 左侧显示当前等级，右侧显示下一等级\n   2. 效果：所有频道演播阅历加成","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":14.05,"y":74.39,"title":"进阶操作区","rule":"1. 进阶条件：\n   1. 身份等级达到要求等级（当前等级/要求等级）\n   2. 主持人等级达到要求等级（当前等级/要求等级）\n2. 条件状态\n   1. 条件不足显示为红色\n   2. 条件达到正常显示。\n3. 进阶按钮：\n   1. 条件满足时，点击后执行进阶，显示【进阶成功】弹窗。\n   2. 条件不足时，点击后不执行进阶，tips提示“未达到进阶条件”。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"05","x":46.95,"y":85.19,"title":"页签","rule":"1. 页签内容：\n   1. 升级\n   2. 进阶\n2. 默认：每次进入默认选中升级页签\n3. 点击效果：点击可选中并切换页签","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"GvQRbLqQgo4TnMxn4IpckFCHnYc","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"2.0.0","name":"频道节目","groupId":"TV-2","groupName":"节目库界面","note":"归入 TV-2：节目库界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"2.0.0-img-1","label":"界面1","role":"正式界面","width":941,"height":1672,"src":"assets/screen-015.png","entryRule":"1. 节目单入口：\n   1. 入口来源：从电视台主界面点击【节目单】进入。","annotations":[{"id":"01","x":9.7,"y":6.1,"title":"标题区","rule":"1. 界面标题：显示【节目库】标题。 \n2. 资源栏：显示四种节目经验资源\n  ","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":50,"y":17,"title":"栏目加成区","rule":"1. 加成标题：节目库。\n2. 加成数值：\n   1. 根据频道对应的商铺，显示对应商铺的总加成值\n   2. 文本\"#类型名称#商铺赚速 +#num#%”","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":50,"y":42,"title":"节目分类列表","rule":"1. 分类标题：\n   1. 显示内容：显示节目类型图标、节目类型名称\n   2. 显示顺序：按类型编号从小到大，从左往右排列\n2. 节目项：\n   1. 显示规则：\n      1. 每个节目类型下，竖向排列该同类型的所有节目\n      2. 排序规则：按编号从小到大，从上到下排列。\n   2. 显示内容：\n      1. 节目图标\n      2. 节目名称\n      3. 节目等级\n      4. 节目底色：根据分类对应显示四种颜色\n   3. 显示状态：\n      1. 已解锁：普通态\n      2. 未解锁：置灰，每列首个未解锁的节目，增加显示解锁条件\n      3. 待解锁：置灰，显示解锁提示标志\n      4. 可升级：普通态，增加显示升级提示图标或红点\n3. 点击规则：\n   1. 已解锁：点击打开【节目升级】界面\n   2. 未解锁：点击打开【解锁提示引导】弹窗\n   3. 待解锁：点击解锁界面，显示【解锁新节目】弹窗\n   4. 可升级：点击打开【节目升级】界面","extraImages":[{"src":"assets/extra-016.png","note":"已解锁"},{"src":"assets/extra-017.png","note":"未解锁"},{"src":"assets/extra-018.png","note":"待解锁"}],"linkActions":[{"label":"点击节目图标","targetImageId":"2.1.0::2.1.0-img-1"}],"targetImageId":"2.1.0::2.1.0-img-1"},{"id":"04","x":4.28,"y":79.93,"title":"频道页签","rule":"1. 频道页签：点击页签切换频道，并刷新节目分类列表。\n2. 选中态：当前频道页签显示高亮态，其余页签显示未选中态。\n3. 排列顺序：按频道编号从小到大，从左到右排列","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"05","x":34,"y":90,"title":"节目解锁数量","rule":"1. 解锁数量：显示当前频道已解锁节目数量，已解锁节目数量 / 节目总数量。\n2.提示文本：解锁节目将加入电视台播出片单通过三消完成播出，获得更多阅历","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"06","x":72,"y":90,"title":"一键升级按钮","rule":"1. 显示条件：\n   1. 解锁一键升级功能\n   2. 当前频道有可升级的节目\n   3. 同时满足以上条件才显示按钮\n2. 点击效果：一键提升当前频道可升级的所有节目，展开【节目升级成功】弹窗","extraImages":[],"linkActions":[{"label":"点击一键升级","targetImageId":"2.1.1::2.1.1-img-1"}],"targetImageId":"2.1.1::2.1.1-img-1"},{"id":"07","x":8,"y":94,"title":"返回按钮","rule":"1. 返回按钮：点击后返回上一级界面。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"BIBZbXnVBooAoax7wgWcb5uTnJf","sourceUpdatedAt":"2026-10-10T10:02:43.029Z"},{"id":"2.0.0-img-2","label":"界面2","role":"参考图","width":619,"height":1056,"src":"assets/screen-019.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"MxoqbZEF0oe7t1xmLxhc23qgnth","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"},{"id":"2.0.0-img-3","label":"界面3","role":"状态图","width":626,"height":1062,"src":"assets/screen-020.png","entryRule":"状态图：仅用于展示当前界面的状态差异。重复区域不重新标点；只在新增或变化区域手动补充标点。","annotations":[],"sourceImageToken":"VfFobIYPGoSxB6xa86fc5UOynGb","sourceUpdatedAt":"2026-10-10T10:02:43.029Z"}]},{"id":"2.0.1","name":"解锁新界面","groupId":"TV-2","groupName":"节目库界面","note":"归入 TV-2：节目库界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"2.0.1-img-1","label":"界面1","role":"正式界面","width":617,"height":1056,"src":"assets/screen-021.png","entryRule":"1. 入口来源：从节目库点击待解锁节目触发。\n","annotations":[{"id":"01","x":16.86,"y":25.87,"title":"弹窗标题","rule":"1. 弹窗标题：显示【解锁新节目】","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":25.51,"y":42.87,"title":"解锁对象展示区","rule":"1. 节目图标：显示新解锁节目的图标。\n2. 节目名称：显示新解锁节目名称。\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":14.24,"y":62.55,"title":"解锁效果区","rule":"1. 显示内容：根据配置显示对应的效果\n   1. 效果图标\n   2. 效果名称\n   3. 效果加成 ","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":50,"y":84,"title":"关闭提示文本","rule":"1. 关闭提示文本：点击后空白区域关闭弹窗。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"LvCFbw5MIo2VsuxdCsccNmZFnOc","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"2.1.0","name":"节目升级","groupId":"TV-2","groupName":"节目库界面","note":"归入 TV-2：节目库界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"2.1.0-img-1","label":"界面1","role":"正式界面","width":941,"height":1672,"src":"assets/screen-022.png","entryRule":"1. 节目详情入口：\n   1. 入口来源：从节目库点击已解锁节目进入。","annotations":[{"id":"01","x":7.33,"y":5.81,"title":"标题区","rule":"1. 界面标题：显示【节目库】标题。 \n2. 资源栏：显示四种节目经验资源","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":32.24,"y":14.89,"title":"栏目加成区 ","rule":"1. 加成标题：节目库。\n2. 加成数值：\n   1. 根据频道对应的商铺，显示对应商铺的总加成值\n   2. 文本\"#类型名称#商铺赚速 +#num#%”\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":31.73,"y":34.75,"title":"节目主信息区","rule":"1. 节目图片：显示当前节目图片。\n2. 节目名称：显示当前节目名称。\n3. 类型标签：显示节目所属类型或频道标签。\n4. 说明文本：显示节目说明文本。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":48.85,"y":55,"title":"播放收益区","rule":"1. 播放量：显示当前节目播放量。\n2. 电台收益：显示当前节目带来的电台收益。\n\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"05","x":48.51,"y":65.6,"title":"升级属性区 ","rule":"1. 显示内容：\n   1. 属性图标\n   2. 属性名称\n   3. 属性当前值\n   4. 属性下一级数值\n2. 属性效果：根据配置显示\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"06","x":26.48,"y":74.39,"title":"升级操作区","rule":"1. 升级材料：\n   1. 显示规则：显示升级所需材料数量 / 当前拥有数量。\n   2. 显示状态\n      1. 材料不足时，数量显示为红色\n      2. 材料足够时，数量正常显示\n2. 升级按钮：\n   1. 材料充足时，点击后刷新界面，并飘字显示赚速提升数值。\n   2. 材料不足时，点击后不执行升级，打开【道具不足】弹窗。\n3. 十连升级勾选框\n   1. 默认为未勾选状态\n   2. 勾选后，升级材料显示为连升10级所需的材料\n   3. 勾选后，点击升级按钮，直接提升10级\n   4. 若道具不足10连升级时，可进行升级，升到不可提升为止。\n","extraImages":[{"src":"assets/extra-023.png","note":"升级飘字"}],"linkActions":[],"targetImageId":""},{"id":"07","x":6.14,"y":81.75,"title":"底部频道","rule":"1. 频道页签：\n   1. 显示规则：显示当前频道分类。\n   2. 点击规则：切换频道并返回该频道节目列表。\n\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"08","x":13.41,"y":94.88,"title":"返回按钮","rule":"1. 返回按钮：点击后返回节目列表。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"Zlghbaz9GoZ3iFxsywPcxF0tnld","sourceUpdatedAt":"2026-10-10T10:02:43.029Z"},{"id":"2.1.0-img-2","label":"界面2","role":"参考图","width":627,"height":1074,"src":"assets/screen-024.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"ZhyzbtORyoZGPXxS7nKcrDZpn7e","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"},{"id":"2.1.0-img-3","label":"界面3","role":"参考图","width":615,"height":1058,"src":"assets/screen-025.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"NWU0b7InZoRy0yxYmd5c33GHnfc","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"2.1.1","name":"节目升级成功弹窗","groupId":"TV-2","groupName":"节目库界面","note":"归入 TV-2：节目库界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"2.1.1-img-1","label":"界面1","role":"正式界面","width":629,"height":1074,"src":"assets/screen-026.png","entryRule":"1. 自动弹出：\n   1. 入口来源：节目升级成功后自动弹出。\n   2. 进入条件：升级请求成功，且服务端返回升级结果。","annotations":[{"id":"01","x":25.28,"y":23.58,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示【升级成功】标题。\n2. 关闭按钮：点击后关闭弹窗，返回节目详情或节目库。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":23.98,"y":32.94,"title":"升级对象区","rule":"1. 节目图标：显示本次升级的节目图标。\n2. 节目名称：显示本次升级的节目名称。\n3. 等级变化：显示升级前等级和升级后等级。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":10.46,"y":49.18,"title":"属性提升区","rule":"1. 属性变化列表：\n   1. 显示规则：显示升级后提升的属性、收益或加成。\n   2. 排序规则：按升级结果返回顺序或配置顺序展示。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":50,"y":82,"title":"确认操作区","rule":"1. 确认按钮：点击后关闭弹窗，并刷新节目等级与属性显示。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"Qg1ibiI7loD3GexL1OBcLkpfn5e","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"},{"id":"2.1.1-img-2","label":"界面2","role":"状态图","width":631,"height":1074,"src":"assets/screen-027.png","entryRule":"状态图：仅用于展示当前界面的状态差异。重复区域不重新标点；只在新增或变化区域手动补充标点。","annotations":[],"sourceImageToken":"RIIhbtmezoHrngxUeCyc10OEnhg","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"2.1.2","name":"未解锁二次确认弹窗","groupId":"TV-2","groupName":"节目库界面","note":"归入 TV-2：节目库界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"2.1.2-img-1","label":"界面1","role":"正式界面","width":628,"height":1074,"src":"assets/screen-028.png","entryRule":"1. 二次确认触发：\n   1. 入口来源：从未解锁节目、条件不足操作或高风险操作点击后弹出。\n   2. 进入条件：当前操作需要玩家二次确认。","annotations":[{"id":"01","x":50,"y":14,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示提示或确认标题。\n2. 关闭按钮：点击后关闭弹窗，不执行原操作。","extraImages":[]},{"id":"02","x":50,"y":42,"title":"确认说明区","rule":"1. 说明文本：显示当前操作的确认内容、消耗、风险或条件说明。","extraImages":[]},{"id":"03","x":35,"y":78,"title":"取消按钮","rule":"1. 取消按钮：点击后关闭弹窗，不执行原操作。","extraImages":[]},{"id":"04","x":65,"y":78,"title":"确认按钮","rule":"1. 确认按钮：\n   1. 点击后执行原操作。\n   2. 操作成功后关闭弹窗并刷新相关界面。\n   3. 操作失败时停留弹窗并显示失败提示。","extraImages":[]}],"sourceImageToken":"QJlbbSiP3o4240xBjLxcOAT0nYb","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"3.0.0","name":"演播界面","groupId":"TV-3","groupName":"演播界面","note":"归入 TV-3：演播界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"3.0.0-img-1","label":"界面1","role":"正式界面","width":720,"height":1280,"src":"assets/screen-029.png","entryRule":"1. 演播入口：\n   1. 入口来源：从电视台主界面选择节目后点击演播入口进入。\n   2. 进入条件：当前节目已解锁，主持人配置有效，演播消耗满足开始条件。\n   3. 条件不足时不进入演播界面，并显示对应提示。","annotations":[{"id":"01","x":35,"y":5,"title":"顶部资源区","rule":"1. 演播资源：显示当前资源、体力或演播相关消耗；点击加号打开对应资源获取或购买入口。","extraImages":[]},{"id":"02","x":68,"y":12,"title":"节目信息区","rule":"1. 频道名称：显示当前节目所属频道。\n2. 节目名称：显示当前演播节目名称。\n3. 档期与倍率：显示当前档期和收益倍率。","extraImages":[]},{"id":"03","x":50,"y":42,"title":"演播主视觉区","rule":"1. 演播画面：\n   1. 显示规则：显示当前节目演播主视觉和舞台表现。\n   2. 状态规则：演播操作触发后可播放对应反馈表现。","extraImages":[]},{"id":"04","x":35,"y":76,"title":"体力次数与进度区","rule":"1. 演播消耗：显示当前体力或操作次数。\n2. 演播进度：\n   1. 显示规则：显示当前演播进度。\n   2. 刷新规则：执行演播操作后同步刷新剩余次数和进度。","extraImages":[]},{"id":"05","x":72,"y":76,"title":"热度结果区","rule":"1. 热度变化：\n   1. 显示规则：显示本次操作带来的热度变化。\n   2. 计算规则：根据选择的操作卡和当前加成计算。\n2. 结果提示：操作完成后显示本次结果提示。","extraImages":[]},{"id":"06","x":50,"y":90,"title":"操作卡牌区","rule":"1. 操作卡牌：\n   1. 显示规则：显示可选择的演播操作、消耗和收益预览。\n   2. 点击规则：点击后消耗对应次数或资源，并执行该操作。\n   3. 状态规则：条件不足时卡牌置灰或点击后显示不足提示。","extraImages":[]},{"id":"07","x":8,"y":94,"title":"返回按钮","rule":"1. 返回按钮：点击后退出演播界面，返回进入前界面。","extraImages":[]}],"sourceImageToken":"A7ZObK6fGoHCYwxQxNCcI3SInzS","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"},{"id":"3.0.0-img-2","label":"界面2","role":"参考图","width":630,"height":1076,"src":"assets/screen-030.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"PV7cbWqnAoLVhgxImkMckOdunqc","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"3.1.0","name":"演播结算","groupId":"TV-3","groupName":"演播界面","note":"归入 TV-3：演播界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"3.1.0-img-1","label":"界面1","role":"正式界面","width":720,"height":1280,"src":"assets/screen-031.png","entryRule":"1. 自动弹出：\n   1. 入口来源：演播流程完成后自动弹出。\n   2. 进入条件：当前演播达到结算节点，且服务端返回结算结果。","annotations":[{"id":"01","x":50,"y":12,"title":"结算标题与关闭","rule":"1. 结算标题：显示【演播完成】标题。\n2. 关闭按钮：点击后关闭结算弹窗，返回演播前界面或电视台主界面。","extraImages":[]},{"id":"02","x":50,"y":32,"title":"评价与热度区","rule":"1. 演播评价：\n   1. 显示规则：显示本次演播评级。\n   2. 计算规则：根据结算分数或热度区间计算。\n2. 最终热度：显示本次演播最终热度值。","extraImages":[]},{"id":"03","x":50,"y":55,"title":"奖励预览区","rule":"1. 奖励列表：\n   1. 显示规则：显示本次演播获得的资源、道具或材料数量。\n   2. 排序规则：按结算结果返回顺序或奖励配置顺序展示。","extraImages":[]},{"id":"04","x":50,"y":76,"title":"阅历与连击区","rule":"1. 阅历收益：显示本次获得阅历。\n2. 连击信息：\n   1. 显示规则：显示本次连击次数或额外加成结果。\n   2. 计算规则：根据本次演播操作结果计算。","extraImages":[]},{"id":"05","x":50,"y":92,"title":"背景遮罩","rule":"1. 背景遮罩：\n   1. 显示规则：结算弹窗出现时，背景界面压暗。\n   2. 点击规则：系统配置允许点击遮罩关闭时，点击遮罩关闭弹窗；未配置时不响应。","extraImages":[]}],"sourceImageToken":"ZOnnbaGSaoHk4kxr5NscPT61nqd","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"},{"id":"3.1.0-img-2","label":"界面2","role":"参考图","width":630,"height":1073,"src":"assets/screen-032.png","entryRule":"参考图：仅用于对标或说明，不生成界面规则。","annotations":[],"sourceImageToken":"G8gTbwihmodZwfxhLzMc0Xcvntg","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]},{"id":"4.0.0","name":"使用道具弹窗","groupId":"TV-4","groupName":"通用界面","note":"归入 TV-4：通用界面规则组","status":"总览已更新，待详细画板","remark":"已补真实截图卡片；详细规则画板完成后回填真实跳转链接","images":[{"id":"4.0.0-img-1","label":"界面1","role":"正式界面","width":630,"height":1074,"src":"assets/screen-033.png","entryRule":"1. 道具入口：\n   1. 入口来源：从需要消耗道具的功能按钮、材料不足提示或背包道具入口打开。\n   2. 进入条件：当前操作存在可使用道具，且玩家拥有该道具。\n   3. 没有可用道具时不打开弹窗，并显示获取提示或不足提示。","annotations":[{"id":"01","x":50,"y":12,"title":"弹窗标题与关闭","rule":"1. 弹窗标题：显示【使用道具】标题。\n2. 关闭按钮：点击后关闭弹窗，返回进入前界面。","extraImages":[]},{"id":"02","x":50,"y":32,"title":"道具信息区","rule":"1. 道具图标：显示当前使用道具图标。\n2. 道具名称：显示当前使用道具名称。\n3. 道具说明：显示道具用途和效果说明。","extraImages":[]},{"id":"03","x":50,"y":54,"title":"数量选择区","rule":"1. 当前数量：显示当前选择使用数量。\n2. 减少按钮：\n   1. 点击规则：点击后减少使用数量。\n   2. 状态规则：数量达到下限时按钮置灰。\n3. 增加按钮：\n   1. 点击规则：点击后增加使用数量。\n   2. 状态规则：数量达到拥有上限或使用上限时按钮置灰。","extraImages":[]},{"id":"04","x":50,"y":78,"title":"使用按钮","rule":"1. 使用按钮：\n   1. 数量有效且道具充足时，点击后使用道具，并刷新使用结果。\n   2. 数量无效或道具不足时，点击后不使用，并显示对应提示。","extraImages":[]},{"id":"05","x":50,"y":92,"title":"背景遮罩","rule":"1. 背景遮罩：\n   1. 显示规则：弹窗开启时背景压暗。\n   2. 点击规则：系统配置允许点击遮罩关闭时，点击遮罩关闭弹窗；未配置时不响应。","extraImages":[]}],"sourceImageToken":"UpJJb8RSdox1klx4xvPcErKznhc","sourceUpdatedAt":"2026-10-10T01:39:23.036Z"}]}],"ruleContentVersion":"mapping-sync-2026-10-10-100243","savedAt":"2026-10-10T10:02:43.029Z"};
 const storageKey = "tv-ui-rules-html-prototype-v15";
 const ruleContentVersion = seedData.ruleContentVersion || "object-first-rules-v2";
 let state = clone(seedData);
@@ -611,6 +711,7 @@ let activeMarkerId = "01";
 let ruleDisplayMode = "overview";
 let moveMarkerId = null;
 let expandedExtraPanels = new Set();
+let jumpBackTarget = null;
 
 function clone(value) { return JSON.parse(JSON.stringify(value)); }
 function mergeRuleContentFromSeed(cached) {
@@ -763,6 +864,7 @@ async function preparePublish(button) {
 function pad2(n) { return String(n).padStart(2, "0"); }
 function byId(id) { return document.getElementById(id); }
 function screenTitle(screen) { return screen.id + " " + screen.name; }
+function isViewOnlyMode() { return document.body.classList.contains("view-only"); }
 function normalizeMarkerActions(marker) {
   if (!marker) return [];
   const actions = Array.isArray(marker.linkActions) ? marker.linkActions : [];
@@ -786,10 +888,40 @@ function buildTargetImageOptions(selectedValue) {
   return '<option value="">不跳转</option>' + state.interfaces.map(targetScreen =>
     '<optgroup label="' + escapeAttr(screenTitle(targetScreen)) + '">' +
     targetScreen.images.map((img, index) =>
-      '<option value="' + escapeAttr(targetScreen.id + "::" + img.id) + '" ' + (selectedValue === targetScreen.id + "::" + img.id || selectedValue === img.id ? 'selected' : '') + '>' + escapeHtml((img.label || ("界面" + (index + 1))) + " · " + (img.role || "正式界面")) + '</option>'
+      '<option value="' + escapeAttr(targetScreen.id + "::" + img.id) + '" ' + (selectedValue === targetScreen.id + "::" + img.id || selectedValue === img.id ? 'selected' : '') + '>' + escapeHtml(screenTitle(targetScreen) + " / " + (img.label || ("界面" + (index + 1))) + " · " + (img.role || "正式界面")) + '</option>'
     ).join("") +
     '</optgroup>'
   ).join("");
+}
+function resolveTargetImage(targetValue, fallbackScreen) {
+  if (!targetValue) return null;
+  let targetScreen = fallbackScreen;
+  let targetImageId = targetValue;
+  if (targetValue.includes("::")) {
+    const parts = targetValue.split("::");
+    targetScreen = state.interfaces.find(item => item.id === parts[0]) || fallbackScreen;
+    targetImageId = parts[1];
+  } else {
+    targetScreen = state.interfaces.find(screen => (screen.images || []).some(img => img.id === targetValue)) || fallbackScreen;
+  }
+  const targetIndex = targetScreen?.images?.findIndex(img => img.id === targetImageId) ?? -1;
+  if (!targetScreen || targetIndex < 0) return null;
+  const image = targetScreen.images[targetIndex];
+  return {
+    screen: targetScreen,
+    image,
+    index: targetIndex,
+    value: targetScreen.id + "::" + image.id,
+    title: screenTitle(targetScreen),
+    meta: (image.label || ("界面" + (targetIndex + 1))) + " · " + (image.role || "正式界面"),
+  };
+}
+function renderActionTargetPreview(target, markerId, actionIndex) {
+  if (!target) return '<div class="action-target-empty">未选择目标界面</div>';
+  return '<div class="action-target-card">' +
+    '<button class="action-target-thumb" data-preview-action="' + escapeAttr(markerId) + '" data-action-index="' + actionIndex + '" title="查看大图"><img src="' + escapeAttr(target.image.src) + '" alt="' + escapeAttr(target.title) + '" /></button>' +
+    '<div><div class="action-target-title">' + escapeHtml(target.title) + '</div><div class="action-target-meta">' + escapeHtml(target.meta) + '</div></div>' +
+  '</div>';
 }
 
 function render() {
@@ -830,6 +962,7 @@ function renderOverview() {
 }
 
 function openDetail(screenId) {
+  jumpBackTarget = null;
   activeScreenId = screenId;
   activeImageIndex = 0;
   activeMarkerId = "01";
@@ -848,15 +981,19 @@ function renderDetail(screenId) {
     return;
   }
   const image = screen.images[activeImageIndex];
+  const jumpOrigin = jumpBackTarget
+    ? '<div class="jump-origin"><span>从 ' + escapeHtml(jumpBackTarget.label || "上一界面") + ' 跳转而来</span><button class="ghost" data-return-jump>返回来源</button></div>'
+    : "";
   view.innerHTML = '<div class="detail-head">' +
     '<div><h2>' + escapeHtml(screenTitle(screen)) + '</h2><p class="hint">' + escapeHtml(screen.groupName || screen.note || "界面规则展示") + '</p></div>' +
     '<button class="secondary" data-back>返回总览</button>' +
   '</div>' +
+  jumpOrigin +
   '<section class="screen-block">' +
     '<div class="screen-title"><h3>' + escapeHtml(screenTitle(screen)) + '</h3><span class="tag">' + escapeHtml(screen.groupId || "未分组") + '</span></div>' +
     (image ? renderImageWorkspace(screen, image) : renderEmptyImage(screen)) +
   '</section>';
-  view.querySelector("[data-back]").addEventListener("click", () => { activeScreenId = null; renderOverview(); renderNav(); });
+  view.querySelector("[data-back]").addEventListener("click", () => { jumpBackTarget = null; activeScreenId = null; renderOverview(); renderNav(); });
   bindDetailEvents(screen);
 }
 
@@ -893,14 +1030,19 @@ function renderImageWorkspace(screen, image) {
         '<div class="mini-toolbar"><button class="ghost" data-insert-extra-ref="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '">插入引用</button><button class="danger" data-delete-extra="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '">删除</button></div>' +
       '</div>'
     ).join("");
-    const actionRows = linkActions.map((action, index) =>
-      '<div class="action-row" data-action-row="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">' +
+    const actionRows = linkActions.map((action, index) => {
+      const target = resolveTargetImage(action.targetImageId || "", screen);
+      return '<div class="action-row" data-action-row="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">' +
         '<input data-action-label="' + escapeAttr(marker.id) + '" data-action-index="' + index + '" value="' + escapeAttr(action.label || "") + '" placeholder="动作名，如点击详情" />' +
-        '<select data-action-target="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">' + buildTargetImageOptions(action.targetImageId || "") + '</select>' +
+        '<div class="action-target-cell">' +
+          '<select data-action-target="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">' + buildTargetImageOptions(action.targetImageId || "") + '</select>' +
+          renderActionTargetPreview(target, marker.id, index) +
+        '</div>' +
+        '<button class="ghost" data-preview-action="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">大图</button>' +
         '<button class="ghost" data-jump-action="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">查看</button>' +
         '<button class="danger" data-delete-action="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">删除</button>' +
-      '</div>'
-    ).join("");
+      '</div>';
+    }).join("");
     return '<article class="rule-card ' + (marker.id === activeMarkerId ? 'active' : '') + '" data-rule="' + escapeAttr(marker.id) + '" data-rule-drop="' + escapeAttr(marker.id) + '">' +
       '<div class="rule-head"><span class="rule-num">' + escapeHtml(marker.id) + '</span><input data-edit-title="' + escapeAttr(marker.id) + '" value="' + escapeAttr(marker.title) + '" /></div>' +
       '<textarea data-edit-rule="' + escapeAttr(marker.id) + '">' + escapeHtml(marker.rule) + '</textarea>' +
@@ -976,13 +1118,13 @@ function bindDetailEvents(screen) {
       const id = el.dataset.marker || el.dataset.rule || el.dataset.focusMarker;
       if (id) {
         activeMarkerId = id;
-        activeMarkerId = marker.id;
         renderDetail(screen.id);
       }
     });
   });
   document.querySelectorAll("[data-marker]").forEach(markerEl => {
     markerEl.addEventListener("pointerdown", event => {
+      if (isViewOnlyMode()) return;
       event.preventDefault();
       event.stopPropagation();
       const marker = image.annotations.find(item => item.id === markerEl.dataset.marker);
@@ -1040,6 +1182,18 @@ function bindDetailEvents(screen) {
       actions[index].targetImageId = select.value;
       syncLegacyTarget(marker);
       saveState();
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-preview-action]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      const marker = image.annotations.find(item => item.id === btn.dataset.previewAction);
+      const index = Number(btn.dataset.actionIndex);
+      const action = normalizeMarkerActions(marker)[index];
+      const target = resolveTargetImage(action?.targetImageId || "", screen);
+      if (!target) return;
+      openImagePreview(target.image.src, target.title + " / " + target.meta);
     });
   });
   document.querySelectorAll("[data-jump-action]").forEach(btn => {
@@ -1048,7 +1202,7 @@ function bindDetailEvents(screen) {
       const index = Number(btn.dataset.actionIndex);
       const action = normalizeMarkerActions(marker)[index];
       if (!action?.targetImageId) return;
-      jumpToTargetImage(action.targetImageId, marker.id, screen);
+      jumpToTargetImage(action.targetImageId, marker.id, screen, action.label);
     });
   });
   document.querySelectorAll("[data-delete-action]").forEach(btn => {
@@ -1065,6 +1219,7 @@ function bindDetailEvents(screen) {
   });
   document.querySelectorAll("[data-add-action]").forEach(btn => {
     btn.addEventListener("click", () => {
+      if (isViewOnlyMode()) return;
       const marker = image.annotations.find(item => item.id === btn.dataset.addAction);
       const actions = normalizeMarkerActions(marker);
       actions.push({ label: "点击动作 " + (actions.length + 1), targetImageId: "" });
@@ -1245,7 +1400,22 @@ function bindDetailEvents(screen) {
       saveState();
     });
   }
-  document.querySelector("[data-add-marker]").addEventListener("click", () => addMarker(image, 50, 50, screen.id));
+  const returnJump = document.querySelector("[data-return-jump]");
+  if (returnJump) {
+    returnJump.addEventListener("click", () => {
+      if (!jumpBackTarget) return;
+      activeScreenId = jumpBackTarget.screenId;
+      activeImageIndex = jumpBackTarget.imageIndex;
+      activeMarkerId = jumpBackTarget.markerId;
+      jumpBackTarget = null;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+  document.querySelector("[data-add-marker]").addEventListener("click", () => {
+    if (isViewOnlyMode()) return;
+    addMarker(image, 50, 50, screen.id);
+  });
   document.querySelector("[data-renumber-markers]").addEventListener("click", () => {
     const result = renumberMarkersSequential(image);
     if (!result.ok) {
@@ -1284,6 +1454,7 @@ function bindDetailEvents(screen) {
   const wrap = document.querySelector("[data-image-wrap]");
   wrap.addEventListener("click", event => {
     if (event.target.closest(".marker")) return;
+    if (isViewOnlyMode()) return;
     const rect = wrap.getBoundingClientRect();
     const x = ((event.clientX - rect.left) / rect.width) * 100;
     const y = ((event.clientY - rect.top) / rect.height) * 100;
@@ -1349,17 +1520,41 @@ function remapIdSet(sourceSet, idMap) {
   return next;
 }
 
-function jumpToTargetImage(targetValue, sourceMarkerId, fallbackScreen) {
+function openImagePreview(src, title) {
+  const old = document.querySelector(".image-modal");
+  old?.remove();
+  const modal = document.createElement("div");
+  modal.className = "image-modal";
+  modal.innerHTML = '<div class="image-modal-card" role="dialog" aria-modal="true">' +
+    '<div class="image-modal-head"><strong>' + escapeHtml(title || "查看图片") + '</strong><button class="ghost" data-close-image-modal>关闭</button></div>' +
+    '<div class="image-modal-body"><img src="' + src + '" alt="' + escapeAttr(title || "查看图片") + '" /></div>' +
+  '</div>';
+  modal.addEventListener("click", event => {
+    if (event.target === modal || event.target.closest("[data-close-image-modal]")) modal.remove();
+  });
+  document.addEventListener("keydown", function closeOnEsc(event) {
+    if (event.key !== "Escape") return;
+    modal.remove();
+    document.removeEventListener("keydown", closeOnEsc);
+  });
+  document.body.appendChild(modal);
+}
+
+function jumpToTargetImage(targetValue, sourceMarkerId, fallbackScreen, actionLabel = "") {
   if (!targetValue) return;
-  let targetScreen = fallbackScreen;
-  let targetImageId = targetValue;
-  if (targetValue.includes("::")) {
-    const parts = targetValue.split("::");
-    targetScreen = state.interfaces.find(item => item.id === parts[0]) || fallbackScreen;
-    targetImageId = parts[1];
-  }
-  const targetIndex = targetScreen.images.findIndex(img => img.id === targetImageId);
-  if (targetIndex < 0) return;
+  const target = resolveTargetImage(targetValue, fallbackScreen);
+  if (!target) return;
+  const sourceScreen = state.interfaces.find(item => item.id === activeScreenId) || fallbackScreen;
+  const sourceImage = sourceScreen?.images?.[activeImageIndex];
+  const sourceMarker = sourceImage?.annotations?.find(item => item.id === sourceMarkerId);
+  jumpBackTarget = {
+    screenId: sourceScreen.id,
+    imageIndex: activeImageIndex,
+    markerId: sourceMarkerId,
+    label: screenTitle(sourceScreen) + " / " + (sourceImage?.label || "当前图片") + " / " + sourceMarkerId + (sourceMarker?.title ? " " + sourceMarker.title : "") + (actionLabel ? " / " + actionLabel : ""),
+  };
+  const targetScreen = target.screen;
+  const targetIndex = target.index;
   activeScreenId = targetScreen.id;
   activeImageIndex = targetIndex;
   activeMarkerId = targetScreen.images[targetIndex].annotations.find(item => item.id === sourceMarkerId)?.id || targetScreen.images[targetIndex].annotations[0]?.id || "0";
