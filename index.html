@@ -3,58 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>公路小镇 · 规则文档总览</title>
+<title>公路小镇规则文档总览</title>
 <style>
-:root {
-  --ink: #1f2933;
-  --muted: #607080;
-  --line: #d9e2ec;
-  --warm: #fff7e8;
-  --brand: #25384e;
-  --accent: #d4563f;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  min-height: 100vh;
-  font: 15px/1.7 "Inter", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
-  color: var(--ink);
-  background: linear-gradient(135deg, #fff8ea 0%, #eef8f7 55%, #f7fbff 100%);
-}
-.page { max-width: 1120px; margin: 0 auto; padding: 48px 28px; }
-.hero {
-  border-radius: 18px;
-  padding: 34px 40px;
-  background: linear-gradient(100deg, #ffe5a9 0%, #edf2d7 46%, #cdeff3 100%);
-  box-shadow: 0 18px 40px rgba(37, 56, 78, .10);
-}
-.eyebrow { color: #6a7b88; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-h1 { margin: 8px 0 8px; font-size: 34px; line-height: 1.25; }
-.hero p { margin: 0; color: #526575; max-width: 760px; }
-.section { margin-top: 30px; }
-.section h2 { margin: 0 0 14px; font-size: 22px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
-.card {
-  display: block;
-  min-height: 154px;
-  padding: 22px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: rgba(255,255,255,.86);
-  color: inherit;
-  text-decoration: none;
-  box-shadow: 0 12px 28px rgba(37, 56, 78, .08);
-}
-.card:hover { border-color: #efc76b; transform: translateY(-1px); }
-.tag { display: inline-block; padding: 3px 9px; border-radius: 999px; background: #fce8dc; color: #a7432f; font-size: 12px; font-weight: 700; }
-.card h3 { margin: 12px 0 8px; font-size: 20px; }
-.card p { margin: 0; color: var(--muted); }
-.empty { border-style: dashed; color: var(--muted); }
-@media (max-width: 640px) {
-  .page { padding: 24px 16px; }
-  .hero { padding: 26px 22px; border-radius: 14px; }
-  h1 { font-size: 28px; }
-}
+:root{--ink:#1f2933;--muted:#607080;--line:#d9e2ec;--brand:#25384e}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font:15px/1.7 "Inter","Microsoft YaHei","PingFang SC",Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#fff8ea 0%,#eef8f7 55%,#f7fbff 100%)}.page{max-width:1120px;margin:0 auto;padding:48px 28px}.hero{border-radius:18px;padding:34px 40px;background:linear-gradient(100deg,#ffe5a9 0%,#edf2d7 46%,#cdeff3 100%);box-shadow:0 18px 40px rgba(37,56,78,.10)}.eyebrow{color:#6a7b88;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}h1{margin:8px 0 8px;font-size:34px;line-height:1.25}.hero p{margin:0;color:#526575;max-width:760px}.section{margin-top:30px}.section h2{margin:0 0 14px;font-size:22px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}.card{display:block;min-height:170px;padding:22px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.88);color:inherit;text-decoration:none;box-shadow:0 12px 28px rgba(37,56,78,.08)}.card:hover{border-color:#efc76b;transform:translateY(-1px)}.tag{display:inline-block;padding:3px 9px;border-radius:999px;background:#fce8dc;color:#a7432f;font-size:12px;font-weight:700}.card h3{margin:12px 0 8px;font-size:20px}.card p{margin:0 0 12px;color:var(--muted)}.card small{color:#81909d}.empty{border-style:dashed;color:var(--muted)}@media(max-width:640px){.page{padding:24px 16px}.hero{padding:26px 22px;border-radius:14px}h1{font-size:28px}}
 </style>
 </head>
 <body>
@@ -65,19 +17,19 @@ h1 { margin: 8px 0 8px; font-size: 34px; line-height: 1.25; }
     <p>这里收录各系统的界面规则展示页。每个系统使用独立目录发布，方便后续单独更新、分享和嵌入飞书。</p>
   </section>
   <section class="section">
-    <h2>已发布系统</h2>
-    <div class="grid">
-      <a class="card" href="./tv-ui-rules/">
-        <span class="tag">已发布</span>
-        <h3>小镇电视台</h3>
-        <p>【V0.2】小镇电视台界面规则展示版，支持目录浏览、截图标注和规则切换查看。</p>
-      </a>
-      <div class="card empty">
-        <span class="tag">预留</span>
-        <h3>后续系统</h3>
-        <p>新增系统后会在这里补充入口，例如宴会系统、邀请中心等。</p>
-      </div>
-    </div>
+    <h2>系统入口</h2>
+    <div class="grid"><a class="card" href="./tv-ui-rules/">
+  <span class="tag">已发布</span>
+  <h3>【V0.2】小镇电视台</h3>
+  <p>小镇电视台界面规则展示版，支持目录浏览、截图标注、规则切换和内联效果图查看。</p>
+  <small>15 个界面 · 25 张图</small>
+</a>
+<a class="card" href="./youth-center-ui-rules/">
+  <span class="tag">待推送</span>
+  <h3>【V0.2】青少年中心</h3>
+  <p>青少年中心界面规则展示版，包含界面截图、标点规则、动作跳转和效果图说明。</p>
+  <small>23 个界面 · 39 张图</small>
+</a></div>
   </section>
 </main>
 </body>
