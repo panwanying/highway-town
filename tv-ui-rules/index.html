@@ -785,6 +785,7 @@ body.view-only [data-save],
 body.view-only [data-delete-marker],
 body.view-only [data-move-marker],
 body.view-only [data-upload-image],
+body.view-only [data-sync-mapping-inline],
 body.view-only [data-upload-extra],
 body.view-only [data-system-clipboard],
 body.view-only [data-add-action],
@@ -836,11 +837,14 @@ body.view-only .rule-card textarea {
       <h2>界面规则展示版</h2>
       <p>左侧按系统与界面组织目录；进入界面后，可点击截图标注高亮对应规则，并在总览/分点模式间切换查看。</p>
       <div class="toolbar">
-        <button class="secondary" id="exportJsonBtn">导出编辑数据</button>
-        <button class="ghost" id="importJsonBtn">导入编辑数据</button>
-        <button class="ghost" id="resetBtn">恢复初始数据</button>
         <button class="secondary" id="saveTopBtn">保存修改</button>
-        <button id="publishBtn">发布</button>
+        <button class="secondary" id="syncMappingBtn">同步映射表</button>
+        <button id="buildPreviewBtn">生成本地预览版</button>
+        <button class="secondary" id="openPreviewBtn">打开本地预览版</button>
+        <button class="ghost" id="exportJsonBtn">导出备份</button>
+        <button class="ghost" id="importJsonBtn">导入备份</button>
+        <button class="ghost" id="preparePublishBtn">准备发布文件</button>
+        <button class="ghost" id="resetBtn">恢复初始数据</button>
         <input class="file-input" id="importJsonInput" type="file" accept="application/json" />
       </div>
     </section>
@@ -862,6 +866,7 @@ let ruleDisplayMode = "overview";
 let moveMarkerId = null;
 let expandedExtraPanels = new Set();
 let jumpBackTarget = null;
+const systemSlug = "tv-ui-rules";
 
 function clone(value) { return JSON.parse(JSON.stringify(value)); }
 function mergeRuleContentFromSeed(cached) {
@@ -940,6 +945,18 @@ function loadState() {
   return fresh;
 }
 let lastSaveError = "";
+function endpoint(path) {
+  return location.protocol === "file:" ? "http://127.0.0.1:5177" + path : path;
+}
+function downloadEditData(filename) {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename || (systemSlug + "-edit-data-backup.json");
+  a.click();
+  URL.revokeObjectURL(url);
+}
 function saveState() {
   try {
     localStorage.setItem(storageKey, JSON.stringify(state));
@@ -953,14 +970,14 @@ function saveState() {
 }
 async function saveStateToLocalFile(button, options = {}) {
   const browserSaved = saveState();
-  const endpoint = location.protocol === "file:" ? "http://127.0.0.1:5177/save-state" : "/save-state";
+  const saveEndpoint = endpoint("/save-state?system=" + encodeURIComponent(systemSlug));
   const oldText = button?.textContent;
   if (button) {
     button.textContent = "保存中...";
     button.disabled = true;
   }
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetch(saveEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ state }),
@@ -975,7 +992,11 @@ async function saveStateToLocalFile(button, options = {}) {
     return { ok: true, browserSaved, result };
   } catch (error) {
     const message = (browserSaved ? "已保存到当前浏览器，但" : "浏览器缓存保存失败，且") + "未写回本地 HTML。\n" + (error?.message || "请确认本地服务已启动。");
-    if (!options.silent) alert(message);
+    if (!options.silent) {
+      if (confirm(message + "\n\n是否立刻导出当前编辑数据备份？")) {
+        downloadEditData(systemSlug + "-save-failed-backup.json");
+      }
+    }
     return { ok: false, browserSaved, message };
   } finally {
     if (button) {
@@ -984,26 +1005,99 @@ async function saveStateToLocalFile(button, options = {}) {
     }
   }
 }
-async function preparePublish(button) {
+async function buildLocalPreview(button, options = {}) {
   const oldText = button?.textContent;
   if (button) {
-    button.textContent = "发布准备中...";
+    button.textContent = "生成中...";
     button.disabled = true;
   }
   try {
     const saved = await saveStateToLocalFile(null, { silent: true });
     if (!saved.ok) {
-      throw new Error(saved.message || "保存失败，已停止发布准备。");
+      throw new Error(saved.message || "保存失败，已停止生成本地预览版。");
     }
-    const endpoint = location.protocol === "file:" ? "http://127.0.0.1:5177/prepare-publish" : "/prepare-publish";
-    const response = await fetch(endpoint, { method: "POST" });
+    const response = await fetch(endpoint("/build-preview?system=" + encodeURIComponent(systemSlug)), { method: "POST" });
     const result = await response.json();
     if (!response.ok || !result.ok) {
-      throw new Error(result.message || "准备发布失败。");
+      throw new Error(result.message || "生成本地预览版失败。");
     }
-    alert(result.message + "\n\n提交号：" + result.commitSha + "\n下一步：在 Codex 对话里告诉我“继续发布线上版本”，我会发布到同一个线上链接。");
+    if (!options.silent) {
+      alert(result.message + "\n\n预览地址：" + result.previewUrl);
+    }
+    return { ok: true, result };
   } catch (error) {
-    alert("发布准备失败。\n" + (error?.message || "请确认本地服务已启动。"));
+    if (!options.silent) alert("生成本地预览版失败。\n" + (error?.message || "请确认本地服务已启动。"));
+    return { ok: false, message: error?.message || "生成本地预览版失败。" };
+  } finally {
+    if (button) {
+      button.textContent = oldText;
+      button.disabled = false;
+    }
+  }
+}
+async function preparePublishFiles(button) {
+  const oldText = button?.textContent;
+  if (button) {
+    button.textContent = "准备中...";
+    button.disabled = true;
+  }
+  try {
+    const saved = await saveStateToLocalFile(null, { silent: true });
+    if (!saved.ok) {
+      throw new Error(saved.message || "保存失败，已停止准备发布文件。");
+    }
+    const response = await fetch(endpoint("/prepare-publish?system=" + encodeURIComponent(systemSlug)), { method: "POST" });
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(result.message || "准备发布文件失败。");
+    }
+    const githubTarget = result.githubPublish?.targetDir ? ("\nGitHub本地目录：" + result.githubPublish.targetDir) : "";
+    alert(result.message + "\n\n本地预览：" + result.previewUrl + "\n发布目录：" + result.siteRoot + "\n发布包：" + result.archivePath + githubTarget);
+  } catch (error) {
+    alert("准备发布文件失败。\n" + (error?.message || "请确认本地服务已启动。"));
+  } finally {
+    if (button) {
+      button.textContent = oldText;
+      button.disabled = false;
+    }
+  }
+}
+function openLocalPreview() {
+  window.open("/" + systemSlug + "/dist/index.html?v=" + Date.now(), "_blank", "noopener");
+}
+async function syncMappingTable(button) {
+  const oldText = button?.textContent;
+  if (button) {
+    button.textContent = "同步中...";
+    button.disabled = true;
+  }
+  try {
+    const saved = await saveStateToLocalFile(null, { silent: true });
+    if (!saved.ok) {
+      throw new Error(saved.message || "保存失败，已停止同步映射表。");
+    }
+    const response = await fetch(endpoint("/sync-mapping?system=" + encodeURIComponent(systemSlug)), { method: "POST" });
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(result.message || "同步映射表失败。");
+    }
+    const summary = [
+      result.message,
+      "",
+      "新增界面：" + result.addedInterfaces,
+      "显示名变化：" + result.updatedNames,
+      "替换图片：" + result.replacedImages,
+      "新增图片：" + result.addedImages,
+      "类型变化：" + result.roleChanges,
+      "补充图片基线：" + result.baselineTokens,
+      "",
+      "页面将刷新，以载入同步后的本地数据。"
+    ].join("\n");
+    alert(summary);
+    localStorage.removeItem(storageKey);
+    location.reload();
+  } catch (error) {
+    alert("同步映射表失败。\n" + (error?.message || "请确认本地服务已启动，并且当前账号可以访问飞书映射表。"));
   } finally {
     if (button) {
       button.textContent = oldText;
@@ -1219,8 +1313,8 @@ function renderDetail(screenId) {
 
 function renderEmptyImage(screen) {
   return '<div class="empty-detail">' +
-    '<p>这个界面还没有图片。可以先上传一张本地图片用于标注。</p>' +
-    '<button data-upload-image>上传图片</button><input class="file-input" type="file" accept="image/*" data-upload-input />' +
+    '<p>这个界面还没有图片。界面主图需要从映射表同步进来；本地编辑器只维护规则、标点、动作和效果图。</p>' +
+    '<button class="secondary" data-sync-mapping-inline>同步映射表</button>' +
   '</div>';
 }
 
@@ -1296,10 +1390,10 @@ function renderImageWorkspace(screen, image) {
   }).join("");
   return '<div class="workspace">' +
     '<div class="image-stage">' +
-      '<div class="image-tabs">' + tabs + '<button class="secondary" data-upload-image>上传/追加图片</button><input class="file-input" type="file" accept="image/*" data-upload-input /></div>' +
+      '<div class="image-tabs">' + tabs + '<button class="secondary" data-sync-mapping-inline>同步映射表</button></div>' +
       '<div class="image-wrap" data-image-wrap><img src="' + image.src + '" alt="' + escapeAttr(screen.name) + '" />' + markers + '</div>' +
       '<div class="move-tip ' + (moveMarkerId ? 'active' : '') + '">正在调整 ' + escapeHtml(moveMarkerId || "") + '：点击截图目标位置，或直接拖动红色标点。</div>' +
-      '<p class="hint">点击图片空白处可新增标注；可直接拖动标点调整位置；规则卡片内可上传图片，也可以先点击粘贴框再 Ctrl+V 粘贴截图。</p>' +
+      '<p class="hint">点击图片空白处可新增标注；可直接拖动标点调整位置；界面主图、状态图和参考图通过映射表同步，规则卡片内只添加效果图。</p>' +
     '</div>' +
     '<div class="rule-panel mode-' + ruleDisplayMode + '">' +
       '<div class="rule-toolbar">' +
@@ -1328,9 +1422,7 @@ function bindAutoGrowTextarea(textarea) {
 function bindDetailEvents(screen) {
   const image = screen.images[activeImageIndex];
   if (!image) {
-    const upload = document.querySelector("[data-upload-input]");
-    document.querySelector("[data-upload-image]").addEventListener("click", () => upload.click());
-    upload.addEventListener("change", event => handleUpload(screen, event));
+    document.querySelector("[data-sync-mapping-inline]")?.addEventListener("click", event => syncMappingTable(event.currentTarget));
     return;
   }
   document.querySelectorAll("[data-image-index]").forEach(btn => {
@@ -1709,6 +1801,9 @@ function bindDetailEvents(screen) {
   document.querySelector("[data-save]").addEventListener("click", event => {
     saveStateToLocalFile(event.currentTarget);
   });
+  document.querySelectorAll("[data-sync-mapping-inline]").forEach(btn => {
+    btn.addEventListener("click", event => syncMappingTable(event.currentTarget));
+  });
   document.querySelectorAll("[data-delete-marker]").forEach(btn => {
     btn.addEventListener("click", event => {
       event.preventDefault();
@@ -1750,9 +1845,6 @@ function bindDetailEvents(screen) {
     }
     addMarker(image, Math.max(0, Math.min(100, x)), Math.max(0, Math.min(100, y)), screen.id);
   });
-  const upload = document.querySelector("[data-upload-input]");
-  document.querySelector("[data-upload-image]").addEventListener("click", () => upload.click());
-  upload.addEventListener("change", event => handleUpload(screen, event));
 }
 
 function addMarker(image, x, y, screenId) {
@@ -2210,17 +2302,14 @@ document.querySelector("[data-open-overview]").addEventListener("click", () => {
   renderNav();
 });
 byId("exportJsonBtn").addEventListener("click", () => {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "ui-rules-edit-data.json";
-  a.click();
-  URL.revokeObjectURL(url);
+  downloadEditData(systemSlug + "-edit-data-backup.json");
 });
 byId("importJsonBtn").addEventListener("click", () => byId("importJsonInput").click());
 byId("saveTopBtn").addEventListener("click", event => saveStateToLocalFile(event.currentTarget));
-byId("publishBtn").addEventListener("click", event => preparePublish(event.currentTarget));
+byId("syncMappingBtn").addEventListener("click", event => syncMappingTable(event.currentTarget));
+byId("buildPreviewBtn").addEventListener("click", event => buildLocalPreview(event.currentTarget));
+byId("openPreviewBtn").addEventListener("click", openLocalPreview);
+byId("preparePublishBtn").addEventListener("click", event => preparePublishFiles(event.currentTarget));
 byId("importJsonInput").addEventListener("change", event => {
   const file = event.target.files[0];
   if (!file) return;
@@ -2244,7 +2333,7 @@ document.addEventListener("paste", handlePasteImage);
 
 (function(){
   document.body.classList.add('view-only');
-  try { localStorage.removeItem('tv-ui-rules-html-prototype-v15'); } catch (error) {}
+  try { localStorage.removeItem("tv-ui-rules-html-prototype-v15"); } catch (error) {}
   function applyViewOnlyMode(){
     document.body.classList.add('view-only');
     document.querySelectorAll('textarea').forEach(function(el){
