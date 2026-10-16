@@ -1,0 +1,2363 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>【V0.2】小镇博物馆 · 界面规则展示版</title>
+<style>
+:root {
+  --bg: #f4f6f3;
+  --paper: #fffaf0;
+  --panel: #ffffff;
+  --ink: #1f2a37;
+  --muted: #697386;
+  --line: #d7dfdf;
+  --brand: #d6523c;
+  --brand-dark: #a5372b;
+  --sage: #dce9df;
+  --sky: #d8eef3;
+  --warm: #ffe5ae;
+  --shadow: 0 18px 40px rgba(55, 64, 67, .13);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.65 "Inter", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+}
+button, input, textarea { font: inherit; }
+button {
+  border: 0;
+  border-radius: 7px;
+  padding: 8px 12px;
+  background: #23364d;
+  color: #fff;
+  cursor: pointer;
+}
+button.secondary { background: #eef2f5; color: #243040; border: 1px solid var(--line); }
+button.ghost { background: transparent; color: #2c475d; border: 1px solid var(--line); }
+button.danger { background: #b63c32; }
+.app {
+  display: grid;
+  grid-template-columns: 288px 1fr;
+  min-height: 100vh;
+}
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: auto;
+  padding: 22px 18px;
+  background: #182331;
+  color: #e9f0f6;
+}
+.brand {
+  padding: 14px 14px 18px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  margin-bottom: 18px;
+}
+.brand .eyebrow { color: #9fb5c9; font-size: 12px; letter-spacing: .05em; }
+.brand h1 { margin: 6px 0 0; font-size: 24px; line-height: 1.2; }
+.side-title { margin: 18px 8px 8px; color: #9fb5c9; font-size: 12px; }
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0;
+  padding: 9px 10px;
+  color: #d9e5ef;
+  background: transparent;
+  border: 1px solid transparent;
+  text-align: left;
+}
+.nav-item:hover, .nav-item.active {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.11);
+}
+.nav-id {
+  min-width: 52px;
+  color: #ffd991;
+  font-variant-numeric: tabular-nums;
+}
+.main {
+  padding: 34px 38px 70px;
+  min-width: 0;
+}
+.hero {
+  padding: 30px 34px;
+  border-radius: 16px;
+  background: linear-gradient(105deg, var(--warm), #edf0d9 48%, var(--sky));
+  box-shadow: var(--shadow);
+  margin-bottom: 26px;
+}
+.hero h2 { margin: 0; font-size: 34px; letter-spacing: 0; }
+.hero p { margin: 8px 0 0; color: #4d5d6b; max-width: 880px; }
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 16px 0 0;
+}
+.view { display: none; }
+.view.active { display: block; }
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+.overview-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 10px 22px rgba(31,42,55,.06);
+  cursor: pointer;
+}
+.overview-card:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.overview-card h3 { margin: 0 0 10px; font-size: 18px; }
+.tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: #eef4f4;
+  color: #3d5363;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.thumb-strip { display: flex; gap: 8px; overflow: hidden; height: 150px; margin: 12px 0; }
+.overview-thumb {
+  height: 150px;
+  width: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  overflow: hidden;
+}
+.overview-thumb img {
+  height: 150px;
+  width: auto;
+  border-radius: 8px;
+  border: 1px solid #dce3e5;
+  background: #f3f5f5;
+  display: block;
+}
+.empty-thumb {
+  display: grid;
+  place-items: center;
+  height: 150px;
+  width: 110px;
+  border-radius: 8px;
+  background: repeating-linear-gradient(135deg, #f1f3f4, #f1f3f4 10px, #e8ecef 10px, #e8ecef 20px);
+  color: #7b8794;
+}
+.detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+.detail-head h2 { margin: 0; font-size: 28px; }
+.screen-block {
+  background: var(--paper);
+  border: 1px solid #ead9b7;
+  border-radius: 14px;
+  padding: 20px;
+  margin: 18px 0;
+  box-shadow: 12px 14px 0 rgba(221, 202, 160, .38);
+  min-width: 0;
+  width: max-content;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+.screen-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 14px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: linear-gradient(100deg, #ffe8ac, #edf0d7 48%, #d7eff5);
+}
+.screen-title h3 { margin: 0; font-size: 20px; }
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(300px, 500px) minmax(320px, 1fr);
+  gap: 22px;
+  align-items: start;
+  min-width: 0;
+  background: var(--paper);
+  border-radius: 12px;
+}
+.image-stage {
+  background: #f8f1e5;
+  border: 1px solid #e3d1ad;
+  border-radius: 10px;
+  padding: 16px;
+  min-width: 0;
+}
+.image-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.image-tabs button { padding: 6px 10px; background: #e9edf0; color: #2f4050; }
+.image-tabs button.active { background: #25384e; color: #fff; }
+.image-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #d6dcdd;
+}
+.image-wrap img {
+  display: block;
+  max-width: 100%;
+  max-height: 760px;
+  object-fit: contain;
+}
+.marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  text-align: center;
+  font-weight: 800;
+  font-size: 13px;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,.24);
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+.marker.dragging { cursor: grabbing; }
+.marker.active { background: #c7352c; outline: 4px solid rgba(255, 207, 87, .95); box-shadow: 0 0 0 7px rgba(255, 207, 87, .24), 0 6px 14px rgba(0,0,0,.28); }
+.rule-panel {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  background: var(--paper);
+  border-radius: 12px;
+  box-shadow: 0 0 0 12px var(--paper);
+}
+.rule-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 9px;
+  background: #eef2f5;
+  border: 1px solid var(--line);
+}
+.segmented button {
+  background: transparent;
+  color: #2f4050;
+  border-radius: 7px;
+  padding: 6px 10px;
+}
+.segmented button.active {
+  background: #23364d;
+  color: #fff;
+}
+.point-tabs {
+  display: none;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+.point-tabs button {
+  background: #fff;
+  color: #32465b;
+  border: 1px solid #d5dde1;
+  min-width: 42px;
+  padding: 7px 10px;
+}
+.point-tabs button.active {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+.rule-panel.mode-point .point-tabs { display: flex; }
+.rule-panel.mode-point .rule-card { display: none; }
+.rule-panel.mode-point .rule-card.active { display: block; }
+.rule-card {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px;
+  min-width: 0;
+}
+.rule-card.active {
+  background: #fff3cf;
+  border-color: #e09f2d;
+  box-shadow: 0 0 0 5px rgba(224,159,45,.28), 0 12px 28px rgba(115, 86, 24, .14);
+}
+.rule-head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.rule-num {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  flex: 0 0 auto;
+}
+.rule-card input, .rule-card textarea {
+  width: 100%;
+  border: 1px solid #d5dde1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #fbfcfd;
+  color: var(--ink);
+}
+.rule-card textarea {
+  min-height: 180px;
+  resize: none;
+  overflow: hidden;
+}
+.rule-text-preview {
+  width: 100%;
+  min-height: 96px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: transparent;
+  color: var(--ink);
+  white-space: pre-wrap;
+  line-height: 1.75;
+}
+.inline-effect-thumb,
+.inline-jump-thumb {
+  display: inline-grid;
+  grid-template-columns: 38px auto;
+  gap: 6px;
+  align-items: center;
+  max-width: min(240px, 100%);
+  margin: 0 3px;
+  padding: 3px 7px 3px 3px;
+  border: 1px solid #d5dde1;
+  border-radius: 999px;
+  background: #fff;
+  color: #2c475d;
+  vertical-align: middle;
+  box-shadow: 0 1px 2px rgba(31,42,55,.08);
+}
+.inline-jump-thumb {
+  grid-template-columns: 42px minmax(0, auto);
+  border-color: #cbd8e2;
+  background: #f8fbff;
+}
+.inline-effect-thumb img,
+.inline-jump-thumb img {
+  width: 38px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 1px solid #d5dde1;
+  background: #f4f6f7;
+}
+.inline-jump-thumb img {
+  width: 42px;
+  height: 32px;
+  border-radius: 8px;
+}
+.inline-effect-thumb span,
+.inline-jump-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.inline-jump-text strong {
+  margin-right: 5px;
+  color: #17324a;
+}
+.inline-jump-text em {
+  color: #496476;
+  font-style: normal;
+}
+.inline-effect-missing,
+.inline-jump-missing {
+  display: inline-flex;
+  margin: 0 3px;
+  padding: 2px 7px;
+  border: 1px dashed #c8d2d8;
+  border-radius: 999px;
+  color: #7b8794;
+  background: #fbfcfd;
+  font-size: 13px;
+}
+.rule-meta {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  margin: 10px 0;
+}
+.rule-meta select {
+  width: 100%;
+  border: 1px solid #d5dde1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #fbfcfd;
+  color: var(--ink);
+}
+.action-links {
+  margin: 10px 0;
+  border: 1px solid #d5dde1;
+  border-radius: 10px;
+  background: #fbfcfd;
+  padding: 10px;
+}
+.action-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.action-list {
+  display: grid;
+  gap: 8px;
+}
+.action-row {
+  display: grid;
+  grid-template-columns: minmax(120px, .6fr) minmax(260px, 1.4fr) auto auto auto;
+  gap: 8px;
+  align-items: stretch;
+}
+.action-row input,
+.action-row select {
+  width: 100%;
+  border: 1px solid #d5dde1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #fff;
+  color: var(--ink);
+}
+.action-target-cell {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) minmax(160px, 1.05fr);
+  gap: 8px;
+  align-items: stretch;
+}
+.action-target-card {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+  padding: 6px;
+  border: 1px solid #d5dde1;
+  border-radius: 8px;
+  background: #fff;
+}
+.action-target-thumb {
+  width: 42px;
+  height: 54px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #d5dde1;
+  border-radius: 6px;
+  background: #eef2f5;
+}
+.action-target-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.action-target-title {
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.action-target-meta {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+  margin-top: 2px;
+}
+.action-target-empty {
+  display: flex;
+  align-items: center;
+  min-height: 54px;
+  color: #7b8794;
+  font-size: 13px;
+}
+.jump-origin {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid #f1c77f;
+  border-radius: 10px;
+  background: #fff2cf;
+  color: #5d4820;
+}
+.image-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(20, 28, 38, .72);
+}
+.image-modal-card {
+  width: min(980px, 96vw);
+  max-height: 92vh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+.image-modal-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.image-modal-body {
+  overflow: auto;
+  padding: 12px;
+  background: #f5f6f3;
+}
+.image-modal-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+  gap: 12px;
+  align-items: start;
+}
+.image-modal-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+.image-modal-note {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--ink);
+}
+.image-modal-note strong {
+  display: block;
+  font-size: 13px;
+  color: #5c6b7b;
+}
+.image-modal-note p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.action-empty {
+  color: #7b8794;
+  font-size: 13px;
+}
+.extra-attachment {
+  margin: 10px 0;
+  border: 1px solid #d5dde1;
+  border-radius: 10px;
+  background: #fbfcfd;
+  overflow: hidden;
+}
+.extra-attachment.drag-over {
+  border-color: #2f7d55;
+  box-shadow: 0 0 0 4px rgba(47,125,85,.14);
+}
+.extra-summary {
+  display: grid;
+  grid-template-columns: auto minmax(120px, 1fr) auto auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+}
+.extra-count {
+  font-size: 13px;
+  font-weight: 800;
+  color: #5c6b7b;
+  white-space: nowrap;
+}
+.extra-preview-strip {
+  display: flex;
+  gap: 6px;
+  min-height: 34px;
+  align-items: center;
+  overflow: hidden;
+}
+.extra-preview-btn {
+  position: relative;
+  width: 42px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  overflow: hidden;
+}
+.extra-preview-btn img {
+  width: 42px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #d5dde1;
+  background: #f4f6f7;
+  display: block;
+}
+.extra-preview-btn.linked::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2f7d55;
+  box-shadow: 0 0 0 2px #fff;
+}
+.extra-preview-empty {
+  color: #8b97a5;
+  font-size: 13px;
+}
+.extra-panel {
+  display: none;
+  border-top: 1px solid #d5dde1;
+  padding: 10px;
+  background: #fff;
+}
+.extra-attachment.open .extra-panel { display: block; }
+.extra-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+.extra-image-card {
+  width: 178px;
+  padding: 8px;
+  border: 1px solid #d5dde1;
+  border-radius: 9px;
+  background: #fbfcfd;
+}
+.extra-image-card:first-child {
+  border-color: #d6523c;
+  box-shadow: 0 0 0 3px rgba(214,82,60,.12);
+}
+.extra-image-card img {
+  width: 100%;
+  height: 104px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #d5dde1;
+  background: #f4f6f7;
+}
+.extra-image-preview {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.extra-ref-status {
+  margin-top: 6px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  background: #eef4f4;
+  color: #4f6272;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.extra-ref-status.linked {
+  background: #eaf5ed;
+  color: #2f704e;
+}
+.extra-image-card textarea {
+  min-height: 56px;
+  margin-top: 6px;
+  font-size: 13px;
+}
+.mini-toolbar {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+.mini-toolbar button {
+  padding: 5px 8px;
+  font-size: 12px;
+}
+.paste-zone {
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px dashed #c8d2d8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  color: #697386;
+  outline: none;
+}
+.paste-zone:focus {
+  border-color: #d6523c;
+  background: #fff6ef;
+  color: #2c3542;
+}
+.paste-zone.drag-over {
+  border-color: #2f7d55;
+  background: #eefaf3;
+  color: #23543b;
+}
+.reference-note {
+  padding: 18px;
+  border: 1px dashed #d5c298;
+  border-radius: 10px;
+  background: #fff7e7;
+  color: #6b5a36;
+}
+.move-tip {
+  display: none;
+  margin: 10px 0 0;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: #fff3cf;
+  color: #7a4d06;
+  border: 1px solid #efc76b;
+}
+.move-tip.active { display: block; }
+.hint {
+  color: var(--muted);
+  font-size: 13px;
+}
+.empty-detail {
+  padding: 32px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+.file-input { display: none; }
+@media (max-width: 680px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { position: relative; height: auto; }
+  .screen-block { width: 100%; }
+  .workspace { grid-template-columns: 1fr; }
+  .main { padding: 20px; }
+}
+</style>
+<style>
+body.view-only .hero .toolbar,
+body.view-only [data-add-marker],
+body.view-only [data-renumber-markers],
+body.view-only [data-save],
+body.view-only [data-delete-marker],
+body.view-only [data-move-marker],
+body.view-only [data-upload-image],
+body.view-only [data-sync-mapping-inline],
+body.view-only [data-upload-extra],
+body.view-only [data-system-clipboard],
+body.view-only [data-add-action],
+body.view-only [data-delete-action],
+body.view-only [data-insert-action-ref],
+body.view-only [data-upload-input],
+body.view-only .file-input,
+body.view-only .paste-zone,
+body.view-only .mini-toolbar,
+body.view-only .action-links {
+  display: none !important;
+}
+body.view-only textarea,
+body.view-only input,
+body.view-only select {
+  pointer-events: none;
+}
+body.view-only textarea,
+body.view-only input:not([type='file']) {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  resize: none;
+}
+body.view-only select {
+  opacity: .9;
+  background: transparent;
+  border-color: transparent;
+}
+body.view-only .rule-card textarea {
+  min-height: 96px;
+  overflow: hidden;
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="eyebrow">UI RULES · HTML PROTOTYPE</div>
+      <h1>小镇博物馆</h1>
+    </div>
+    <button class="nav-item active" data-open-overview><span class="nav-id">总览</span><span>全部界面</span></button>
+    <div class="side-title">界面目录</div>
+    <div id="navList"></div>
+  </aside>
+  <main class="main">
+    <section class="hero">
+      <h2>界面规则展示版</h2>
+      <p>左侧按系统与界面组织目录；进入界面后，可点击截图标注高亮对应规则，并在总览/分点模式间切换查看。</p>
+      <div class="toolbar">
+        <button class="secondary" id="saveTopBtn">保存修改</button>
+        <button class="secondary" id="syncMappingBtn">同步映射表</button>
+        <button id="buildPreviewBtn">生成本地预览版</button>
+        <button class="secondary" id="openPreviewBtn">打开本地预览版</button>
+        <button class="ghost" id="exportJsonBtn">导出备份</button>
+        <button class="ghost" id="importJsonBtn">导入备份</button>
+        <button class="ghost" id="preparePublishBtn">准备发布文件</button>
+        <button class="ghost" id="resetBtn">恢复初始数据</button>
+        <input class="file-input" id="importJsonInput" type="file" accept="application/json" />
+      </div>
+    </section>
+    <section id="overviewView" class="view active">
+      <div class="overview-grid" id="overviewGrid"></div>
+    </section>
+    <section id="detailView" class="view"></section>
+  </main>
+</div>
+<script>
+const seedData = {"systemName":"【V0.2】小镇博物馆","generatedAt":"2026-10-15T11:51:18.312Z","interfaces":[{"id":"1.0.0","name":"博物馆主界面","groupId":"BWG-1","groupName":"探索界面","note":"","targetLink":"","status":"已生成界面规则初稿","remark":"","images":[{"id":"1.0.0-img-1","label":"界面1","role":"正式界面","width":941,"height":1672,"src":"assets/screen-001.png","entryRule":"1. 入口来源：从主界面的【小镇博物馆】建筑入口进入。\n","annotations":[{"id":"01","x":7.19,"y":10.07,"title":"顶部系统与资源区","rule":"1. 系统名称：显示【小镇博物馆】。\n2. 详情按钮：点击后打开【系统详情】弹窗。\n3. 线索资源栏：旧城线索、公路线索、郊野线索、湖湾线索：\n      - 显示各类线索当前数量；\n\n\n\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":28.92,"y":25.71,"title":"探索区域","rule":"1. 区域卡片：按探索地图位置展示旧城区、公路沿线、郊野谷地与湖湾地带。\n2. 区域卡片状态：\n   1. 已解锁区域：\n      1. 未进行区域：\n         - 区域名称\n         - 区域图片\n         - 所需线索类型\n         - 绑定门客属性；点击后打开派遣弹窗\n      2. 进行中区域：\n         - 在未进行区域状态下增加以下内容\n         - 探索中标签\n         - 队伍成员头像（放不下可只展示前两个门客头像）\n         - 探索剩余时间\n   2. 未解锁区域：置灰，并显示等级解锁条件。\n3. 点击效果：点击选中这个区域卡片，卡片外增加选中光效","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":51.27,"y":51.84,"title":"博物馆入口","rule":"1. 博物馆入口：点击后进入【博物馆展览】界面【跳转1：进入博物馆】。","extraImages":[],"linkActions":[{"label":"进入博物馆","targetImageId":"2.0.0::2.0.0-img-1"}],"targetImageId":"2.0.0::2.0.0-img-1"},{"id":"04","x":38.24,"y":82.18,"title":"主按钮","rule":"1.前往探索\n   1. 当前选中区域正在探索中：点击前往【探索中】界面。【跳转2：前往探索】\n   2. 当前选中区域未进行探索：点击打开【派遣】弹窗。【跳转1：前往探索】\n   3. 当前选中区域未解锁：点击tips提示“未到达解锁条件”","extraImages":[],"linkActions":[{"label":"前往探索","targetImageId":"1.2.0::1.2.0-img-1"},{"label":"前往探索","targetImageId":"1.3.0::1.3.0-img-1"}],"targetImageId":"1.2.0::1.2.0-img-1"},{"id":"05","x":81,"y":91,"title":"每日线索领取","rule":"1. 可领取奖励：\n   1. 显示：气泡提示，显示宝箱数量*2。宝箱每2秒晃动一次\n   2. 点击：领取本次随机获得的 2 个线索，打开【线索领取】界面。【跳转1：领取线索】\n2. 无可领取奖励\n   1.显示：无气泡提示，不可点击","extraImages":[],"linkActions":[{"label":"领取线索","targetImageId":"1.0.1::1.0.1-img-1"}],"targetImageId":"1.0.1::1.0.1-img-1"},{"id":"06","x":83.35,"y":5.99,"title":"小镇博物馆勋章等级","rule":"1. 等级徽章：\n   1. 显示规则：显示当前博物馆等级。\n   2. 点击规则：点击打开【勋章界面】弹窗。【跳转1：点击等级勋章】\n2. 经验进度条：\n   1. 显示规则：当前值 / 升级所需值。\n   2. 状态规则：达到升级条件时，显示光效。","extraImages":[],"linkActions":[{"label":"点击等级勋章","targetImageId":"1.1.0::1.1.0-img-1"}],"targetImageId":"1.1.0::1.1.0-img-1"},{"id":"07","x":7.61,"y":91.17,"title":"返回按钮","rule":"1. 返回按钮：点击后关闭主界面，返回进入前界面。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"X33JbgaKOoVtIdxkNNWc9WLunIb","sourceUpdatedAt":"2026-10-16T05:33:37.220Z"}]},{"id":"1.0.1","name":"线索领取界面","groupId":"BWG-1","groupName":"探索界面","note":"","targetLink":"","status":"已生成界面规则初稿","remark":"","images":[{"id":"1.0.1-img-1","label":"界面1","role":"正式界面","width":484,"height":832,"src":"assets/screen-002.png","entryRule":"触发条件：在探索地图点击【每日线索领取】后打开。","annotations":[{"id":"01","x":22.98,"y":31.66,"title":"标题","rule":"1. 标题：【恭喜获得】","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":20.78,"y":45.66,"title":"奖励展示","rule":"1. 显示获得的道具\n2. 文本提示：今日免费线索已领取！快去探索地图吧~","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":50.21,"y":72.03,"title":"按钮","rule":"1. 确定按钮：点击后关闭领取结果弹窗\n2. 前往使用：点击关闭弹窗，并打开线索对应区域的派遣弹窗。【跳转1：点击前往使用】","extraImages":[],"linkActions":[{"label":"点击前往使用","targetImageId":"1.2.0::1.2.0-img-1"}],"targetImageId":"1.2.0::1.2.0-img-1"}],"sourceImageToken":"Gm7ybcaECotHpwxfs9Hc8Btfnbd","sourceUpdatedAt":"2026-10-15T11:51:18.371Z"}]},{"id":"1.1.0","name":"勋章界面","groupId":"BWG-2","groupName":"展览界面","note":"","targetLink":"","status":"已生成界面规则初稿","remark":"","images":[{"id":"1.1.0-img-1","label":"界面1","role":"正式界面","width":480,"height":823,"src":"assets/screen-003.png","entryRule":"1. 主入口：\n   1. 入口来源：点击主界面【勋章】按钮进入。","annotations":[{"id":"01","x":34.9,"y":2.6,"title":"顶部标题区","rule":"1. 界面标题：显示【小镇博物馆】标题。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":49,"y":50,"title":"主列表/节点区","rule":"1. 节点排序规则：从下到到上，按等级从低到高的顺序展示节点。\n2. 节点显示内容：\n   1. 勋章图标：显示勋章图标和等级\n   2. 展示图片：根据系统显示该系统对应等级的插画图片\n   3. 等级效果：根据配置显示全局效果和系统勋章专属效果\n   4. 其他信息：\n      - 生效中标记：只在当前生效等级对应的节点显示\n      - 解锁条件： 只在未解锁的等级对应的节点显示\n      - 点击解锁提示：只在待解锁的等级对应的节点显示\n3. 节点状态：\n   1. 未解锁状态：勋章图标和展示图片置灰，增加显示解锁条件【效果图1：未解锁状态】\n   2. 已解锁状态：正常显示【效果图2：已解锁状态】\n   3. 生效中状态：增加显示生效中标记【效果图3：生效中状态】\n   4. 待解锁状态：勋章图标和展示图片置灰，增加显示点击解锁提示【效果图4：待解锁状态】\n4. 点击效果：仅在待解锁状态下可进行点击，整个节点区域都可点击，点击后显示【升级成功】弹窗。【跳转1：点击待解锁的勋章】","extraImages":[{"src":"assets/extra-004.png","note":"未解锁"},{"src":"assets/extra-005.png","note":"已解锁"},{"src":"assets/extra-006.png","note":"生效中"},{"src":"assets/extra-007.png","note":"待解锁"}],"linkActions":[{"label":"点击待解锁的勋章","targetImageId":"1.1.1::1.1.1-img-1"}],"targetImageId":"1.1.1::1.1.1-img-1"},{"id":"03","x":77.05,"y":95.49,"title":"升件级条","rule":"1. 显示当前系统的升级条件及相关数值\n   - 藏品收藏值","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":9.34,"y":96.3,"title":"返回按钮","rule":"1. 返回按钮：点击返回上一级界面","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"Agykb0y7OoToI3xcyCscSA7vnbf","sourceUpdatedAt":"2026-10-15T11:51:18.371Z"}]},{"id":"1.1.1","name":"勋章升级成功弹窗","groupId":"TV-1","groupName":"电视台主界面","note":"","targetLink":"","status":"","remark":"","images":[{"id":"1.1.1-img-1","label":"界面1","role":"正式界面","width":619,"height":1057,"src":"assets/screen-008.png","entryRule":"入口规则待补充。","annotations":[{"id":"01","x":23.03,"y":24.66,"title":"弹窗标题","rule":"1. 弹窗标题：显示【升级成功】","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":21.76,"y":41.18,"title":"升级展示","rule":"1. 勋章节点插图：显示勋章等级对应的插图。\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":16.86,"y":61.18,"title":"升级信息","rule":"1. 等级提升\n   1. 系统名称\n   2. 等级提升：左侧上一等级，右侧当前提升到的等级\n2. 全局效果\n   1. 效果名称：按配置显示\n   2. 效果提升：左侧上一等级，右侧当前提升到的等级\n3. 专属效果\n   1.  效果名称：按配置显示\n   2. 效果提升：左侧上一等级，右侧当前提升到的等级\n      - 若效果为解锁效果，直接显示解锁内容 ","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":34.07,"y":94.41,"title":"关闭提示","rule":"1.文本：点击空白处关闭","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"BXuybyHkCoV8QSxY6npc2pq6nTb","sourceUpdatedAt":"2026-10-16T06:25:19.015Z"}]},{"id":"1.2.0","name":"派遣弹窗","groupId":"BWG-1","groupName":"探索界面","note":"","targetLink":"","status":"已生成界面规则初稿","remark":"","images":[{"id":"1.2.0-img-1","label":"界面1","role":"正式界面","width":941,"height":1672,"src":"assets/screen-009.png","entryRule":"入口来源：在探索地图选择已解锁区域后，点击【前往探索】打开。","annotations":[{"id":"01","x":20.85,"y":11.24,"title":"标题与关闭按钮","rule":"1. 弹窗标题：显示【派遣探索】标题。\n2. 关闭按钮：点击后关闭弹窗。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":87.91,"y":22.44,"title":"地点页签","rule":"1. 按配置顺序展示当前区域内地点。\n2. 页签状态\n   1. 已解锁地点：正常显示\n   2. 未解锁地点：灰度显示+带锁图标\n   3. 选中地点：增加显示定位图标\n3. 选中未解锁的界面，页面不显示小队派遣区域，显示解锁条件","extraImages":[{"src":"assets/extra-010.png","note":""}],"linkActions":[],"targetImageId":""},{"id":"03","x":88.73,"y":34.22,"title":"地点信息","rule":"1. 地图图片\n2. 地点名称\n3. 可派遣门客属性图标\n4. 挂机时长\n5. 门客知识产速","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":89.56,"y":42.74,"title":"可能获得藏品","rule":"1. 小标题：藏品预览\n2. 道具：根据配置的可能掉落的产品进行显示\n   1. 顺序：按品质由低到高显示\n   2. 显示状态：已获取的正常显示，未获取的增加灰度显示","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"05","x":9.26,"y":52.43,"title":"探索队伍","rule":"1. 小队区域：\n   1. 未派遣：显示加号\n   2. 已派遣：显示门客头像及门客等级\n      - 点击可下阵门客\n   3. 未解锁：显示锁+解锁条件\n   4. 选中：当前选中位置，显示金色提示框\n2. 门客列表区域：\n   1. 顺序：按等级从高到低排序\n   2. 显示：门客头像及等级，已上阵的显示上阵角标提示\n   3. 该区域可左右滑动\n   4. 若没有可上阵的门客，显示为空，文本提示“暂无可上阵员工”","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"06","x":50,"y":86,"title":"线索消耗与前往按钮","rule":"1. 探索材料：\n   1. 显示规则：显示所需数量 / 当前拥有数量。\n   2. 显示状态\n      1. 资源不足时，数量显示为红色\n      2. 资源足够时，数量正常显示\n2. 前往按钮：\n   1. 材料充足时，点击后，进入【探索中】界面。【跳转1：探索中】\n   2. 材料不足时，点击后不执行，打开【道具不足】弹窗。","extraImages":[],"linkActions":[{"label":"探索中","targetImageId":"1.3.0::1.3.0-img-1"}],"targetImageId":"1.3.0::1.3.0-img-1"}],"sourceImageToken":"AgnVbAwBvomAauxcX0CcXFxCnZd","sourceUpdatedAt":"2026-10-16T05:33:37.220Z"},{"id":"1.2.0-img-2","label":"界面2","role":"状态图","width":941,"height":1672,"src":"assets/screen-011.png","entryRule":"状态图：展示地点未解锁时的显示差异。","annotations":[],"sourceImageToken":"M0n9b61fNoOCSXx002QcoqUxnXe","sourceUpdatedAt":"2026-10-15T11:51:18.371Z"}]},{"id":"1.3.0","name":"探索中界面","groupId":"BWG-1","groupName":"探索界面","note":"","targetLink":"","status":"已生成界面规则初稿","remark":"","images":[{"id":"1.3.0-img-1","label":"界面1","role":"正式界面","width":941,"height":1672,"src":"assets/screen-012.png","entryRule":"入口来源：探索开始后，从探索地图点击探索中的区域卡片进入。","annotations":[{"id":"01","x":8.02,"y":4.7,"title":"探索地点信息","rule":"1. 系统名称：显示【地图探索】。\n2. 详情按钮：点击后打开【系统详情】弹窗。\n","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":42.79,"y":64.33,"title":"探索进度","rule":"1. 队伍列表\n   1. 显示：门客头像、门客等级\n   2. 点击：跳转到门客对应界面\n2. 门客知识累计值\n   1. 门客知识产速\n   2. 门客知识累计值\n3. 显示当前探索进度与剩余时间\n4. 加速按钮：点击打卡二次确认呢弹窗","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":41.13,"y":76.82,"title":"可能获得藏品","rule":"1. 道具：根据配置的可能掉落的产品进行显示\n   1. 顺序：按品质由低到高显示\n   2. 显示状态：本次探索中已获取的显示获得角标，未获得的正常显示","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":81.7,"y":18.59,"title":"地点信息","rule":"1.地点名称\n2.地点图片","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"05","x":21.27,"y":92.92,"title":"返回按钮","rule":"点击后返回探索地图；探索继续进行，不受离开界面影响。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"TnRbbaTfBoctbkxbo76c0v4BnPh","sourceUpdatedAt":"2026-10-15T11:51:18.371Z"}]},{"id":"1.3.1","name":"探索完成界面","groupId":"BWG-1","groupName":"探索界面","note":"","targetLink":"","status":"已生成界面规则初稿","remark":"","images":[{"id":"1.3.1-img-1","label":"界面1","role":"正式界面","width":646,"height":956,"src":"assets/screen-013.png","entryRule":"触发条件：探索时长结束后自动结算；玩家进入小镇博物馆时自动弹出。","annotations":[{"id":"01","x":17.87,"y":21.32,"title":"标题","rule":"1. 标题：【进阶成功】\n2. 可考虑是否放地点图片，根据地点素材判断","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":17.3,"y":36.16,"title":"地点信息","rule":"1. 地点名称\n2. 挂机时长","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":14.44,"y":54.99,"title":"派遣门客","rule":"1. 门客知识：显示本次获得的门客知识累计值\n2. 门客：显示参与本次探索的门客","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":13.11,"y":77.56,"title":"获得藏品","rule":"1. 显示条件：\n   1. 展示本次探索中获得的藏品；\n   2. 首次获得的藏品标记为新藏品。\n2. 未获得藏品时隐藏本区域。【效果图1】","extraImages":[{"src":"assets/extra-014.png","note":""}],"linkActions":[],"targetImageId":""},{"id":"05","x":21.31,"y":91.49,"title":"前往博物馆","rule":"1. 显示条件：本次获得藏品时显示；\n2. 点击：进入【博物馆展览】界面。【跳转1：进入博物馆】。","extraImages":[],"linkActions":[{"label":"进入博物馆","targetImageId":"2.0.0::2.0.0-img-1"}],"targetImageId":"2.0.0::2.0.0-img-1"}],"sourceImageToken":"XKCKbMY5YouYxDxrv2gcLdyznph","sourceUpdatedAt":"2026-10-15T11:51:18.371Z"},{"id":"1.3.1-img-2","label":"界面2","role":"状态图","width":642,"height":959,"src":"assets/screen-015.png","entryRule":"状态图：展示本次探索未获得藏品时的结算结果。","annotations":[],"sourceImageToken":"AuzJbOaYaoi3XzxUcjhc2aVBnZN","sourceUpdatedAt":"2026-10-15T11:51:18.371Z"}]},{"id":"2.0.0","name":"博物馆展览界面","groupId":"BWG-2","groupName":"展览界面","note":"","targetLink":"","status":"已生成界面规则初稿","remark":"","images":[{"id":"2.0.0-img-1","label":"界面1","role":"正式界面","width":724,"height":2172,"src":"assets/screen-016.png","entryRule":"入口来源：从探索地图的博物馆入口进入，或在探索结算中点击【前往博物馆】进入。","annotations":[{"id":"01","x":12.8,"y":2.6,"title":"标题","rule":"1. 标题：【博物馆展馆】","extraImages":[],"linkActions":[{"label":"返回探索地图","targetImageId":"1.0.0::1.0.0-img-1"}],"targetImageId":"1.0.0::1.0.0-img-1"},{"id":"02","x":50,"y":52,"title":"藏品陈列","rule":"1. 顺序：按品质冲高到底排列，相同品质按藏品ID从小到大排列\n2. 显示：只显示当前已获得的藏品，未获得的不显示\n   1. 藏品图标\n   2. 藏品名称\n   3. 藏品展区\n   4. 藏品品质\n   5. 藏品等级\n   6. 可升级状态\n3. 点击：打开【藏品详情】弹窗【跳转1：查看藏品详情】。","extraImages":[],"linkActions":[{"label":"查看藏品详情","targetImageId":"2.1.0::2.1.0-img-1"}],"targetImageId":"2.1.0::2.1.0-img-1"},{"id":"03","x":91.55,"y":6.92,"title":"展品数量","rule":"1. 展品数量：当前已激活藏品数量/图鉴总数\n2. 点击：打开【藏品图鉴】弹窗。【跳转1：点击图鉴】\n","extraImages":[],"linkActions":[{"label":"点击图鉴","targetImageId":"2.2.0::2.2.0-img-1"}],"targetImageId":"2.2.0::2.2.0-img-1"},{"id":"04","x":10.37,"y":96.88,"title":"返回按钮","rule":"1. 点击后返回上一级界面","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"TfdpbdMnbo3Wl3xoWCbci5pinWd","sourceUpdatedAt":"2026-10-15T11:51:18.371Z"}]},{"id":"2.1.0","name":"藏品详情弹窗","groupId":"BWG-2","groupName":"展览界面","note":"","targetLink":"","status":"已生成界面规则初稿","remark":"","images":[{"id":"2.1.0-img-1","label":"界面1","role":"正式界面","width":481,"height":829,"src":"assets/screen-017.png","entryRule":"入口来源：在博物馆展区点击藏品后打开。","annotations":[{"id":"01","x":26.45,"y":29.09,"title":"藏品展示与切换","rule":"1. 藏品展示\n   1. 图标\n   2. 名称\n   3. 等级：若藏品未解锁，显示锁图标。【效果图1】\n   4. 品质色\n2. 左右切换按钮按当前展区的藏品顺序切换详情。","extraImages":[{"src":"assets/extra-018.png","note":""}],"linkActions":[],"targetImageId":""},{"id":"02","x":10.59,"y":58.5,"title":"藏品信息","rule":"1. 藏品介绍\n2. 藏品等级\n3. 藏品加成效果\n4. 藏品收藏值","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":30.67,"y":82.18,"title":"升级/激活区域","rule":"1. 升级材料：\n   1. 显示规则：显示升级所需材料数量 / 当前拥有数量。\n   2. 显示状态\n      1. 材料不足时，数量显示为红色\n      2. 材料足够时，数量正常显示\n2. 升级按钮：\n   1. 显示条件：已激活藏品\n   2. 点击效果：\n      1. 材料充足时，点击后刷新界面，并飘字显示赚速提升数值。\n      2. 材料不足时，点击后不执行升级，tips提示“#道具名称#不足”。\n3. 激活按钮：【效果图1】\n   1. 显示条件：未激活藏品\n   2. 点击效果：\n      1. 材料充足时，点击后刷新界面，并飘字显示赚速提升数值。\n      2. 材料不足时，点击后不执行升级，tips提示“#道具名称#不足”。","extraImages":[{"src":"assets/extra-019.png","note":""}],"linkActions":[],"targetImageId":""},{"id":"04","x":91,"y":7,"title":"关闭按钮","rule":"点击后关闭详情弹窗并返回博物馆展区。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"BIN3b6LQRoBU6fxobNUcuSk8nxh","sourceUpdatedAt":"2026-10-15T11:51:18.371Z"},{"id":"2.1.0-img-2","label":"界面2","role":"状态图","width":481,"height":827,"src":"assets/screen-020.png","entryRule":"状态图：展示同名藏品数量满足升级要求时的详情状态。","annotations":[],"sourceImageToken":"A5h7b9M6qokO8LxNAiPcLwWRnte","sourceUpdatedAt":"2026-10-15T11:51:18.371Z"},{"id":"2.1.0-img-3","label":"界面3","role":"状态图","width":597,"height":1060,"src":"assets/screen-021.png","entryRule":"状态图：展示未激活藏品的详情状态。","annotations":[],"sourceImageToken":"GGkkbRHPYojvvax8yXkc5xlnnBb","sourceUpdatedAt":"2026-10-15T11:51:18.371Z"}]},{"id":"2.2.0","name":"藏品图鉴","groupId":"BWG-2","groupName":"展览界面","note":"","targetLink":"","status":"已生成界面规则初稿","remark":"","images":[{"id":"2.2.0-img-1","label":"界面1","role":"正式界面","width":477,"height":828,"src":"assets/screen-022.png","entryRule":"入口来源：从博物馆相关图鉴入口进入。","annotations":[{"id":"01","x":11.07,"y":10.07,"title":"标题","rule":"1. 弹窗标题：显示【藏品图鉴】标题。\n2. 关闭按钮：点击后关闭弹窗","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":49.49,"y":16.84,"title":"页签","rule":"1. 显示页签：旧城区、公路沿线、郊野谷地、湖湾地带","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":49.89,"y":46.48,"title":"藏品图鉴列表","rule":"1. 展示顺序：\n   1. 展示当前页签下所有的藏品。\n   2. 顺序：已激活＞未激活，高品质＞低品质，ID小＞ID大\n2. 显示内容\n   1. 藏品名称\n   2. 藏品图标\n   3. 藏品等级\n3. 状态：\n   1. 已激活：正常显示\n   2. 未激活：置灰+锁\n   3. 可升级：升级提示角标\n4. 点击：打开对应【藏品详情】弹窗。【跳转1：点击藏品】","extraImages":[],"linkActions":[{"label":"点击藏品","targetImageId":"2.1.0::2.1.0-img-1"}],"targetImageId":"2.1.0::2.1.0-img-1"},{"id":"04","x":28.06,"y":79.38,"title":"藏品效果汇总","rule":"展示当前图鉴内已激活藏品的效果信息；具体效果读取藏品配置。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"LQWcbzAkdow8MsxKdDPcKWsAnXf","sourceUpdatedAt":"2026-10-15T11:51:18.371Z"}]}],"ruleContentVersion":"mapping-sync-2026-10-16-062519","savedAt":"2026-10-16T08:56:03.920Z"};
+const storageKey = "town-museum-ui-rules-html-prototype-v1";
+const ruleContentVersion = seedData.ruleContentVersion || "object-first-rules-v2";
+let state = clone(seedData);
+let activeScreenId = null;
+let activeImageIndex = 0;
+let activeMarkerId = "01";
+let ruleDisplayMode = "overview";
+let moveMarkerId = null;
+let expandedExtraPanels = new Set();
+let jumpBackTarget = null;
+const systemSlug = "town-museum-ui-rules";
+
+function clone(value) { return JSON.parse(JSON.stringify(value)); }
+function mergeRuleContentFromSeed(cached) {
+  const next = clone(seedData);
+  const cachedScreens = new Map((cached.interfaces || []).map(screen => [screen.id, screen]));
+
+  for (const nextScreen of next.interfaces || []) {
+    const cachedScreen = cachedScreens.get(nextScreen.id);
+    if (!cachedScreen) continue;
+    const cachedImages = new Map((cachedScreen.images || []).map(image => [image.id, image]));
+
+    for (const nextImage of nextScreen.images || []) {
+      const cachedImage = cachedImages.get(nextImage.id);
+      if (!cachedImage) continue;
+        const imageSourceChanged = nextImage.sourceImageToken && cachedImage.sourceImageToken !== nextImage.sourceImageToken;
+        if (cachedImage.src && !imageSourceChanged) nextImage.src = cachedImage.src;
+        if (cachedImage.entryRule !== undefined) nextImage.entryRule = cachedImage.entryRule;
+      const cachedMarkers = new Map((cachedImage.annotations || []).map(marker => [marker.id, marker]));
+
+      for (const nextMarker of nextImage.annotations || []) {
+        const cachedMarker = cachedMarkers.get(nextMarker.id);
+        if (!cachedMarker) continue;
+        nextMarker.x = cachedMarker.x ?? nextMarker.x;
+        nextMarker.y = cachedMarker.y ?? nextMarker.y;
+        nextMarker.extraImages = cachedMarker.extraImages || nextMarker.extraImages || [];
+        nextMarker.targetImageId = cachedMarker.targetImageId || nextMarker.targetImageId || "";
+          if (cachedMarker.title !== undefined) nextMarker.title = cachedMarker.title;
+          if (cachedMarker.rule !== undefined) nextMarker.rule = cachedMarker.rule;
+          nextMarker.linkActions = cachedMarker.linkActions || nextMarker.linkActions || [];
+      }
+
+      for (const cachedMarker of cachedImage.annotations || []) {
+        if (!nextImage.annotations?.some(marker => marker.id === cachedMarker.id)) {
+          nextImage.annotations.push(cachedMarker);
+        }
+      }
+    }
+
+    const knownImageIds = new Set((nextScreen.images || []).map(image => image.id));
+    for (const cachedImage of cachedScreen.images || []) {
+      if (!knownImageIds.has(cachedImage.id)) nextScreen.images.push(cachedImage);
+    }
+  }
+
+  next.ruleContentVersion = ruleContentVersion;
+  return next;
+}
+function loadState() {
+  try {
+    const cached = localStorage.getItem(storageKey);
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      const hasValidInterfaces = Array.isArray(parsed?.interfaces) && parsed.interfaces.length > 0;
+      if (!hasValidInterfaces) {
+        const backupKey = storageKey + "-invalid-" + Date.now();
+        localStorage.setItem(backupKey, cached);
+        localStorage.setItem(storageKey + "-last-invalid", backupKey);
+        localStorage.removeItem(storageKey);
+        throw new Error("Invalid cached state");
+      }
+      if (parsed && parsed.ruleContentVersion && parsed.ruleContentVersion !== ruleContentVersion) {
+        const backupKey = storageKey + "-backup-" + parsed.ruleContentVersion + "-" + Date.now();
+        localStorage.setItem(backupKey, cached);
+        localStorage.setItem(storageKey + "-last-backup", backupKey);
+      }
+      if (parsed.ruleContentVersion !== ruleContentVersion) {
+        const migrated = mergeRuleContentFromSeed(parsed);
+        localStorage.setItem(storageKey, JSON.stringify(migrated));
+        return migrated;
+      }
+      return parsed;
+    }
+  } catch (error) {}
+  const fresh = clone(seedData);
+  fresh.ruleContentVersion = ruleContentVersion;
+  return fresh;
+}
+let lastSaveError = "";
+function endpoint(path) {
+  return location.protocol === "file:" ? "http://127.0.0.1:5177" + path : path;
+}
+function downloadEditData(filename) {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename || (systemSlug + "-edit-data-backup.json");
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function saveState() {
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(state));
+    lastSaveError = "";
+    return true;
+  } catch (error) {
+    lastSaveError = error?.message || "浏览器本地缓存保存失败。";
+    console.warn("localStorage save failed:", error);
+    return false;
+  }
+}
+async function saveStateToLocalFile(button, options = {}) {
+  const browserSaved = saveState();
+  const saveEndpoint = endpoint("/save-state?system=" + encodeURIComponent(systemSlug));
+  const oldText = button?.textContent;
+  if (button) {
+    button.textContent = "保存中...";
+    button.disabled = true;
+  }
+  try {
+    const response = await fetch(saveEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ state }),
+    });
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(result.message || "写回本地 HTML 失败。");
+    }
+    if (!options.silent) {
+      alert(result.message + (browserSaved ? "" : "\n浏览器缓存空间不足，已跳过浏览器缓存；不影响重新打开本地 HTML 查看最新内容。"));
+    }
+    return { ok: true, browserSaved, result };
+  } catch (error) {
+    const message = (browserSaved ? "已保存到当前浏览器，但" : "浏览器缓存保存失败，且") + "未写回本地 HTML。\n" + (error?.message || "请确认本地服务已启动。");
+    if (!options.silent) {
+      if (confirm(message + "\n\n是否立刻导出当前编辑数据备份？")) {
+        downloadEditData(systemSlug + "-save-failed-backup.json");
+      }
+    }
+    return { ok: false, browserSaved, message };
+  } finally {
+    if (button) {
+      button.textContent = oldText;
+      button.disabled = false;
+    }
+  }
+}
+async function buildLocalPreview(button, options = {}) {
+  const oldText = button?.textContent;
+  if (button) {
+    button.textContent = "生成中...";
+    button.disabled = true;
+  }
+  try {
+    const saved = await saveStateToLocalFile(null, { silent: true });
+    if (!saved.ok) {
+      throw new Error(saved.message || "保存失败，已停止生成本地预览版。");
+    }
+    const response = await fetch(endpoint("/build-preview?system=" + encodeURIComponent(systemSlug)), { method: "POST" });
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(result.message || "生成本地预览版失败。");
+    }
+    if (!options.silent) {
+      alert(result.message + "\n\n预览地址：" + result.previewUrl);
+    }
+    return { ok: true, result };
+  } catch (error) {
+    if (!options.silent) alert("生成本地预览版失败。\n" + (error?.message || "请确认本地服务已启动。"));
+    return { ok: false, message: error?.message || "生成本地预览版失败。" };
+  } finally {
+    if (button) {
+      button.textContent = oldText;
+      button.disabled = false;
+    }
+  }
+}
+async function preparePublishFiles(button) {
+  const oldText = button?.textContent;
+  if (button) {
+    button.textContent = "准备中...";
+    button.disabled = true;
+  }
+  try {
+    const saved = await saveStateToLocalFile(null, { silent: true });
+    if (!saved.ok) {
+      throw new Error(saved.message || "保存失败，已停止准备发布文件。");
+    }
+    const response = await fetch(endpoint("/prepare-publish?system=" + encodeURIComponent(systemSlug)), { method: "POST" });
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(result.message || "准备发布文件失败。");
+    }
+    const githubTarget = result.githubPublish?.targetDir ? ("\nGitHub本地目录：" + result.githubPublish.targetDir) : "";
+    const indexNote = result.indexResult?.localIndexPath ? ("\n索引页：已更新本地管理索引和 GitHub 首页") : "";
+    alert(result.message + "\n\n本地预览：" + result.previewUrl + "\n发布目录：" + result.siteRoot + "\n发布包：" + result.archivePath + githubTarget + indexNote);
+  } catch (error) {
+    alert("准备发布文件失败。\n" + (error?.message || "请确认本地服务已启动。"));
+  } finally {
+    if (button) {
+      button.textContent = oldText;
+      button.disabled = false;
+    }
+  }
+}
+function openLocalPreview() {
+  window.open("/" + systemSlug + "/dist/index.html?v=" + Date.now(), "_blank", "noopener");
+}
+async function syncMappingTable(button) {
+  const oldText = button?.textContent;
+  if (button) {
+    button.textContent = "同步中...";
+    button.disabled = true;
+  }
+  try {
+    const saved = await saveStateToLocalFile(null, { silent: true });
+    if (!saved.ok) {
+      throw new Error(saved.message || "保存失败，已停止同步映射表。");
+    }
+    const response = await fetch(endpoint("/sync-mapping?system=" + encodeURIComponent(systemSlug)), { method: "POST" });
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(result.message || "同步映射表失败。");
+    }
+    const summary = [
+      result.message,
+      "",
+      "新增界面：" + result.addedInterfaces,
+      "显示名变化：" + result.updatedNames,
+      "替换图片：" + result.replacedImages,
+      "新增图片：" + result.addedImages,
+      "类型变化：" + result.roleChanges,
+      "补充图片基线：" + result.baselineTokens,
+      "",
+      "页面将刷新，以载入同步后的本地数据。"
+    ].join("\n");
+    alert(summary);
+    localStorage.removeItem(storageKey);
+    location.reload();
+  } catch (error) {
+    alert("同步映射表失败。\n" + (error?.message || "请确认本地服务已启动，并且当前账号可以访问飞书映射表。"));
+  } finally {
+    if (button) {
+      button.textContent = oldText;
+      button.disabled = false;
+    }
+  }
+}
+function pad2(n) { return String(n).padStart(2, "0"); }
+function byId(id) { return document.getElementById(id); }
+function screenTitle(screen) { return screen.id + " " + screen.name; }
+function isViewOnlyMode() { return document.body.classList.contains("view-only"); }
+function normalizeMarkerActions(marker) {
+  if (!marker) return [];
+  const actions = Array.isArray(marker.linkActions) ? marker.linkActions : [];
+  marker.linkActions = actions
+    .map((action, index) => ({
+      label: action?.label || ("点击动作 " + (index + 1)),
+      targetImageId: action?.targetImageId || action?.target || "",
+    }))
+    .filter(action => action.label || action.targetImageId);
+  if (!marker.linkActions.length && marker.targetImageId) {
+    marker.linkActions.push({ label: "点击动作 1", targetImageId: marker.targetImageId });
+  }
+  syncLegacyTarget(marker);
+  return marker.linkActions;
+}
+function syncLegacyTarget(marker) {
+  if (!marker) return;
+  marker.targetImageId = (marker.linkActions || []).find(action => action.targetImageId)?.targetImageId || "";
+}
+function buildTargetImageOptions(selectedValue) {
+  return '<option value="">不跳转</option>' + state.interfaces.map(targetScreen =>
+    '<optgroup label="' + escapeAttr(screenTitle(targetScreen)) + '">' +
+    targetScreen.images.map((img, index) =>
+      '<option value="' + escapeAttr(targetScreen.id + "::" + img.id) + '" ' + (selectedValue === targetScreen.id + "::" + img.id || selectedValue === img.id ? 'selected' : '') + '>' + escapeHtml(screenTitle(targetScreen) + " / " + (img.label || ("界面" + (index + 1))) + " · " + (img.role || "正式界面")) + '</option>'
+    ).join("") +
+    '</optgroup>'
+  ).join("");
+}
+function resolveTargetImage(targetValue, fallbackScreen) {
+  if (!targetValue) return null;
+  let targetScreen = fallbackScreen;
+  let targetImageId = targetValue;
+  if (targetValue.includes("::")) {
+    const parts = targetValue.split("::");
+    targetScreen = state.interfaces.find(item => item.id === parts[0]) || fallbackScreen;
+    targetImageId = parts[1];
+  } else {
+    targetScreen = state.interfaces.find(screen => (screen.images || []).some(img => img.id === targetValue)) || fallbackScreen;
+  }
+  const targetIndex = targetScreen?.images?.findIndex(img => img.id === targetImageId) ?? -1;
+  if (!targetScreen || targetIndex < 0) return null;
+  const image = targetScreen.images[targetIndex];
+  return {
+    screen: targetScreen,
+    image,
+    index: targetIndex,
+    value: targetScreen.id + "::" + image.id,
+    title: screenTitle(targetScreen),
+    meta: (image.label || ("界面" + (targetIndex + 1))) + " · " + (image.role || "正式界面"),
+  };
+}
+function renderActionTargetPreview(target, markerId, actionIndex) {
+  if (!target) return '<div class="action-target-empty">未选择目标界面</div>';
+  return '<div class="action-target-card">' +
+    '<button class="action-target-thumb" data-preview-action="' + escapeAttr(markerId) + '" data-action-index="' + actionIndex + '" title="查看大图"><img src="' + escapeAttr(target.image.src) + '" alt="' + escapeAttr(target.title) + '" /></button>' +
+    '<div><div class="action-target-title">' + escapeHtml(target.title) + '</div><div class="action-target-meta">' + escapeHtml(target.meta) + '</div></div>' +
+  '</div>';
+}
+function effectRefLabel(index) {
+  return "效果图" + (index + 1);
+}
+function jumpRefLabel(index) {
+  return "跳转" + (index + 1);
+}
+function findEffectReference(marker, index) {
+  const label = effectRefLabel(index);
+  const lines = String(marker?.rule || "").split("\n");
+  const lineIndex = lines.findIndex(line => line.includes("【" + label) || line.includes("[" + label));
+  if (lineIndex < 0) return null;
+  return {
+    label,
+    lineNumber: lineIndex + 1,
+    text: lines[lineIndex].trim(),
+  };
+}
+function renderRuleTextPreview(marker, fallbackScreen) {
+  const text = String(marker?.rule || "");
+  const pattern = /(【(效果图|跳转)(\d+)(?:[：:]([^】]+))?】|\[(效果图|跳转)(\d+)(?:[：:]([^\]]+))?\])/g;
+  let html = "";
+  let lastIndex = 0;
+  let match;
+  while ((match = pattern.exec(text))) {
+    html += escapeHtml(text.slice(lastIndex, match.index));
+    const type = match[2] || match[5];
+    const numberText = match[3] || match[6];
+    const caption = (match[4] || match[7] || "").trim();
+    const index = Number(numberText) - 1;
+    if (type === "效果图") {
+      const item = marker?.extraImages?.[index];
+      const label = caption || effectRefLabel(index);
+      if (item) {
+        const src = typeof item === "string" ? item : item.src;
+        html += '<button class="inline-effect-thumb" data-preview-extra="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '">' +
+          '<img src="' + escapeAttr(src) + '" alt="' + escapeAttr(label) + '" />' +
+          '<span>' + escapeHtml(label) + '</span>' +
+        '</button>';
+      } else {
+        html += '<span class="inline-effect-missing">' + escapeHtml(match[0]) + '</span>';
+      }
+    } else {
+      const action = normalizeMarkerActions(marker)[index];
+      const target = resolveTargetImage(action?.targetImageId || "", fallbackScreen);
+      const label = caption || action?.label || target?.title || jumpRefLabel(index);
+      if (action && target) {
+        html += '<button class="inline-jump-thumb" data-inline-jump="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">' +
+          '<img src="' + escapeAttr(target.image.src) + '" alt="' + escapeAttr(target.title) + '" />' +
+          '<span class="inline-jump-text"><strong>前往</strong><em>' + escapeHtml(label) + '</em></span>' +
+        '</button>';
+      } else {
+        html += '<span class="inline-jump-missing">' + escapeHtml(match[0]) + '</span>';
+      }
+    }
+    lastIndex = pattern.lastIndex;
+  }
+  html += escapeHtml(text.slice(lastIndex));
+  return '<div class="rule-text-preview">' + html + '</div>';
+}
+
+function render() {
+  renderNav();
+  if (activeScreenId) renderDetail(activeScreenId);
+  else renderOverview();
+}
+
+function renderNav() {
+  const nav = byId("navList");
+  nav.innerHTML = state.interfaces.map(screen =>
+    '<button class="nav-item ' + (screen.id === activeScreenId ? 'active' : '') + '" data-screen="' + escapeAttr(screen.id) + '">' +
+    '<span class="nav-id">' + escapeHtml(screen.id) + '</span><span>' + escapeHtml(screen.name) + '</span></button>'
+  ).join("");
+  nav.querySelectorAll("[data-screen]").forEach(btn => {
+    btn.addEventListener("click", () => openDetail(btn.dataset.screen));
+  });
+}
+
+function renderOverview() {
+  activeScreenId = null;
+  document.querySelector("[data-open-overview]").classList.add("active");
+  byId("overviewView").classList.add("active");
+  byId("detailView").classList.remove("active");
+  const grid = byId("overviewGrid");
+  grid.innerHTML = state.interfaces.map(screen => {
+    const thumbs = screen.images.length
+      ? screen.images.map((img, index) => '<button class="overview-thumb" data-overview-preview="' + escapeAttr(screen.id) + '" data-image-index="' + index + '" title="查看大图"><img src="' + escapeAttr(img.src) + '" alt="' + escapeAttr(screenTitle(screen) + " / " + (img.label || ("界面" + (index + 1)))) + '" /></button>').join("")
+      : '<div class="empty-thumb">待补图</div>';
+    return '<article class="overview-card" data-screen="' + escapeAttr(screen.id) + '">' +
+      '<h3>' + escapeHtml(screenTitle(screen)) + '</h3>' +
+      '<div class="tag-row"><span class="tag">' + escapeHtml(screen.groupId || "未分组") + '</span><span class="tag">' + escapeHtml(screen.status || "待处理") + '</span></div>' +
+      '<div class="thumb-strip">' + thumbs + '</div>' +
+      '<p class="hint">' + escapeHtml(screen.note || screen.remark || "点击进入界面规则。") + '</p>' +
+    '</article>';
+  }).join("");
+  grid.querySelectorAll("[data-screen]").forEach(card => card.addEventListener("click", () => openDetail(card.dataset.screen)));
+  grid.querySelectorAll("[data-overview-preview]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const screen = state.interfaces.find(item => item.id === btn.dataset.overviewPreview);
+      const imageIndex = Number(btn.dataset.imageIndex);
+      const image = screen?.images?.[imageIndex];
+      if (!screen || !image) return;
+      openImagePreview(image.src, screenTitle(screen) + " / " + (image.label || ("界面" + (imageIndex + 1))) + " · " + (image.role || "正式界面"));
+    });
+  });
+}
+
+function openDetail(screenId) {
+  jumpBackTarget = null;
+  activeScreenId = screenId;
+  activeImageIndex = 0;
+  activeMarkerId = "01";
+  document.querySelector("[data-open-overview]").classList.remove("active");
+  byId("overviewView").classList.remove("active");
+  byId("detailView").classList.add("active");
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderDetail(screenId) {
+  const screen = state.interfaces.find(item => item.id === screenId);
+  const view = byId("detailView");
+  if (!screen) {
+    view.innerHTML = '<div class="empty-detail">未找到界面。</div>';
+    return;
+  }
+  const image = screen.images[activeImageIndex];
+  const jumpOrigin = jumpBackTarget
+    ? '<div class="jump-origin"><span>从 ' + escapeHtml(jumpBackTarget.label || "上一界面") + ' 跳转而来</span><button class="ghost" data-return-jump>返回来源</button></div>'
+    : "";
+  view.innerHTML = '<div class="detail-head">' +
+    '<div><h2>' + escapeHtml(screenTitle(screen)) + '</h2><p class="hint">' + escapeHtml(screen.groupName || screen.note || "界面规则展示") + '</p></div>' +
+    '<button class="secondary" data-back>返回总览</button>' +
+  '</div>' +
+  jumpOrigin +
+  '<section class="screen-block">' +
+    '<div class="screen-title"><h3>' + escapeHtml(screenTitle(screen)) + '</h3><span class="tag">' + escapeHtml(screen.groupId || "未分组") + '</span></div>' +
+    (image ? renderImageWorkspace(screen, image) : renderEmptyImage(screen)) +
+  '</section>';
+  view.querySelector("[data-back]").addEventListener("click", () => { jumpBackTarget = null; activeScreenId = null; renderOverview(); renderNav(); });
+  bindDetailEvents(screen);
+}
+
+function renderEmptyImage(screen) {
+  return '<div class="empty-detail">' +
+    '<p>这个界面还没有图片。界面主图需要从映射表同步进来；本地编辑器只维护规则、标点、动作和效果图。</p>' +
+    '<button class="secondary" data-sync-mapping-inline>同步映射表</button>' +
+  '</div>';
+}
+
+function renderImageWorkspace(screen, image) {
+  const tabs = screen.images.map((img, index) =>
+    '<button class="' + (index === activeImageIndex ? 'active' : '') + '" data-image-index="' + index + '">' + escapeHtml(img.label || ("界面" + (index + 1))) + '</button>'
+  ).join("");
+  const markers = image.annotations.map(marker =>
+    '<button class="marker ' + (marker.id === activeMarkerId ? 'active' : '') + '" style="left:' + marker.x + '%;top:' + marker.y + '%" data-marker="' + escapeAttr(marker.id) + '">' + escapeHtml(marker.id) + '</button>'
+  ).join("");
+  const pointTabs = [{ id: "0", title: "入口规则" }].concat(image.annotations).map(marker =>
+    '<button class="' + (marker.id === activeMarkerId ? 'active' : '') + '" data-rule-tab="' + escapeAttr(marker.id) + '">' + escapeHtml(marker.id) + '</button>'
+  ).join("");
+  const rules = image.annotations.map(marker => {
+    const normalizedExtras = (marker.extraImages || []).map(item => typeof item === "string" ? { src: item, note: "" } : item);
+    marker.extraImages = normalizedExtras;
+    const linkActions = normalizeMarkerActions(marker);
+    const isExtraOpen = expandedExtraPanels.has(marker.id);
+    const previewImages = normalizedExtras.slice(0, 4).map((item, index) => {
+      const ref = findEffectReference(marker, index);
+      return '<button class="extra-preview-btn ' + (ref ? "linked" : "") + '" data-preview-extra="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '" title="' + escapeAttr((ref ? "已关联：" + ref.text : "查看" + effectRefLabel(index))) + '">' +
+        '<img src="' + escapeAttr(item.src) + '" alt="' + escapeAttr(marker.title + effectRefLabel(index)) + '" />' +
+      '</button>';
+    }).join("");
+    const previewStrip = previewImages || '<span class="extra-preview-empty">可上传、拖拽或导入截图</span>';
+    const extraImages = normalizedExtras.map((item, index) => {
+      const ref = findEffectReference(marker, index);
+      return '<div class="extra-image-card">' +
+        '<button class="extra-image-preview" data-preview-extra="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '"><img src="' + escapeAttr(item.src) + '" alt="' + escapeAttr(marker.title + effectRefLabel(index)) + '" /></button>' +
+        '<div class="extra-ref-status ' + (ref ? "linked" : "") + '">' + (ref ? "已关联：" + escapeHtml(ref.text) : "未在正文中引用，点击“插入引用”可绑定到当前光标位置。") + '</div>' +
+        '<textarea data-extra-note="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '" placeholder="补充这张效果图说明">' + escapeHtml(item.note || "") + '</textarea>' +
+        '<div class="mini-toolbar"><button class="ghost" data-insert-extra-ref="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '">插入引用</button><button class="danger" data-delete-extra="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '">删除</button></div>' +
+      '</div>';
+    }).join("");
+    const actionRows = linkActions.map((action, index) => {
+      const target = resolveTargetImage(action.targetImageId || "", screen);
+      return '<div class="action-row" data-action-row="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">' +
+        '<input data-action-label="' + escapeAttr(marker.id) + '" data-action-index="' + index + '" value="' + escapeAttr(action.label || "") + '" placeholder="动作名，如点击详情" />' +
+        '<div class="action-target-cell">' +
+          '<select data-action-target="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">' + buildTargetImageOptions(action.targetImageId || "") + '</select>' +
+          renderActionTargetPreview(target, marker.id, index) +
+        '</div>' +
+        '<button class="secondary" data-insert-action-ref="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">插入跳转</button>' +
+        '<button class="ghost" data-jump-action="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">查看</button>' +
+        '<button class="danger" data-delete-action="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">删除</button>' +
+      '</div>';
+    }).join("");
+    const ruleBody = isViewOnlyMode()
+      ? renderRuleTextPreview(marker, screen)
+      : '<textarea data-edit-rule="' + escapeAttr(marker.id) + '">' + escapeHtml(marker.rule) + '</textarea>';
+    return '<article class="rule-card ' + (marker.id === activeMarkerId ? 'active' : '') + '" data-rule="' + escapeAttr(marker.id) + '" data-rule-drop="' + escapeAttr(marker.id) + '">' +
+      '<div class="rule-head"><span class="rule-num">' + escapeHtml(marker.id) + '</span><input data-edit-title="' + escapeAttr(marker.id) + '" value="' + escapeAttr(marker.title) + '" /></div>' +
+      ruleBody +
+      '<div class="action-links">' +
+        '<div class="action-head"><strong>动作跳转</strong><button class="secondary" data-add-action="' + escapeAttr(marker.id) + '">新增动作</button></div>' +
+        '<div class="action-list">' + (actionRows || '<div class="action-empty">暂无动作。可添加多个点击区域或点击效果，并分别绑定目标界面。</div>') + '</div>' +
+      '</div>' +
+      '<div class="extra-attachment ' + (isExtraOpen ? "open" : "") + '" data-extra-attachment="' + escapeAttr(marker.id) + '">' +
+        '<div class="extra-summary">' +
+          '<span class="extra-count">效果图 ' + normalizedExtras.length + ' 张</span>' +
+          '<div class="extra-preview-strip">' + previewStrip + '</div>' +
+          '<button class="ghost" data-toggle-extra-panel="' + escapeAttr(marker.id) + '">' + (isExtraOpen ? "收起" : "展开") + '</button>' +
+          '<button class="secondary" data-upload-extra="' + escapeAttr(marker.id) + '">上传图片</button><input class="file-input" type="file" accept="image/*" data-extra-input="' + escapeAttr(marker.id) + '" />' +
+          '<button class="secondary" data-system-clipboard="' + escapeAttr(marker.id) + '">从系统剪贴板导入</button>' +
+        '</div>' +
+        '<div class="extra-panel">' +
+          '<div class="extra-images">' + (extraImages || '<p class="hint">暂无效果图。可以上传图片、拖拽图片到下方区域，或使用系统剪贴板导入。</p>') + '</div>' +
+          '<div class="paste-zone" tabindex="0" role="button" data-paste-zone="' + escapeAttr(marker.id) + '">复制截图后点这里按 Ctrl+V；localhost 模式会自动读取系统剪贴板</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="toolbar"><button class="ghost" data-focus-marker="' + escapeAttr(marker.id) + '">定位标注</button><button class="secondary" data-move-marker="' + escapeAttr(marker.id) + '">调整位置</button><button class="danger" data-delete-marker="' + escapeAttr(marker.id) + '">删除标注</button></div>' +
+    '</article>';
+  }).join("");
+  return '<div class="workspace">' +
+    '<div class="image-stage">' +
+      '<div class="image-tabs">' + tabs + '<button class="secondary" data-sync-mapping-inline>同步映射表</button></div>' +
+      '<div class="image-wrap" data-image-wrap><img src="' + image.src + '" alt="' + escapeAttr(screen.name) + '" />' + markers + '</div>' +
+      '<div class="move-tip ' + (moveMarkerId ? 'active' : '') + '">正在调整 ' + escapeHtml(moveMarkerId || "") + '：点击截图目标位置，或直接拖动红色标点。</div>' +
+      '<p class="hint">点击图片空白处可新增标注；可直接拖动标点调整位置；界面主图、状态图和参考图通过映射表同步，规则卡片内只添加效果图。</p>' +
+    '</div>' +
+    '<div class="rule-panel mode-' + ruleDisplayMode + '">' +
+      '<div class="rule-toolbar">' +
+        '<div class="toolbar"><button data-add-marker>新增标注</button><button class="secondary" data-renumber-markers>整理编号</button><button class="secondary" data-save>保存修改</button></div>' +
+        '<div class="segmented"><button class="' + (ruleDisplayMode === "overview" ? "active" : "") + '" data-rule-display="overview">总览</button><button class="' + (ruleDisplayMode === "point" ? "active" : "") + '" data-rule-display="point">分点</button></div>' +
+      '</div>' +
+      '<div class="point-tabs">' + pointTabs + '</div>' +
+      (image.role === "参考图" ? '<div class="reference-note">这张图标记为参考图：只用于对标或说明，不生成标点和规则。</div>' : '<div class="rule-card ' + (activeMarkerId === "0" ? "active" : "") + '" data-rule="0"><div class="rule-head"><span class="rule-num">0</span><strong>入口规则</strong></div><textarea data-entry-rule>' + escapeHtml(image.entryRule || "待补充：说明如何进入当前界面。") + '</textarea></div>') +
+      rules +
+    '</div>' +
+  '</div>';
+}
+
+function autoGrowTextarea(textarea) {
+  if (!textarea) return;
+  const minHeight = textarea.hasAttribute("data-extra-note") ? 84 : 180;
+  textarea.style.height = "auto";
+  textarea.style.height = Math.max(textarea.scrollHeight + 2, minHeight) + "px";
+}
+
+function bindAutoGrowTextarea(textarea) {
+  autoGrowTextarea(textarea);
+  textarea.addEventListener("input", () => autoGrowTextarea(textarea));
+}
+
+function bindDetailEvents(screen) {
+  const image = screen.images[activeImageIndex];
+  if (!image) {
+    document.querySelector("[data-sync-mapping-inline]")?.addEventListener("click", event => syncMappingTable(event.currentTarget));
+    return;
+  }
+  document.querySelectorAll("[data-image-index]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeImageIndex = Number(btn.dataset.imageIndex);
+      activeMarkerId = screen.images[activeImageIndex].annotations[0]?.id || "01";
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-marker], [data-focus-marker]").forEach(el => {
+    el.addEventListener("click", event => {
+      event.stopPropagation();
+      const id = el.dataset.marker || el.dataset.rule || el.dataset.focusMarker;
+      if (id) {
+        activeMarkerId = id;
+        renderDetail(screen.id);
+      }
+    });
+  });
+  document.querySelectorAll("[data-marker]").forEach(markerEl => {
+    markerEl.addEventListener("pointerdown", event => {
+      if (isViewOnlyMode()) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const marker = image.annotations.find(item => item.id === markerEl.dataset.marker);
+      if (!marker) return;
+      activeMarkerId = marker.id;
+      markerEl.classList.add("dragging");
+      markerEl.setPointerCapture(event.pointerId);
+      const move = moveEvent => {
+        const rect = wrap.getBoundingClientRect();
+        const x = ((moveEvent.clientX - rect.left) / rect.width) * 100;
+        const y = ((moveEvent.clientY - rect.top) / rect.height) * 100;
+        marker.x = Number(Math.max(0, Math.min(100, x)).toFixed(2));
+        marker.y = Number(Math.max(0, Math.min(100, y)).toFixed(2));
+        markerEl.style.left = marker.x + "%";
+        markerEl.style.top = marker.y + "%";
+      };
+      const up = upEvent => {
+        markerEl.classList.remove("dragging");
+        markerEl.releasePointerCapture(upEvent.pointerId);
+        markerEl.removeEventListener("pointermove", move);
+        markerEl.removeEventListener("pointerup", up);
+        markerEl.removeEventListener("pointercancel", up);
+        moveMarkerId = null;
+        saveState();
+        renderDetail(screen.id);
+      };
+      markerEl.addEventListener("pointermove", move);
+      markerEl.addEventListener("pointerup", up);
+      markerEl.addEventListener("pointercancel", up);
+    });
+  });
+  document.querySelectorAll("[data-rule-tab]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeMarkerId = btn.dataset.ruleTab;
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-action-label]").forEach(input => {
+    input.addEventListener("input", () => {
+      const marker = image.annotations.find(item => item.id === input.dataset.actionLabel);
+      const index = Number(input.dataset.actionIndex);
+      const actions = normalizeMarkerActions(marker);
+      if (!actions[index]) return;
+      actions[index].label = input.value;
+      syncLegacyTarget(marker);
+      saveState();
+    });
+  });
+  document.querySelectorAll("[data-action-target]").forEach(select => {
+    select.addEventListener("change", () => {
+      const marker = image.annotations.find(item => item.id === select.dataset.actionTarget);
+      const index = Number(select.dataset.actionIndex);
+      const actions = normalizeMarkerActions(marker);
+      if (!actions[index]) return;
+      actions[index].targetImageId = select.value;
+      syncLegacyTarget(marker);
+      saveState();
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-preview-action]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      const marker = image.annotations.find(item => item.id === btn.dataset.previewAction);
+      const index = Number(btn.dataset.actionIndex);
+      const action = normalizeMarkerActions(marker)[index];
+      const target = resolveTargetImage(action?.targetImageId || "", screen);
+      if (!target) return;
+      openImagePreview(target.image.src, target.title + " / " + target.meta);
+    });
+  });
+  document.querySelectorAll("[data-preview-extra]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const marker = image.annotations.find(item => item.id === btn.dataset.previewExtra);
+      const index = Number(btn.dataset.extraIndex);
+      const item = marker?.extraImages?.[index];
+      if (!marker || !item) return;
+      const src = typeof item === "string" ? item : item.src;
+      const note = typeof item === "string" ? "" : item.note || "";
+      const ref = findEffectReference(marker, index);
+      openImagePreview(src, marker.id + " " + marker.title + " / " + effectRefLabel(index), {
+        referenceText: ref?.text || "",
+        note,
+        emptyText: "这张效果图尚未在正文中引用。可以在规则正文对应状态后插入【" + effectRefLabel(index) + "】来建立关联。",
+      });
+    });
+  });
+  document.querySelectorAll("[data-jump-action]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const marker = image.annotations.find(item => item.id === btn.dataset.jumpAction);
+      const index = Number(btn.dataset.actionIndex);
+      const action = normalizeMarkerActions(marker)[index];
+      if (!action?.targetImageId) return;
+      jumpToTargetImage(action.targetImageId, marker.id, screen, action.label);
+    });
+  });
+  document.querySelectorAll("[data-inline-jump]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const marker = image.annotations.find(item => item.id === btn.dataset.inlineJump);
+      const index = Number(btn.dataset.actionIndex);
+      const action = normalizeMarkerActions(marker)[index];
+      if (!action?.targetImageId) return;
+      jumpToTargetImage(action.targetImageId, marker.id, screen, action.label);
+    });
+  });
+  document.querySelectorAll("[data-insert-action-ref]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const marker = image.annotations.find(item => item.id === btn.dataset.insertActionRef);
+      const index = Number(btn.dataset.actionIndex);
+      const action = normalizeMarkerActions(marker)[index];
+      if (!marker || !action) return;
+      const target = resolveTargetImage(action.targetImageId || "", screen);
+      const textarea = document.querySelector('[data-edit-rule="' + CSS.escape(marker.id) + '"]');
+      if (!textarea) return;
+      const label = action.label || target?.title || jumpRefLabel(index);
+      const ref = "【跳转" + (index + 1) + (label ? "：" + label : "") + "】";
+      replaceTextareaRange(textarea, textarea.selectionStart, textarea.selectionEnd, ref);
+      marker.rule = textarea.value;
+      saveState();
+      activeMarkerId = marker.id;
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-delete-action]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const marker = image.annotations.find(item => item.id === btn.dataset.deleteAction);
+      const index = Number(btn.dataset.actionIndex);
+      const actions = normalizeMarkerActions(marker);
+      actions.splice(index, 1);
+      syncLegacyTarget(marker);
+      activeMarkerId = marker.id;
+      saveState();
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-add-action]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (isViewOnlyMode()) return;
+      const marker = image.annotations.find(item => item.id === btn.dataset.addAction);
+      const actions = normalizeMarkerActions(marker);
+      actions.push({ label: "点击动作 " + (actions.length + 1), targetImageId: "" });
+      activeMarkerId = marker.id;
+      saveState();
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-move-marker]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      moveMarkerId = btn.dataset.moveMarker;
+      activeMarkerId = moveMarkerId;
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-upload-extra]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      expandedExtraPanels.add(btn.dataset.uploadExtra);
+      const input = document.querySelector('[data-extra-input="' + CSS.escape(btn.dataset.uploadExtra) + '"]');
+      input?.click();
+    });
+  });
+  document.querySelectorAll("[data-toggle-extra-panel]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.toggleExtraPanel;
+      if (expandedExtraPanels.has(id)) expandedExtraPanels.delete(id);
+      else expandedExtraPanels.add(id);
+      activeMarkerId = id;
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-system-clipboard]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      expandedExtraPanels.add(btn.dataset.systemClipboard);
+      importSystemClipboardImage(image, btn.dataset.systemClipboard, screen.id, btn);
+    });
+  });
+  document.querySelectorAll("[data-rule-drop]").forEach(card => {
+    card.addEventListener("dragover", event => {
+      if (!hasImageLikeDragData(event.dataTransfer)) return;
+      event.preventDefault();
+      expandedExtraPanels.add(card.dataset.ruleDrop);
+      card.classList.add("active");
+      const box = card.querySelector("[data-extra-attachment]");
+      box?.classList.add("drag-over");
+    }, true);
+    card.addEventListener("dragleave", event => {
+      if (card.contains(event.relatedTarget)) return;
+      const box = card.querySelector("[data-extra-attachment]");
+      box?.classList.remove("drag-over");
+    }, true);
+    card.addEventListener("drop", event => {
+      if (!hasImageLikeDragData(event.dataTransfer)) return;
+      event.preventDefault();
+      const box = card.querySelector("[data-extra-attachment]");
+      box?.classList.remove("drag-over");
+      expandedExtraPanels.add(card.dataset.ruleDrop);
+      handleDropImageToMarker(image, card.dataset.ruleDrop, event, screen.id, null);
+    }, true);
+  });
+  document.querySelectorAll("[data-extra-attachment]").forEach(box => {
+    box.addEventListener("dragover", event => {
+      event.preventDefault();
+      expandedExtraPanels.add(box.dataset.extraAttachment);
+      box.classList.add("drag-over");
+    });
+    box.addEventListener("dragleave", () => {
+      box.classList.remove("drag-over");
+    });
+    box.addEventListener("drop", event => {
+      event.preventDefault();
+      box.classList.remove("drag-over");
+      expandedExtraPanels.add(box.dataset.extraAttachment);
+      handleDropImageToMarker(image, box.dataset.extraAttachment, event, screen.id, null);
+    });
+  });
+  document.querySelectorAll("[data-paste-zone]").forEach(zone => {
+    zone.addEventListener("paste", event => handlePasteImageToMarker(image, zone.dataset.pasteZone, event, screen.id, zone));
+    zone.addEventListener("keydown", event => {
+      if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== "v") return;
+      event.preventDefault();
+      activeMarkerId = zone.dataset.pasteZone;
+      expandedExtraPanels.add(activeMarkerId);
+      importSystemClipboardImage(image, activeMarkerId, screen.id, null, zone);
+    });
+    zone.addEventListener("focus", () => {
+      activeMarkerId = zone.dataset.pasteZone;
+      saveState();
+    });
+    zone.addEventListener("dragover", event => {
+      event.preventDefault();
+      zone.classList.add("drag-over");
+      zone.textContent = "松开鼠标添加图片";
+    });
+    zone.addEventListener("dragleave", () => {
+      zone.classList.remove("drag-over");
+      zone.textContent = "复制截图后点这里按 Ctrl+V；localhost 模式会自动读取系统剪贴板";
+    });
+    zone.addEventListener("drop", event => {
+      event.preventDefault();
+      zone.classList.remove("drag-over");
+      handleDropImageToMarker(image, zone.dataset.pasteZone, event, screen.id, zone);
+    });
+  });
+  document.querySelectorAll("[data-extra-note]").forEach(textarea => {
+    bindAutoGrowTextarea(textarea);
+    textarea.addEventListener("input", () => {
+      const marker = image.annotations.find(item => item.id === textarea.dataset.extraNote);
+      const index = Number(textarea.dataset.extraIndex);
+      if (!marker?.extraImages?.[index]) return;
+      if (typeof marker.extraImages[index] === "string") marker.extraImages[index] = { src: marker.extraImages[index], note: "" };
+      marker.extraImages[index].note = textarea.value;
+      saveState();
+    });
+  });
+  document.querySelectorAll("[data-delete-extra]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const marker = image.annotations.find(item => item.id === btn.dataset.deleteExtra);
+      const index = Number(btn.dataset.extraIndex);
+      if (!marker?.extraImages) return;
+      marker.extraImages.splice(index, 1);
+      activeMarkerId = marker.id;
+      saveState();
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-insert-extra-ref]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const marker = image.annotations.find(item => item.id === btn.dataset.insertExtraRef);
+      const index = Number(btn.dataset.extraIndex);
+      const item = marker?.extraImages?.[index];
+      if (!marker || !item) return;
+      const note = typeof item === "string" ? "" : item.note || "";
+      const textarea = document.querySelector('[data-edit-rule="' + CSS.escape(marker.id) + '"]');
+      if (!textarea) return;
+      const ref = "【效果图" + (index + 1) + (note ? "：" + note : "") + "】";
+      replaceTextareaRange(textarea, textarea.selectionStart, textarea.selectionEnd, ref);
+      marker.rule = textarea.value;
+      saveState();
+      activeMarkerId = marker.id;
+      expandedExtraPanels.add(marker.id);
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-extra-input]").forEach(input => {
+    input.addEventListener("change", event => handleExtraUpload(image, input.dataset.extraInput, event, screen.id));
+  });
+  document.querySelectorAll("[data-rule-display]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      ruleDisplayMode = btn.dataset.ruleDisplay;
+      if (ruleDisplayMode === "point" && !activeMarkerId) {
+        activeMarkerId = image.annotations[0]?.id || "0";
+      }
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-edit-title]").forEach(input => {
+    input.addEventListener("input", () => {
+      const marker = image.annotations.find(item => item.id === input.dataset.editTitle);
+      marker.title = input.value;
+      saveState();
+    });
+  });
+  document.querySelectorAll("[data-edit-rule]").forEach(textarea => {
+    bindAutoGrowTextarea(textarea);
+    textarea.addEventListener("keydown", handleRuleEditorKeydown);
+    textarea.addEventListener("input", () => {
+      const marker = image.annotations.find(item => item.id === textarea.dataset.editRule);
+      marker.rule = textarea.value;
+      saveState();
+    });
+  });
+  const entryRule = document.querySelector("[data-entry-rule]");
+  if (entryRule) {
+    bindAutoGrowTextarea(entryRule);
+    entryRule.addEventListener("keydown", handleRuleEditorKeydown);
+    entryRule.addEventListener("input", event => {
+      image.entryRule = event.target.value;
+      saveState();
+    });
+  }
+  const returnJump = document.querySelector("[data-return-jump]");
+  if (returnJump) {
+    returnJump.addEventListener("click", () => {
+      if (!jumpBackTarget) return;
+      activeScreenId = jumpBackTarget.screenId;
+      activeImageIndex = jumpBackTarget.imageIndex;
+      activeMarkerId = jumpBackTarget.markerId;
+      jumpBackTarget = null;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+  document.querySelector("[data-add-marker]").addEventListener("click", () => {
+    if (isViewOnlyMode()) return;
+    addMarker(image, 50, 50, screen.id);
+  });
+  document.querySelector("[data-renumber-markers]").addEventListener("click", () => {
+    const result = renumberMarkersSequential(image);
+    if (!result.ok) {
+      alert(result.reason || "当前标注不适合自动整理编号。");
+      return;
+    }
+    activeMarkerId = result.idMap.get(activeMarkerId) || activeMarkerId;
+    moveMarkerId = moveMarkerId ? result.idMap.get(moveMarkerId) || moveMarkerId : null;
+    expandedExtraPanels = remapIdSet(expandedExtraPanels, result.idMap);
+    saveState();
+    renderDetail(screen.id);
+  });
+  document.querySelector("[data-save]").addEventListener("click", event => {
+    saveStateToLocalFile(event.currentTarget);
+  });
+  document.querySelectorAll("[data-sync-mapping-inline]").forEach(btn => {
+    btn.addEventListener("click", event => syncMappingTable(event.currentTarget));
+  });
+  document.querySelectorAll("[data-delete-marker]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const deletedId = btn.dataset.deleteMarker;
+      image.annotations = image.annotations.filter(marker => marker.id !== deletedId);
+      const result = renumberMarkersSequential(image, { silent: true });
+      if (result.ok) {
+        activeMarkerId = result.idMap.get(activeMarkerId) || image.annotations[0]?.id || "0";
+        moveMarkerId = moveMarkerId ? result.idMap.get(moveMarkerId) || null : null;
+        expandedExtraPanels = remapIdSet(expandedExtraPanels, result.idMap);
+      } else {
+        activeMarkerId = image.annotations[0]?.id || "0";
+        moveMarkerId = null;
+      }
+      moveMarkerId = null;
+      saveState();
+      renderDetail(screen.id);
+    });
+  });
+  const wrap = document.querySelector("[data-image-wrap]");
+  wrap.addEventListener("click", event => {
+    if (event.target.closest(".marker")) return;
+    if (isViewOnlyMode()) return;
+    const rect = wrap.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    if (moveMarkerId) {
+      const marker = image.annotations.find(item => item.id === moveMarkerId);
+      if (marker) {
+        marker.x = Number(Math.max(0, Math.min(100, x)).toFixed(2));
+        marker.y = Number(Math.max(0, Math.min(100, y)).toFixed(2));
+        activeMarkerId = marker.id;
+        moveMarkerId = null;
+        saveState();
+        renderDetail(screen.id);
+      }
+      return;
+    }
+    addMarker(image, Math.max(0, Math.min(100, x)), Math.max(0, Math.min(100, y)), screen.id);
+  });
+}
+
+function addMarker(image, x, y, screenId) {
+  const used = new Set(image.annotations.map(item => item.id));
+  let next = 1;
+  while (used.has(pad2(next))) next++;
+  const id = pad2(next);
+  image.annotations.push({
+    id,
+    x: Number(x.toFixed(2)),
+    y: Number(y.toFixed(2)),
+    title: "新增标注",
+    rule: "待补充：显示规则、点击规则、状态规则。",
+  });
+  activeMarkerId = id;
+  saveState();
+  renderDetail(screenId);
+}
+
+function renumberMarkersSequential(image, options = {}) {
+  const annotations = image.annotations || [];
+  const ids = annotations.map(marker => String(marker.id || ""));
+  const numericMarkers = annotations.filter(marker => /^\d+$/.test(String(marker.id || "")));
+  const numericIds = numericMarkers.map(marker => String(marker.id || ""));
+  if (!numericMarkers.length) {
+    return { ok: false, reason: "当前没有可整理的数字编号。", idMap: new Map() };
+  }
+  if (new Set(numericIds).size !== numericIds.length) {
+    return { ok: false, reason: "当前存在重复编号，已保留现状，避免破坏同一位置不同状态的标注。", idMap: new Map() };
+  }
+  const idMap = new Map();
+  numericMarkers.forEach((marker, index) => {
+    const nextId = pad2(index + 1);
+    idMap.set(marker.id, nextId);
+    marker.id = nextId;
+  });
+  return { ok: true, idMap };
+}
+
+function remapIdSet(sourceSet, idMap) {
+  const next = new Set();
+  for (const id of sourceSet || []) next.add(idMap.get(id) || id);
+  return next;
+}
+
+function openImagePreview(src, title, context = {}) {
+  const old = document.querySelector(".image-modal");
+  old?.remove();
+  const noteParts = [];
+  if (context.referenceText) {
+    noteParts.push('<div><strong>关联正文</strong><p>' + escapeHtml(context.referenceText) + '</p></div>');
+  }
+  if (context.note) {
+    noteParts.push('<div><strong>效果说明</strong><p>' + escapeHtml(context.note) + '</p></div>');
+  }
+  if (!noteParts.length && context.emptyText) {
+    noteParts.push('<div><strong>关联正文</strong><p>' + escapeHtml(context.emptyText) + '</p></div>');
+  }
+  const sideNote = noteParts.length ? '<aside class="image-modal-note">' + noteParts.join("") + '</aside>' : "";
+  const modal = document.createElement("div");
+  modal.className = "image-modal";
+  modal.innerHTML = '<div class="image-modal-card" role="dialog" aria-modal="true">' +
+    '<div class="image-modal-head"><strong>' + escapeHtml(title || "查看图片") + '</strong><button class="ghost" data-close-image-modal>关闭</button></div>' +
+    '<div class="image-modal-body"><div class="image-modal-content"><img src="' + escapeAttr(src) + '" alt="' + escapeAttr(title || "查看图片") + '" />' + sideNote + '</div></div>' +
+  '</div>';
+  modal.addEventListener("click", event => {
+    if (event.target === modal || event.target.closest("[data-close-image-modal]")) modal.remove();
+  });
+  document.addEventListener("keydown", function closeOnEsc(event) {
+    if (event.key !== "Escape") return;
+    modal.remove();
+    document.removeEventListener("keydown", closeOnEsc);
+  });
+  document.body.appendChild(modal);
+}
+
+function jumpToTargetImage(targetValue, sourceMarkerId, fallbackScreen, actionLabel = "") {
+  if (!targetValue) return;
+  const target = resolveTargetImage(targetValue, fallbackScreen);
+  if (!target) return;
+  const sourceScreen = state.interfaces.find(item => item.id === activeScreenId) || fallbackScreen;
+  const sourceImage = sourceScreen?.images?.[activeImageIndex];
+  const sourceMarker = sourceImage?.annotations?.find(item => item.id === sourceMarkerId);
+  jumpBackTarget = {
+    screenId: sourceScreen.id,
+    imageIndex: activeImageIndex,
+    markerId: sourceMarkerId,
+    label: screenTitle(sourceScreen) + " / " + (sourceImage?.label || "当前图片") + " / " + sourceMarkerId + (sourceMarker?.title ? " " + sourceMarker.title : "") + (actionLabel ? " / " + actionLabel : ""),
+  };
+  const targetScreen = target.screen;
+  const targetIndex = target.index;
+  activeScreenId = targetScreen.id;
+  activeImageIndex = targetIndex;
+  activeMarkerId = targetScreen.images[targetIndex].annotations.find(item => item.id === sourceMarkerId)?.id || targetScreen.images[targetIndex].annotations[0]?.id || "0";
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function replaceTextareaRange(textarea, start, end, value) {
+  textarea.value = textarea.value.slice(0, start) + value + textarea.value.slice(end);
+  textarea.selectionStart = textarea.selectionEnd = start + value.length;
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function adjustTextareaIndent(textarea, outdent = false) {
+  const value = textarea.value;
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const lineStart = value.lastIndexOf("\n", start - 1) + 1;
+  const lineEnd = end === start ? value.indexOf("\n", end) : end;
+  const realLineEnd = lineEnd < 0 ? value.length : lineEnd;
+  const block = value.slice(lineStart, realLineEnd);
+  const lines = block.split("\n");
+  const nextLines = lines.map(line => {
+    if (outdent) return line.replace(/^ {1,3}/, "");
+    return "   " + line;
+  });
+  textarea.value = value.slice(0, lineStart) + nextLines.join("\n") + value.slice(realLineEnd);
+  const delta = nextLines.join("\n").length - block.length;
+  textarea.selectionStart = Math.max(lineStart, start + (outdent ? -Math.min(3, start - lineStart) : 3));
+  textarea.selectionEnd = Math.max(textarea.selectionStart, end + delta);
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function handleRuleEditorKeydown(event) {
+  const textarea = event.currentTarget;
+  if (event.key === "Tab") {
+    event.preventDefault();
+    adjustTextareaIndent(textarea, event.shiftKey);
+    return;
+  }
+  if (event.key !== "Enter") return;
+
+  const value = textarea.value;
+  const cursor = textarea.selectionStart;
+  const lineStart = value.lastIndexOf("\n", cursor - 1) + 1;
+  const currentLine = value.slice(lineStart, cursor);
+  const numbered = currentLine.match(/^(\s*)(\d+)\.\s+(.*)$/);
+  const bullet = currentLine.match(/^(\s*)([-*])\s+(.*)$/);
+
+  if (numbered) {
+    event.preventDefault();
+    if (!numbered[3].trim()) {
+      replaceTextareaRange(textarea, lineStart, cursor, "");
+      return;
+    }
+    const next = Number(numbered[2]) + 1;
+    replaceTextareaRange(textarea, cursor, cursor, "\n" + numbered[1] + next + ". ");
+    return;
+  }
+  if (bullet) {
+    event.preventDefault();
+    if (!bullet[3].trim()) {
+      replaceTextareaRange(textarea, lineStart, cursor, "");
+      return;
+    }
+    replaceTextareaRange(textarea, cursor, cursor, "\n" + bullet[1] + bullet[2] + " ");
+  }
+}
+
+function handleUpload(screen, event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    screen.images.push({
+      id: screen.id + "-local-" + Date.now(),
+      label: "本地图片",
+      width: 0,
+      height: 0,
+      src: reader.result,
+      annotations: [{ id: "01", x: 50, y: 50, title: "新增标注", rule: "待补充：显示规则、点击规则、状态规则。" }],
+    });
+    activeImageIndex = screen.images.length - 1;
+    activeMarkerId = "01";
+    saveState();
+    renderDetail(screen.id);
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleExtraUpload(image, markerId, event, screenId) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    addExtraImageToMarker(image, markerId, reader.result, screenId);
+  };
+  reader.readAsDataURL(file);
+}
+
+function addExtraImageToMarker(image, markerId, src, screenId) {
+  const marker = image.annotations.find(item => item.id === markerId);
+  if (!marker) return;
+  marker.extraImages = marker.extraImages || [];
+  marker.extraImages.push({ src, note: "" });
+  activeMarkerId = marker.id;
+  expandedExtraPanels.add(marker.id);
+  saveState();
+  renderDetail(screenId);
+}
+
+function readImageFileToMarker(image, markerId, file, screenId) {
+  if (!file) return false;
+  const reader = new FileReader();
+  reader.onload = () => addExtraImageToMarker(image, markerId, reader.result, screenId);
+  reader.readAsDataURL(file);
+  return true;
+}
+
+function addDataUrlToMarker(image, markerId, dataUrl, screenId) {
+  if (!dataUrl || !dataUrl.startsWith("data:image/")) return false;
+  addExtraImageToMarker(image, markerId, dataUrl, screenId);
+  return true;
+}
+
+function clipboardDebugText(dataTransfer) {
+  const files = Array.from(dataTransfer?.files || []).map(file => file.type || file.name || "unknown-file");
+  const items = Array.from(dataTransfer?.items || []).map(item => item.type || item.kind || "unknown-item");
+  const types = Array.from(dataTransfer?.types || []);
+  return files.concat(items, types).filter(Boolean).join(" / ") || "未检测到剪贴板类型";
+}
+
+function hasImageLikeDragData(dataTransfer) {
+  const files = Array.from(dataTransfer?.files || []);
+  if (files.some(file => file.type.startsWith("image/"))) return true;
+  const items = Array.from(dataTransfer?.items || []);
+  if (items.some(item => item.type.startsWith("image/"))) return true;
+  const types = Array.from(dataTransfer?.types || []);
+  return types.includes("text/uri-list") || types.includes("text/html");
+}
+
+function firstImageUrlFromTransfer(dataTransfer) {
+  const uri = dataTransfer?.getData("text/uri-list")?.split("\n").map(line => line.trim()).find(line => line && !line.startsWith("#"));
+  if (uri && /\.(png|jpe?g|gif|webp|bmp|svg)(\?|#|$)/i.test(uri)) return uri;
+  const html = dataTransfer?.getData("text/html") || "";
+  const srcMatch = html.match(new RegExp('<img[^>]+src=["\']([^"\']+)["\']', 'i'));
+  if (srcMatch?.[1]) return srcMatch[1];
+  const text = dataTransfer?.getData("text/plain")?.trim() || "";
+  if (text && (text.startsWith("data:image/") || /\.(png|jpe?g|gif|webp|bmp|svg)(\?|#|$)/i.test(text))) return text;
+  return "";
+}
+
+function addImageUrlToMarker(image, markerId, url, screenId, zone) {
+  if (!url) return false;
+  if (url.startsWith("data:image/")) return addDataUrlToMarker(image, markerId, url, screenId);
+  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("blob:")) {
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        if (!blob.type.startsWith("image/")) throw new Error("not-image");
+        const reader = new FileReader();
+        reader.onload = () => addExtraImageToMarker(image, markerId, reader.result, screenId);
+        reader.readAsDataURL(blob);
+      })
+      .catch(() => {
+        const message = "检测到图片链接，但浏览器不允许读取。请改用上传图片。";
+        if (zone) zone.textContent = message;
+        else alert(message);
+      });
+    return true;
+  }
+  return false;
+}
+
+function tryReadDefaultPastedImage(image, markerId, screenId, zone) {
+  const img = zone.querySelector("img");
+  const src = img?.getAttribute("src") || "";
+  if (src.startsWith("data:image/")) {
+    addDataUrlToMarker(image, markerId, src, screenId);
+    return true;
+  }
+  if (src.startsWith("blob:")) {
+    fetch(src)
+      .then(response => response.blob())
+      .then(blob => {
+        const reader = new FileReader();
+        reader.onload = () => addExtraImageToMarker(image, markerId, reader.result, screenId);
+        reader.readAsDataURL(blob);
+      })
+      .catch(() => {
+        zone.textContent = "浏览器插入了图片，但无法读取该图片数据。请改用上传图片。";
+      });
+    return true;
+  }
+  return false;
+}
+
+function handlePasteImageToMarker(image, markerId, event, screenId, zone) {
+  const data = event.clipboardData;
+  const files = Array.from(data?.files || []).filter(file => file.type.startsWith("image/"));
+  if (files[0]) {
+    event.preventDefault();
+    readImageFileToMarker(image, markerId, files[0], screenId);
+    return;
+  }
+
+  const items = Array.from(data?.items || []);
+  const imageItem = items.find(item => item.type.startsWith("image/"));
+  if (imageItem) {
+    const file = imageItem.getAsFile();
+    if (file) {
+      event.preventDefault();
+      readImageFileToMarker(image, markerId, file, screenId);
+      return;
+    }
+    zone.textContent = "检测到图片类型，但浏览器没有提供图片文件。正在尝试默认粘贴...";
+    setTimeout(() => {
+      if (!tryReadDefaultPastedImage(image, markerId, screenId, zone)) {
+        zone.textContent = "检测到图片类型，但无法读取图片数据。请改用上传图片或拖拽图片文件。";
+      }
+    }, 80);
+    return;
+  }
+
+  const html = data?.getData("text/html") || "";
+  const dataUrlMatch = html.match(new RegExp('<img[^>]+src=["\'](data:image/[^"\']+)["\']', 'i'));
+  if (dataUrlMatch) {
+    event.preventDefault();
+    addDataUrlToMarker(image, markerId, dataUrlMatch[1], screenId);
+    return;
+  }
+
+  const text = data?.getData("text/plain") || "";
+  if (text.startsWith("data:image/")) {
+    event.preventDefault();
+    addDataUrlToMarker(image, markerId, text.trim(), screenId);
+    return;
+  }
+
+  setTimeout(() => {
+    if (!tryReadDefaultPastedImage(image, markerId, screenId, zone)) {
+      zone.textContent = "浏览器没有提供图片，正在尝试读取系统剪贴板...";
+      importSystemClipboardImage(image, markerId, screenId, null, zone);
+    }
+  }, 80);
+}
+
+function handleDropImageToMarker(image, markerId, event, screenId, zone) {
+  const files = Array.from(event.dataTransfer?.files || []).filter(file => file.type.startsWith("image/"));
+  if (files[0]) {
+    if (zone) zone.textContent = "正在添加图片...";
+    readImageFileToMarker(image, markerId, files[0], screenId);
+    return;
+  }
+  const items = Array.from(event.dataTransfer?.items || []);
+  const imageItem = items.find(item => item.type.startsWith("image/"));
+  const itemFile = imageItem?.getAsFile?.();
+  if (itemFile) {
+    if (zone) zone.textContent = "正在添加图片...";
+    readImageFileToMarker(image, markerId, itemFile, screenId);
+    return;
+  }
+  const imageUrl = firstImageUrlFromTransfer(event.dataTransfer);
+  if (addImageUrlToMarker(image, markerId, imageUrl, screenId, zone)) {
+    if (zone) zone.textContent = "正在添加图片...";
+    return;
+  }
+  if (zone) zone.textContent = "拖入内容不是图片。检测到：" + clipboardDebugText(event.dataTransfer);
+  else alert("拖入内容不是图片。检测到：" + clipboardDebugText(event.dataTransfer));
+}
+
+async function importSystemClipboardImage(image, markerId, screenId, button, zone) {
+  const oldText = button?.textContent;
+  if (button) {
+    button.textContent = "读取中...";
+    button.disabled = true;
+  }
+  if (zone) zone.textContent = "正在读取系统剪贴板...";
+  try {
+    const endpoint = location.protocol === "file:" ? "http://127.0.0.1:5177/clipboard-image" : "/clipboard-image";
+    const response = await fetch(endpoint, { cache: "no-store" });
+    const result = await response.json();
+    if (!result.ok || !result.dataUrl) {
+      const message = result.message || "系统剪贴板里没有可读取的图片。";
+      if (zone) zone.textContent = message;
+      else alert(message);
+      return;
+    }
+    if (zone) zone.textContent = "已读取图片，正在添加...";
+    addExtraImageToMarker(image, markerId, result.dataUrl, screenId);
+  } catch (error) {
+    const message = "无法连接本地剪贴板助手。请双击“启动界面规则网页.bat”后使用 localhost 页面，或改用上传图片。";
+    if (zone) zone.textContent = message;
+    else alert(message);
+  } finally {
+    if (button) {
+      button.textContent = oldText;
+      button.disabled = false;
+    }
+  }
+}
+
+async function pasteClipboardImageToMarker(image, markerId, screenId) {
+  if (!navigator.clipboard?.read) {
+    alert("当前浏览器不支持直接读取剪贴板图片，请使用“上传图片”。");
+    return;
+  }
+  try {
+    const items = await navigator.clipboard.read();
+    for (const item of items) {
+      const imageType = item.types.find(type => type.startsWith("image/"));
+      if (!imageType) continue;
+      const blob = await item.getType(imageType);
+      const reader = new FileReader();
+      reader.onload = () => {
+        const marker = image.annotations.find(item => item.id === markerId);
+        if (!marker) return;
+        marker.extraImages = marker.extraImages || [];
+        marker.extraImages.push(reader.result);
+        activeMarkerId = marker.id;
+        saveState();
+        renderDetail(screenId);
+      };
+      reader.readAsDataURL(blob);
+      return;
+    }
+    alert("剪贴板里没有可读取的图片。");
+  } catch (error) {
+    alert("读取剪贴板图片失败。可以先确认浏览器权限，或改用“上传图片”。");
+  }
+}
+
+function handlePasteImage(event) {
+  const items = Array.from(event.clipboardData?.items || []);
+  const imageItem = items.find(item => item.type.startsWith("image/"));
+  if (!activeScreenId || activeMarkerId === "0") return;
+  const activeElement = document.activeElement;
+  if (!imageItem && activeElement && (activeElement.tagName === "TEXTAREA" || activeElement.tagName === "INPUT" || activeElement.isContentEditable)) return;
+  const screen = state.interfaces.find(item => item.id === activeScreenId);
+  const image = screen?.images?.[activeImageIndex];
+  const marker = image?.annotations?.find(item => item.id === activeMarkerId);
+  if (!marker) return;
+  event.preventDefault();
+  if (!imageItem) {
+    importSystemClipboardImage(image, marker.id, screen.id, null, null);
+    return;
+  }
+  const file = imageItem.getAsFile();
+  const reader = new FileReader();
+  reader.onload = () => {
+    addExtraImageToMarker(image, marker.id, reader.result, screen.id);
+  };
+  reader.readAsDataURL(file);
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch]));
+}
+function escapeAttr(value) { return escapeHtml(value); }
+
+document.querySelector("[data-open-overview]").addEventListener("click", () => {
+  activeScreenId = null;
+  renderOverview();
+  renderNav();
+});
+byId("exportJsonBtn").addEventListener("click", () => {
+  downloadEditData(systemSlug + "-edit-data-backup.json");
+});
+byId("importJsonBtn").addEventListener("click", () => byId("importJsonInput").click());
+byId("saveTopBtn").addEventListener("click", event => saveStateToLocalFile(event.currentTarget));
+byId("syncMappingBtn").addEventListener("click", event => syncMappingTable(event.currentTarget));
+byId("buildPreviewBtn").addEventListener("click", event => buildLocalPreview(event.currentTarget));
+byId("openPreviewBtn").addEventListener("click", openLocalPreview);
+byId("preparePublishBtn").addEventListener("click", event => preparePublishFiles(event.currentTarget));
+byId("importJsonInput").addEventListener("change", event => {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    state = JSON.parse(reader.result);
+    saveState();
+    activeScreenId = null;
+    render();
+  };
+  reader.readAsText(file);
+});
+byId("resetBtn").addEventListener("click", () => {
+  if (!confirm("确认恢复初始数据？当前浏览器本地编辑会被清空。")) return;
+  localStorage.removeItem(storageKey);
+  state = clone(seedData);
+  activeScreenId = null;
+  render();
+});
+document.addEventListener("paste", handlePasteImage);
+
+(function(){
+  document.body.classList.add('view-only');
+  try { localStorage.removeItem("town-museum-ui-rules-html-prototype-v1"); } catch (error) {}
+  function applyViewOnlyMode(){
+    document.body.classList.add('view-only');
+    document.querySelectorAll('textarea').forEach(function(el){
+      el.readOnly = true;
+      el.style.height = 'auto';
+      el.style.height = Math.max(el.scrollHeight, 96) + 'px';
+      el.style.overflow = 'hidden';
+    });
+    document.querySelectorAll('input').forEach(function(el){ if (el.type !== 'file') el.readOnly = true; });
+    document.querySelectorAll('select').forEach(function(el){ el.disabled = true; });
+    document.querySelectorAll('.canvas-panel .hint').forEach(function(el){
+      el.textContent = '点击截图标注可高亮对应规则；右侧可切换总览或分点查看。';
+    });
+  }
+  var oldRender = render;
+  render = function(){ oldRender(); applyViewOnlyMode(); };
+  var oldRenderDetail = renderDetail;
+  renderDetail = function(screenId){ oldRenderDetail(screenId); applyViewOnlyMode(); };
+  var oldRenderOverview = renderOverview;
+  renderOverview = function(){ oldRenderOverview(); applyViewOnlyMode(); };
+  applyViewOnlyMode();
+})();
+render();
+</script>
+</body>
+</html>
