@@ -1,0 +1,2363 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>宴会系统 · 界面规则展示版</title>
+<style>
+:root {
+  --bg: #f4f6f3;
+  --paper: #fffaf0;
+  --panel: #ffffff;
+  --ink: #1f2a37;
+  --muted: #697386;
+  --line: #d7dfdf;
+  --brand: #d6523c;
+  --brand-dark: #a5372b;
+  --sage: #dce9df;
+  --sky: #d8eef3;
+  --warm: #ffe5ae;
+  --shadow: 0 18px 40px rgba(55, 64, 67, .13);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.65 "Inter", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+}
+button, input, textarea { font: inherit; }
+button {
+  border: 0;
+  border-radius: 7px;
+  padding: 8px 12px;
+  background: #23364d;
+  color: #fff;
+  cursor: pointer;
+}
+button.secondary { background: #eef2f5; color: #243040; border: 1px solid var(--line); }
+button.ghost { background: transparent; color: #2c475d; border: 1px solid var(--line); }
+button.danger { background: #b63c32; }
+.app {
+  display: grid;
+  grid-template-columns: 288px 1fr;
+  min-height: 100vh;
+}
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: auto;
+  padding: 22px 18px;
+  background: #182331;
+  color: #e9f0f6;
+}
+.brand {
+  padding: 14px 14px 18px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  margin-bottom: 18px;
+}
+.brand .eyebrow { color: #9fb5c9; font-size: 12px; letter-spacing: .05em; }
+.brand h1 { margin: 6px 0 0; font-size: 24px; line-height: 1.2; }
+.side-title { margin: 18px 8px 8px; color: #9fb5c9; font-size: 12px; }
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0;
+  padding: 9px 10px;
+  color: #d9e5ef;
+  background: transparent;
+  border: 1px solid transparent;
+  text-align: left;
+}
+.nav-item:hover, .nav-item.active {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.11);
+}
+.nav-id {
+  min-width: 52px;
+  color: #ffd991;
+  font-variant-numeric: tabular-nums;
+}
+.main {
+  padding: 34px 38px 70px;
+  min-width: 0;
+}
+.hero {
+  padding: 30px 34px;
+  border-radius: 16px;
+  background: linear-gradient(105deg, var(--warm), #edf0d9 48%, var(--sky));
+  box-shadow: var(--shadow);
+  margin-bottom: 26px;
+}
+.hero h2 { margin: 0; font-size: 34px; letter-spacing: 0; }
+.hero p { margin: 8px 0 0; color: #4d5d6b; max-width: 880px; }
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 16px 0 0;
+}
+.view { display: none; }
+.view.active { display: block; }
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+.overview-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 10px 22px rgba(31,42,55,.06);
+  cursor: pointer;
+}
+.overview-card:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.overview-card h3 { margin: 0 0 10px; font-size: 18px; }
+.tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: #eef4f4;
+  color: #3d5363;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.thumb-strip { display: flex; gap: 8px; overflow: hidden; height: 150px; margin: 12px 0; }
+.overview-thumb {
+  height: 150px;
+  width: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  overflow: hidden;
+}
+.overview-thumb img {
+  height: 150px;
+  width: auto;
+  border-radius: 8px;
+  border: 1px solid #dce3e5;
+  background: #f3f5f5;
+  display: block;
+}
+.empty-thumb {
+  display: grid;
+  place-items: center;
+  height: 150px;
+  width: 110px;
+  border-radius: 8px;
+  background: repeating-linear-gradient(135deg, #f1f3f4, #f1f3f4 10px, #e8ecef 10px, #e8ecef 20px);
+  color: #7b8794;
+}
+.detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+.detail-head h2 { margin: 0; font-size: 28px; }
+.screen-block {
+  background: var(--paper);
+  border: 1px solid #ead9b7;
+  border-radius: 14px;
+  padding: 20px;
+  margin: 18px 0;
+  box-shadow: 12px 14px 0 rgba(221, 202, 160, .38);
+  min-width: 0;
+  width: max-content;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+.screen-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 14px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: linear-gradient(100deg, #ffe8ac, #edf0d7 48%, #d7eff5);
+}
+.screen-title h3 { margin: 0; font-size: 20px; }
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(300px, 500px) minmax(320px, 1fr);
+  gap: 22px;
+  align-items: start;
+  min-width: 0;
+  background: var(--paper);
+  border-radius: 12px;
+}
+.image-stage {
+  background: #f8f1e5;
+  border: 1px solid #e3d1ad;
+  border-radius: 10px;
+  padding: 16px;
+  min-width: 0;
+}
+.image-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.image-tabs button { padding: 6px 10px; background: #e9edf0; color: #2f4050; }
+.image-tabs button.active { background: #25384e; color: #fff; }
+.image-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #d6dcdd;
+}
+.image-wrap img {
+  display: block;
+  max-width: 100%;
+  max-height: 760px;
+  object-fit: contain;
+}
+.marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  text-align: center;
+  font-weight: 800;
+  font-size: 13px;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,.24);
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+.marker.dragging { cursor: grabbing; }
+.marker.active { background: #c7352c; outline: 4px solid rgba(255, 207, 87, .95); box-shadow: 0 0 0 7px rgba(255, 207, 87, .24), 0 6px 14px rgba(0,0,0,.28); }
+.rule-panel {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  background: var(--paper);
+  border-radius: 12px;
+  box-shadow: 0 0 0 12px var(--paper);
+}
+.rule-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 9px;
+  background: #eef2f5;
+  border: 1px solid var(--line);
+}
+.segmented button {
+  background: transparent;
+  color: #2f4050;
+  border-radius: 7px;
+  padding: 6px 10px;
+}
+.segmented button.active {
+  background: #23364d;
+  color: #fff;
+}
+.point-tabs {
+  display: none;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+.point-tabs button {
+  background: #fff;
+  color: #32465b;
+  border: 1px solid #d5dde1;
+  min-width: 42px;
+  padding: 7px 10px;
+}
+.point-tabs button.active {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+.rule-panel.mode-point .point-tabs { display: flex; }
+.rule-panel.mode-point .rule-card { display: none; }
+.rule-panel.mode-point .rule-card.active { display: block; }
+.rule-card {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px;
+  min-width: 0;
+}
+.rule-card.active {
+  background: #fff3cf;
+  border-color: #e09f2d;
+  box-shadow: 0 0 0 5px rgba(224,159,45,.28), 0 12px 28px rgba(115, 86, 24, .14);
+}
+.rule-head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.rule-num {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  flex: 0 0 auto;
+}
+.rule-card input, .rule-card textarea {
+  width: 100%;
+  border: 1px solid #d5dde1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #fbfcfd;
+  color: var(--ink);
+}
+.rule-card textarea {
+  min-height: 180px;
+  resize: none;
+  overflow: hidden;
+}
+.rule-text-preview {
+  width: 100%;
+  min-height: 96px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: transparent;
+  color: var(--ink);
+  white-space: pre-wrap;
+  line-height: 1.75;
+}
+.inline-effect-thumb,
+.inline-jump-thumb {
+  display: inline-grid;
+  grid-template-columns: 38px auto;
+  gap: 6px;
+  align-items: center;
+  max-width: min(240px, 100%);
+  margin: 0 3px;
+  padding: 3px 7px 3px 3px;
+  border: 1px solid #d5dde1;
+  border-radius: 999px;
+  background: #fff;
+  color: #2c475d;
+  vertical-align: middle;
+  box-shadow: 0 1px 2px rgba(31,42,55,.08);
+}
+.inline-jump-thumb {
+  grid-template-columns: 42px minmax(0, auto);
+  border-color: #cbd8e2;
+  background: #f8fbff;
+}
+.inline-effect-thumb img,
+.inline-jump-thumb img {
+  width: 38px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 1px solid #d5dde1;
+  background: #f4f6f7;
+}
+.inline-jump-thumb img {
+  width: 42px;
+  height: 32px;
+  border-radius: 8px;
+}
+.inline-effect-thumb span,
+.inline-jump-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.inline-jump-text strong {
+  margin-right: 5px;
+  color: #17324a;
+}
+.inline-jump-text em {
+  color: #496476;
+  font-style: normal;
+}
+.inline-effect-missing,
+.inline-jump-missing {
+  display: inline-flex;
+  margin: 0 3px;
+  padding: 2px 7px;
+  border: 1px dashed #c8d2d8;
+  border-radius: 999px;
+  color: #7b8794;
+  background: #fbfcfd;
+  font-size: 13px;
+}
+.rule-meta {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  margin: 10px 0;
+}
+.rule-meta select {
+  width: 100%;
+  border: 1px solid #d5dde1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #fbfcfd;
+  color: var(--ink);
+}
+.action-links {
+  margin: 10px 0;
+  border: 1px solid #d5dde1;
+  border-radius: 10px;
+  background: #fbfcfd;
+  padding: 10px;
+}
+.action-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.action-list {
+  display: grid;
+  gap: 8px;
+}
+.action-row {
+  display: grid;
+  grid-template-columns: minmax(120px, .6fr) minmax(260px, 1.4fr) auto auto auto;
+  gap: 8px;
+  align-items: stretch;
+}
+.action-row input,
+.action-row select {
+  width: 100%;
+  border: 1px solid #d5dde1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #fff;
+  color: var(--ink);
+}
+.action-target-cell {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) minmax(160px, 1.05fr);
+  gap: 8px;
+  align-items: stretch;
+}
+.action-target-card {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+  padding: 6px;
+  border: 1px solid #d5dde1;
+  border-radius: 8px;
+  background: #fff;
+}
+.action-target-thumb {
+  width: 42px;
+  height: 54px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #d5dde1;
+  border-radius: 6px;
+  background: #eef2f5;
+}
+.action-target-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.action-target-title {
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.action-target-meta {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+  margin-top: 2px;
+}
+.action-target-empty {
+  display: flex;
+  align-items: center;
+  min-height: 54px;
+  color: #7b8794;
+  font-size: 13px;
+}
+.jump-origin {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid #f1c77f;
+  border-radius: 10px;
+  background: #fff2cf;
+  color: #5d4820;
+}
+.image-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(20, 28, 38, .72);
+}
+.image-modal-card {
+  width: min(980px, 96vw);
+  max-height: 92vh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+.image-modal-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.image-modal-body {
+  overflow: auto;
+  padding: 12px;
+  background: #f5f6f3;
+}
+.image-modal-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+  gap: 12px;
+  align-items: start;
+}
+.image-modal-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+.image-modal-note {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--ink);
+}
+.image-modal-note strong {
+  display: block;
+  font-size: 13px;
+  color: #5c6b7b;
+}
+.image-modal-note p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.action-empty {
+  color: #7b8794;
+  font-size: 13px;
+}
+.extra-attachment {
+  margin: 10px 0;
+  border: 1px solid #d5dde1;
+  border-radius: 10px;
+  background: #fbfcfd;
+  overflow: hidden;
+}
+.extra-attachment.drag-over {
+  border-color: #2f7d55;
+  box-shadow: 0 0 0 4px rgba(47,125,85,.14);
+}
+.extra-summary {
+  display: grid;
+  grid-template-columns: auto minmax(120px, 1fr) auto auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+}
+.extra-count {
+  font-size: 13px;
+  font-weight: 800;
+  color: #5c6b7b;
+  white-space: nowrap;
+}
+.extra-preview-strip {
+  display: flex;
+  gap: 6px;
+  min-height: 34px;
+  align-items: center;
+  overflow: hidden;
+}
+.extra-preview-btn {
+  position: relative;
+  width: 42px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  overflow: hidden;
+}
+.extra-preview-btn img {
+  width: 42px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #d5dde1;
+  background: #f4f6f7;
+  display: block;
+}
+.extra-preview-btn.linked::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2f7d55;
+  box-shadow: 0 0 0 2px #fff;
+}
+.extra-preview-empty {
+  color: #8b97a5;
+  font-size: 13px;
+}
+.extra-panel {
+  display: none;
+  border-top: 1px solid #d5dde1;
+  padding: 10px;
+  background: #fff;
+}
+.extra-attachment.open .extra-panel { display: block; }
+.extra-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+.extra-image-card {
+  width: 178px;
+  padding: 8px;
+  border: 1px solid #d5dde1;
+  border-radius: 9px;
+  background: #fbfcfd;
+}
+.extra-image-card:first-child {
+  border-color: #d6523c;
+  box-shadow: 0 0 0 3px rgba(214,82,60,.12);
+}
+.extra-image-card img {
+  width: 100%;
+  height: 104px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #d5dde1;
+  background: #f4f6f7;
+}
+.extra-image-preview {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.extra-ref-status {
+  margin-top: 6px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  background: #eef4f4;
+  color: #4f6272;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.extra-ref-status.linked {
+  background: #eaf5ed;
+  color: #2f704e;
+}
+.extra-image-card textarea {
+  min-height: 56px;
+  margin-top: 6px;
+  font-size: 13px;
+}
+.mini-toolbar {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+.mini-toolbar button {
+  padding: 5px 8px;
+  font-size: 12px;
+}
+.paste-zone {
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px dashed #c8d2d8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  color: #697386;
+  outline: none;
+}
+.paste-zone:focus {
+  border-color: #d6523c;
+  background: #fff6ef;
+  color: #2c3542;
+}
+.paste-zone.drag-over {
+  border-color: #2f7d55;
+  background: #eefaf3;
+  color: #23543b;
+}
+.reference-note {
+  padding: 18px;
+  border: 1px dashed #d5c298;
+  border-radius: 10px;
+  background: #fff7e7;
+  color: #6b5a36;
+}
+.move-tip {
+  display: none;
+  margin: 10px 0 0;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: #fff3cf;
+  color: #7a4d06;
+  border: 1px solid #efc76b;
+}
+.move-tip.active { display: block; }
+.hint {
+  color: var(--muted);
+  font-size: 13px;
+}
+.empty-detail {
+  padding: 32px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+.file-input { display: none; }
+@media (max-width: 680px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { position: relative; height: auto; }
+  .screen-block { width: 100%; }
+  .workspace { grid-template-columns: 1fr; }
+  .main { padding: 20px; }
+}
+</style>
+<style>
+body.view-only .hero .toolbar,
+body.view-only [data-add-marker],
+body.view-only [data-renumber-markers],
+body.view-only [data-save],
+body.view-only [data-delete-marker],
+body.view-only [data-move-marker],
+body.view-only [data-upload-image],
+body.view-only [data-sync-mapping-inline],
+body.view-only [data-upload-extra],
+body.view-only [data-system-clipboard],
+body.view-only [data-add-action],
+body.view-only [data-delete-action],
+body.view-only [data-insert-action-ref],
+body.view-only [data-upload-input],
+body.view-only .file-input,
+body.view-only .paste-zone,
+body.view-only .mini-toolbar,
+body.view-only .action-links {
+  display: none !important;
+}
+body.view-only textarea,
+body.view-only input,
+body.view-only select {
+  pointer-events: none;
+}
+body.view-only textarea,
+body.view-only input:not([type='file']) {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  resize: none;
+}
+body.view-only select {
+  opacity: .9;
+  background: transparent;
+  border-color: transparent;
+}
+body.view-only .rule-card textarea {
+  min-height: 96px;
+  overflow: hidden;
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="eyebrow">UI RULES · HTML PROTOTYPE</div>
+      <h1>宴会系统</h1>
+    </div>
+    <button class="nav-item active" data-open-overview><span class="nav-id">总览</span><span>全部界面</span></button>
+    <div class="side-title">界面目录</div>
+    <div id="navList"></div>
+  </aside>
+  <main class="main">
+    <section class="hero">
+      <h2>界面规则展示版</h2>
+      <p>左侧按系统与界面组织目录；进入界面后，可点击截图标注高亮对应规则，并在总览/分点模式间切换查看。</p>
+      <div class="toolbar">
+        <button class="secondary" id="saveTopBtn">保存修改</button>
+        <button class="secondary" id="syncMappingBtn">同步映射表</button>
+        <button id="buildPreviewBtn">生成本地预览版</button>
+        <button class="secondary" id="openPreviewBtn">打开本地预览版</button>
+        <button class="ghost" id="exportJsonBtn">导出备份</button>
+        <button class="ghost" id="importJsonBtn">导入备份</button>
+        <button class="ghost" id="preparePublishBtn">准备发布文件</button>
+        <button class="ghost" id="resetBtn">恢复初始数据</button>
+        <input class="file-input" id="importJsonInput" type="file" accept="application/json" />
+      </div>
+    </section>
+    <section id="overviewView" class="view active">
+      <div class="overview-grid" id="overviewGrid"></div>
+    </section>
+    <section id="detailView" class="view"></section>
+  </main>
+</div>
+<script>
+const seedData = {"systemName":"宴会系统","generatedAt":"2026-10-21T09:48:40.296Z","interfaces":[{"id":"1.0.0","name":"宴会主界面","groupId":"YH-1","groupName":"宴会主界面","note":"","targetLink":"YH-1 宴会主界面｜YiNxwIBb6huDNJbTLF6cRxbPnHe","status":"已完成","remark":"总览已加入；规则画板已生成；已按单层卡片+原生表格版式整理。","images":[{"id":"1.0.0-img-1","label":"界面1","role":"正式界面","width":555,"height":960,"src":"assets/screen-001.png","entryRule":"入口规则：从主场景的宴会入口进入。","annotations":[{"id":"01","x":42.87,"y":2.6,"title":"顶部信息区","rule":"1. 标题文本：\n   1. 显示：系统名称\n2. 详情按钮：\n   1. 显示：详情按钮\n   2. 点击：打开规则说明弹窗","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":21.71,"y":21.27,"title":"盛宴入口","rule":"1. 入口立牌：\n   1. 显示：文本“夏夜烧烤节”\n   2. 点击：\n      1. 未举办盛宴时，点击打开【夏夜烧烤节举办选择界面】；【跳转1：举办夏夜烧烤节】\n      2. 已举办且未结束时，进入当前【夏夜烧烤节界面】；【跳转2：进入夏夜烧烤节】\n2. 开宴信息：【效果图1：开宴信息】\n   1. 显示：\n      1. 聚会名称：根据开启的聚会名称显示\n      2. 参会人数：当前参加人数\n      3. 聚会结束倒计时\n   2. 显示条件：\n      1. 未举办盛宴时，不显示\n      2. 已举办且未结束时，显示","extraImages":[{"src":"assets/extra-002.png","note":"开宴信息"}],"linkActions":[{"label":"举办夏夜烧烤节","targetImageId":"1.1.1::1.1.1-img-1"},{"label":"进入夏夜烧烤节","targetImageId":"1.3.0::1.3.0-img-1"}],"targetImageId":"1.1.1::1.1.1-img-1"},{"id":"03","x":46.67,"y":46.91,"title":"我的聚会区域","rule":"1. 入口立牌：\n   1. 显示：文本“我的聚会”\n   2. 点击：\n      1. 未举办聚会时，打开【举办聚会选择界面】；【跳转1：举办聚会】\n      2. 已举办且未结束时，进入【我的聚会界面】；【跳转2：进入聚会】\n2. 开宴信息：【效果图1】\n   1.显示：\n      1. 聚会名称：根据开启的聚会名称显示\n      2. 参会人数：宾客数量 / 席位上限\n      3. 聚会结束倒计时\n   2.显示条件：\n      1. 未举办聚会时，不显示\n      2. 已举办且未结束时，显示","extraImages":[{"src":"assets/extra-003.png","note":""}],"linkActions":[{"label":"举办聚会","targetImageId":"1.1.0::1.1.0-img-1"},{"label":"进入聚会","targetImageId":"1.2.0::1.2.0-img-1"}],"targetImageId":"1.1.0::1.1.0-img-1"},{"id":"04","x":91.23,"y":88.37,"title":"参加聚会入口","rule":"1. 入口按钮：\n   1. 显示：文本“参加聚会”\n   2. 点击：进入可参加聚会列表，【跳转1：参加聚会】","extraImages":[],"linkActions":[{"label":"参加聚会","targetImageId":"1.4.0::1.4.0-img-1"}],"targetImageId":"1.4.0::1.4.0-img-1"},{"id":"05","x":9.62,"y":71.1,"title":"左侧快捷入口","rule":"1. 记录入口：\n   1. 显示：记录图标、“记录”文本【跳转1：查看记录】\n   2. 点击：打开聚会记录弹窗\n2. 商店入口：\n   1. 显示：商店图标、“商店”文本【跳转2：前往商店】\n   2. 点击：进入派对商店","extraImages":[],"linkActions":[{"label":"查看记录","targetImageId":"2.0.0::2.0.0-img-1"},{"label":"前往商店","targetImageId":"2.3.0::2.3.0-img-1"}],"targetImageId":"2.0.0::2.0.0-img-1"},{"id":"06","x":16.07,"y":95.48,"title":"返回按钮","rule":"1. 返回按钮：\n   1. 显示：返回按钮\n   2. 点击：关闭主界面，返回进入前界面","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"KWSpbbUJjowuIsxGZC5cZaxXnne","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"},{"id":"1.0.0-img-2","label":"界面2","role":"状态图","width":555,"height":957,"src":"assets/screen-004.png","entryRule":"状态图：用于补充主界面已举办聚会时的显示状态；重复区域沿用界面1规则。","annotations":[],"sourceImageToken":"OaeybgDU0oPHc0xFjoacAmgrn5d","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"1.1.0","name":"开宴选择-普通","groupId":"YH-2","groupName":"开宴选择","note":"","targetLink":"YH-2 开宴选择｜PA3DwvCwuhXFJTbPZRUcaV1Gnwc","status":"已完成","remark":"总览已加入；规则画板已生成；三张界面独立卡片展示。","images":[{"id":"1.1.0-img-1","label":"界面1","role":"正式界面","width":443,"height":769,"src":"assets/screen-005.png","entryRule":"入口规则：未举办个人宴会时，点击主界面的我的聚会入口打开。","annotations":[{"id":"01","x":25.43,"y":15.9,"title":"宴会帖展示区","rule":"1. 宴会帖主视觉：当前选中普通宴会的宴会帖主视觉。\n2. 选中变化：切换下方宴会类型后，主视觉同步切换。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":31.7,"y":61.65,"title":"宴会类型选择列表","rule":"1. 区域标题：文本“开设宴会”。\n2. 宴会类型卡：\n   1. 展示顺序：按配置顺序从左到右展示可开设的普通宴会类型。\n   2. 显示：\n      - 宴会名称\n      - 宴会帖缩略图\n      - 当前状态底板。\n   3. 点击：切换当前选中宴会类型，并刷新上方宴会帖与下方消耗信息。\n   4. 状态：\n      - 选中态高亮\n      - 未选中态为普通底板","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":30.89,"y":88.49,"title":"开宴操作区","rule":"1. 消耗道具：\n   1. 显示：当前选中宴会类型对应的开宴消耗道具。\n   2. 点击：道具图标不可点击。\n2. 消耗数量：\n   1. 显示：开宴所需数量 / 当前拥有数量。\n   2. 状态：\n      1. 拥有数量不足：红色文本\n      2. 拥有数量足够：正常文本颜色\n3. 开宴按钮：\n   1. 显示：按钮文本“开宴”。\n   2. 点击：\n      1. 消耗充足时发起开宴请求；请求成功后进入开宴成功界面。【跳转1：举办成功】\n      2. 消耗不足时点击进入道具不足提示流程。","extraImages":[],"linkActions":[{"label":"举办成功","targetImageId":"1.1.2::1.1.2-img-1"}],"targetImageId":"1.1.2::1.1.2-img-1"},{"id":"04","x":87.1,"y":96.19,"title":"参与区服说明","rule":"1. 区服文本：\n   1. 显示：当前宴会可参与区服范围摘要。\n   2. 点击：点击【查看更多】，展开弹窗显示参与区服。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"EnlLbjGPko4uxTxO9VTcrGgcnVf","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"1.1.1","name":"开宴选择-盛宴","groupId":"YH-2","groupName":"开宴选择","note":"","targetLink":"YH-2 开宴选择｜PA3DwvCwuhXFJTbPZRUcaV1Gnwc","status":"已完成","remark":"总览已加入；规则画板已生成；三张界面独立卡片展示。","images":[{"id":"1.1.1-img-1","label":"界面1","role":"正式界面","width":443,"height":771,"src":"assets/screen-006.png","entryRule":"入口规则：未举办盛宴时，点击主界面的盛宴入口打开。","annotations":[{"id":"01","x":25.49,"y":25.47,"title":"盛宴帖展示区","rule":"1. 盛宴帖主视觉：当前选中盛宴的宴会帖主视觉。\n2. 选中变化：切换盛宴类型后，主视觉同步切换。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":27.93,"y":81.25,"title":"开宴操作区","rule":"1. 消耗道具：\n   1. 显示：当前选中宴会类型对应的开宴消耗道具。\n   2. 点击：道具图标不可点击。\n2. 消耗数量：\n   1. 显示：开宴所需数量 / 当前拥有数量。\n   2. 状态：\n      1. 拥有数量不足：红色文本\n      2. 拥有数量足够：正常文本颜色\n3. 开宴按钮：\n   1. 显示：按钮文本“开宴”。\n   2. 点击：\n      1. 消耗充足时发起盛宴开设请求；请求成功后进入开宴成功界面。【跳转1：举办成功】\n      2. 消耗不足时点击进入道具不足提示流程。","extraImages":[],"linkActions":[{"label":"举办成功","targetImageId":"1.1.2::1.1.2-img-1"}],"targetImageId":"1.1.2::1.1.2-img-1"},{"id":"03","x":87.13,"y":95.37,"title":"参与区服说明","rule":"1. 区服文本：\n   1. 显示：当前宴会可参与区服范围摘要。\n   2. 点击：点击【查看更多】，展开弹窗显示参与区服。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"TKHEb0IpooVY2RxmF5dcZVxtnTb","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"1.1.2","name":"开宴成功界面","groupId":"YH-2","groupName":"开宴选择","note":"","targetLink":"YH-2 开宴选择｜PA3DwvCwuhXFJTbPZRUcaV1Gnwc","status":"已完成","remark":"总览已加入；规则画板已生成；三张界面独立卡片展示。","images":[{"id":"1.1.2-img-1","label":"界面1","role":"正式界面","width":552,"height":959,"src":"assets/screen-007.png","entryRule":"入口规则：举办请求成功后自动展示。","annotations":[{"id":"01","x":27.68,"y":34.22,"title":"成功标题与主视觉","rule":"1. 成功标题：【开宴成功】\n2. 角色/包装图：\n   1. 显示：\n      1. 包装图：根据开启宴会显示对应桌子\n      2. 角色形象：根据角色显示对应Q版角色形象。\n      3. 身份称号：优先显示称号，无任何称号显示玩家等级称号\n      4. 玩家名称\n3. 提示文本：邀请亲朋好友共襄盛举吧！。\n4. 关闭提示：“点击空白处返回”","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"WTembKFpyoHbQ1xZYXpcZOQgnye","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"1.2.0","name":"普通宴会界面","groupId":"YH-3","groupName":"宴会界面","note":"","targetLink":"YH-3 宴会界面｜IaOJwocQehB0dKb9AWxceohknwd","status":"已完成","remark":"总览已加入；规则画板已生成；六张界面按规则组整理。","images":[{"id":"1.2.0-img-2","label":"界面1","role":"正式界面","width":624,"height":1078,"src":"assets/screen-008.png","entryRule":"入口规则：从可参加聚会列表选择普通宴会，或从主界面我的聚会入口进入。","annotations":[{"id":"01","x":32.75,"y":2.6,"title":"顶部标题区","rule":"1. 标题信息：宴会类型名称。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":35.97,"y":25.71,"title":"宴主信息","rule":"1. 宴主展示：\n   1. 宾客形象\n   2. 身份称号：优先显示称号，无任何称号显示玩家等级称号\n   3. 玩家名称：有联盟显示联盟简称+玩家名称\n   4. 区服\n2. 点击：展开【玩家详情】弹窗。【效果图1】","extraImages":[{"src":"assets/extra-009.png","note":""}],"linkActions":[],"targetImageId":""},{"id":"03","x":50.06,"y":47.29,"title":"宴会席位区","rule":"1. 席位：根据开宴类型显示具体席位数量\n2. 席位状态：\n   1. 已上座位置：显示宾客，点击展开【玩家详情】弹窗。【效果图1：已上座-他人】\n      1. 宾客形象\n      2. 身份称号：优先显示称号，无任何称号显示玩家等级称号\n      3. 玩家名称：有联盟显示联盟简称+玩家名称，玩家自己的名称特殊颜色显示。【效果图2：已上座-自己】\n      4. 区服\n   2. 未上座位置：显示为空【效果图3：空座位-无指示】\n      1. 他人宴会，若玩家未参与此宴会，按位置编号最小的位置处，显示箭头指引。【效果图4：空座位-有指示】\n      2. 他人宴会，点击打开【贺礼选择】弹窗\n      3. 自己宴会，不可点击\n3. 发言气泡：\n   1. 显示：互动文本。\n   2. 显示规则：\n      1. 每个宾客每5秒判断一次是否发言，发言概率30%\n      2. 每次发言从配置的发言库中随机一条文本显示\n      3. 每次发言显示4秒\n4. 下一场按钮\n   1. 显示条件：非最后一个的他人宴会显示\n   2. 点击：跳转到下一个宴会","extraImages":[{"src":"assets/extra-010.png","note":"已上座-他人"},{"src":"assets/extra-011.png","note":"已上座-自己"},{"src":"assets/extra-012.png","note":"空座位-无指示"},{"src":"assets/extra-013.png","note":"空座位-有指示"}],"linkActions":[],"targetImageId":""},{"id":"04","x":10.01,"y":72.15,"title":"底部宴会信息","rule":"1. 宴会信息：根据宴会主人和宴会情况显示对应信息\n   1. 宴主信息\n      1. 玩家头像及头像框：展开【玩家详情】弹窗\n      2.  玩家名称：有联盟显示联盟简称+玩家名称\n   2. 宴会信息\n      1. 剩余时间\n      2. 宾客人数：参加人数/人数上限\n      3. 宴会人气。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"05","x":46.64,"y":87.32,"title":"动态记录区","rule":"1. 消息记录：\n   1. 显示规则：按照时间顺序从上到下显示信息\n   2. 显示内容\n      1. 开宴信息：【玩家名称】开启【宴会名称】，欢迎各位姑爷前来捧场！\n      2. 宾客入场信息：【玩家名称】入场并随了份【礼物名称】，宴会人气+【num】\n      3. 可上下滚动查看信息","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"06","x":74.81,"y":75.3,"title":"参与状态操作区","rule":"1. 根据状态显示不同的操作控件\n   1. 邀请按钮【效果图1】\n      1. 显示条件：自己的宴会显示\n      2. 点击效果：向聊天频道发送宴会邀请，并tips提示“已成功发出邀请”\n   2. 入座按钮【效果图2】\n      1. 显示条件：他人宴会且自己未入座\n      2. 点击效果：打开【选择贺礼】界面\n   3. 文本“已入座”【效果图3】\n      1. 显示条件：他人宴会且自己已入座\n      2. 点击效果：不可点击","extraImages":[{"src":"assets/extra-014.png","note":""},{"src":"assets/extra-015.png","note":""},{"src":"assets/extra-016.png","note":""}],"linkActions":[],"targetImageId":""},{"id":"07","x":88.7,"y":90.47,"title":"勾选选项","rule":"1. 根据状态显示不同的勾选框\n   1. 他人宴会：快速入座勾选框\n      1. 默认：未勾选\n      2. 点击效果：勾选或取消勾选，勾选时打开【选择贺礼】弹窗\n      3. 勾选效果：查看下一场宴会时自动随礼并赴宴\n         1. 根据上一次选择的赴宴道具进行随礼\n         2. 礼物道具不足时，不自动自动赴宴\n   2. 自己宴会：有人赴宴提醒勾选框\n      1. 默认：勾选\n      2. 点击效果：勾选或取消勾选\n      3. 勾选效果：有人参与宴会时，有飘窗提示","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"08","x":17.86,"y":95.37,"title":"返回按钮","rule":"1. 返回按钮：\n   1. 显示：返回按钮。\n   2. 点击：关闭当前界面，返回上一界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"09","x":47.64,"y":12.64,"title":"宴会类型说明","rule":"1. 根据开启的宴会类型显示对应信息\n2. 宴会类型：\n   1. 红颜宴会：恭喜结识伙伴【伙伴名称】。【效果图2】\n   2. 子嗣宴会：恭喜【子嗣名称】认证明星学员 【子嗣能力值】。【效果图1】\n   3. 爬塔宴会：恭喜达到【爬塔位置】。【效果图3】","extraImages":[{"src":"assets/extra-017.png","note":""},{"src":"assets/extra-018.png","note":""},{"src":"assets/extra-019.png","note":""}],"linkActions":[],"targetImageId":""}],"sourceImageToken":"AnWvbO4IloahfXxa1Q2c878QnXg","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"},{"id":"1.2.0-img-1","label":"界面2","role":"正式界面","width":558,"height":961,"src":"assets/screen-020.png","entryRule":"入口规则：从可参加聚会列表选择普通宴会，或从主界面我的聚会入口进入。","annotations":[],"sourceImageToken":"UgO3b4cvKowxvzxPrFXcPRVBnPd","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"},{"id":"1.2.0-img-3","label":"界面3","role":"正式界面","width":617,"height":1069,"src":"assets/screen-021.png","entryRule":"入口规则：从可参加聚会列表选择普通宴会，或从主界面我的聚会入口进入。","annotations":[],"sourceImageToken":"VtYrbPBrjoRof0xBOevc52Drnxl","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"},{"id":"1.2.0-img-4","label":"界面4","role":"正式界面","width":623,"height":1074,"src":"assets/screen-022.png","entryRule":"入口规则：从可参加聚会列表选择普通宴会，或从主界面我的聚会入口进入。","annotations":[],"sourceImageToken":"EmSXbVFWpoadGzxrw6JcbSjHnsd","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"1.2.1","name":"豪门宴会界面","groupId":"YH-3","groupName":"宴会界面","note":"","targetLink":"YH-3 宴会界面｜IaOJwocQehB0dKb9AWxceohknwd","status":"已完成","remark":"总览已加入；规则画板已生成；六张界面按规则组整理。","images":[{"id":"1.2.1-img-1","label":"界面1","role":"正式界面","width":556,"height":960,"src":"assets/screen-023.png","entryRule":"入口规则：从可参加聚会列表选择豪门宴会进入。","annotations":[{"id":"01","x":36.76,"y":1.9,"title":"顶部标题区","rule":"1. 标题信息：宴会类型名称。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":8.52,"y":17.84,"title":"宴主信息","rule":"1. 宴主展示：\n   1. 宾客形象\n   2. 身份称号：优先显示称号，无任何称号显示玩家等级称号\n   3. 玩家名称：有联盟显示联盟简称+玩家名称\n   4. 区服\n2. 点击：展开【玩家详情】弹窗。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":47.85,"y":52.68,"title":"宴会席位区","rule":"1. 席位：根据开宴类型显示具体席位数量\n2. 席位状态：\n   1. 已上座位置：显示宾客，点击展开【玩家详情】弹窗。【效果图1：已上座-他人】\n      1. 宾客形象\n      2. 身份称号：优先显示称号，无任何称号显示玩家等级称号\n      3. 玩家名称：有联盟显示联盟简称+玩家名称，玩家自己的名称特殊颜色显示。【效果图2：已上座-自己】\n      4. 区服\n   2. 未上座位置：显示为空【效果图3：空座位-无指示】\n      1. 他人宴会，若玩家未参与此宴会，按位置编号最小的位置处，显示箭头指引。【效果图4：空座位-有指示】\n      2. 他人宴会，点击打开【贺礼选择】弹窗\n      3. 自己宴会，不可点击\n3. 发言气泡：\n   1. 显示：互动文本。\n   2. 显示规则：\n      1. 每个宾客每5秒判断一次是否发言，发言概率30%\n      2. 每次发言从配置的发言库中随机一条文本显示\n      3. 每次发言显示4秒\n4. 下一场按钮\n   1. 显示条件：非最后一个的他人宴会显示\n   2. 点击：跳转到下一个宴会","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":71.19,"y":74.1,"title":"参与状态操作区","rule":"1. 根据状态显示不同的操作控件\n   1. 邀请按钮【效果图1】\n      1. 显示条件：自己的宴会显示\n      2. 点击效果：向聊天频道发送宴会邀请，并tips提示“已成功发出邀请”\n   2. 入座按钮【效果图2】\n      1. 显示条件：他人宴会且自己未入座\n      2. 点击效果：打开【选择贺礼】界面\n   3. 文本“已入座”【效果图3】\n      1. 显示条件：他人宴会且自己已入座\n      2. 点击效果：不可点击","extraImages":[],"linkActions":[{"label":"选择礼品","targetImageId":"1.3.2::1.3.2-img-1"}],"targetImageId":"1.3.2::1.3.2-img-1"},{"id":"05","x":10.01,"y":77.4,"title":"底部宴会信息","rule":"1. 宴会信息：根据宴会主人和宴会情况显示对应信息\n   1. 宴主信息\n      1. 玩家头像及头像框：展开【玩家详情】弹窗\n      2.  玩家名称：有联盟显示联盟简称+玩家名称\n   2. 宴会信息\n      1. 剩余时间\n      2. 宾客人数：参加人数/人数上限\n      3. 宴会人气。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"06","x":39.57,"y":87.78,"title":"动态记录区","rule":"1. 消息记录：\n   1. 显示规则：按照时间顺序从上到下显示信息\n   2. 显示内容\n      1. 开宴信息：【玩家名称】开启【宴会名称】，欢迎各位姑爷前来捧场！\n      2. 宾客入场信息：【玩家名称】入场并随了份【礼物名称】，宴会人气+【num】\n      3. 可上下滚动查看信息","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"07","x":13.31,"y":94.06,"title":"返回按钮","rule":"1. 返回按钮：\n   1. 显示：返回按钮。\n   2. 点击：关闭当前界面，返回上一界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"08","x":92.87,"y":90.7,"title":"勾选选项","rule":"1. 根据状态显示不同的勾选框\n   1. 他人宴会：快速入座勾选框\n      1. 默认：未勾选\n      2. 点击效果：勾选或取消勾选，勾选时打开【选择贺礼】弹窗\n      3. 勾选效果：查看下一场宴会时自动随礼并赴宴\n         1. 根据上一次选择的赴宴道具进行随礼\n         2. 礼物道具不足时，不自动自动赴宴\n   2. 自己宴会：有人赴宴提醒勾选框\n      1. 默认：勾选\n      2. 点击效果：勾选或取消勾选\n      3. 勾选效果：有人参与宴会时，有飘窗提示","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"09","x":20.06,"y":68.65,"title":"满座礼","rule":"1. 显示：固定显示\n2. 点击：打开【满座礼】说明弹窗","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"HEUDb4dddoQ8euxzaMbcgliznFh","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"1.3.0","name":"盛宴宴会界面","groupId":"YH-3","groupName":"宴会界面","note":"","targetLink":"YH-3 宴会界面｜IaOJwocQehB0dKb9AWxceohknwd","status":"已完成","remark":"总览已加入；规则画板已生成；六张界面按规则组整理。","images":[{"id":"1.3.0-img-1","label":"界面1","role":"正式界面","width":563,"height":958,"src":"assets/screen-024.png","entryRule":"入口规则：从盛宴列表选择目标盛宴，或从主界面盛宴入口进入。","annotations":[{"id":"01","x":33.45,"y":1.67,"title":"顶部标题区","rule":"1. 标题信息：宴会类型名称。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":7.88,"y":12.52,"title":"宾客人数进度","rule":"1. 人数进度：\n   1. 显示：当前宾客人数 / 目标人数。\n   2. 显示规则：人数随宾客入座实时刷新。\n2. 宝箱状态\n   1. 正常状态：\n      1. 显示条件：玩家未参与宴会，或当前有未达成的奖励\n      2. 点击效果：打开【盛宴奖励】界面.【跳转1：查看盛宴奖励】\n   2. 抖动+光效\n      1. 显示条件：玩家参与宴会且当前有未领取的奖励\n      2. 点击效果：打开【盛宴奖励】界面\n   3. 开启状态\n      1.显示条件：所有档位奖励都全部领取完\n      2. 点击效果：打开【盛宴奖励】界面","extraImages":[],"linkActions":[{"label":"查看盛宴奖励","targetImageId":"1.3.1::1.3.1-img-1"}],"targetImageId":"1.3.1::1.3.1-img-1"},{"id":"03","x":22.95,"y":26.76,"title":"宴主舞台区","rule":"1. 宴主展示：\n   1. 宾客形象\n   2. 身份称号：优先显示称号，无任何称号显示玩家等级称号\n   3. 玩家名称：有联盟显示联盟简称+玩家名称\n   4. 区服\n2. 点击：展开【玩家详情】弹窗。【效果图1】","extraImages":[{"src":"assets/extra-025.png","note":""}],"linkActions":[],"targetImageId":""},{"id":"04","x":43.62,"y":56.91,"title":"宾客互动区","rule":"1. 宾客：显示已参与的玩家\n   1. 显示：\n      1. 宾客形象。\n      2. 身份称号：优先显示称号，无任何称号显示玩家等级称号。\n      3. 玩家名称：有联盟显示联盟简称+玩家名称。\n      4. 区服。\n   2. 点击：展开【玩家详情】弹窗。\n   3. 宾客可在互动区内随机路径行走\n2. 发言气泡：\n   1. 显示：互动文本。\n   2. 显示规则：\n      1. 每个宾客每5秒判断一次是否发言，发言概率30%\n      2. 每次发言从配置的发言库中随机一条文本显示\n      3. 每次发言显示4秒","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"05","x":87.37,"y":85.34,"title":"参与状态操作区","rule":"1. 根据状态显示不同的操作控件\n2. 状态及显示内容\n   1. 邀请按钮\n      1. 显示条件：自己的宴会显示\n      2. 点击效果：向聊天频道发送宴会邀请，并tips提示“已成功发出邀请”\n   2. 入座按钮\n      1. 显示条件：他人宴会且自己未入座\n      2. 点击效果：打开【选择贺礼】界面。【跳转1：点击入座】\n   3. 文本“已入座”\n      1. 显示条件：他人宴会且自己已入座\n      2. 点击效果：不可点击","extraImages":[],"linkActions":[{"label":"点击入座","targetImageId":"1.3.2::1.3.2-img-1"}],"targetImageId":"1.3.2::1.3.2-img-1"},{"id":"06","x":59.62,"y":88.84,"title":"底部宴会信息","rule":"1. 宴会信息：\n   1. 显示：根据宴会主人和宴会情况显示对应信息\n      1. 宴主信息\n         1. 玩家头像及头像框：展开【玩家详情】弹窗\n         2. 玩家名称：有联盟显示联盟简称+玩家名称\n      2. 宴会信息\n         1. 剩余时间\n         2. 宾客人数：参加人数/人数上限","extraImages":[],"linkActions":[{"label":"选择礼品","targetImageId":"1.3.2::1.3.2-img-1"}],"targetImageId":"1.3.2::1.3.2-img-1"},{"id":"07","x":17.79,"y":95.84,"title":"返回按钮","rule":"1. 返回按钮：\n   1. 显示：返回按钮。\n   2. 点击：关闭当前界面，返回上一界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"08","x":35.24,"y":81.25,"title":"聊天频道","rule":"1. 聊天频道：\n   1. 显示：\n      1. 显示最新一条聊天消息\n      2. 若无消息，显示文本“暂无消息”\n   2. 点击：打开聊天界面","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"X12fbI45Ioqh09xJ8ErcLS4pngb","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"1.3.1","name":"盛宴奖励界面","groupId":"YH-3","groupName":"宴会界面","note":"","targetLink":"YH-3 宴会界面｜IaOJwocQehB0dKb9AWxceohknwd","status":"已完成","remark":"总览已加入；规则画板已生成；六张界面按规则组整理。","images":[{"id":"1.3.1-img-1","label":"界面1","role":"正式界面","width":354,"height":616,"src":"assets/screen-026.png","entryRule":"入口规则：在盛宴界面点击奖励入口打开。","annotations":[{"id":"01","x":25.17,"y":22.06,"title":"标题与关闭","rule":"1. 弹窗标题：\n   1. 显示：文本“盛宴奖励”。\n2. 关闭按钮：\n   1. 点击：关闭奖励弹窗，返回盛宴界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":34.64,"y":47.36,"title":"奖励档位列表","rule":"1. 档位条目：\n   1. 排序：按人数条件从低到高展示。\n   2. 显示：\n      1. 奖励条件：\n         1. 赴宴人数达标条件（当前人数/目标人数）\n         2. 未达标/未参与宴会：均显示为红色文本\n         3. 已达标：显示为绿色文本\n      2. 奖励内容：根据配置显示奖励\n      3. 领取按钮：\n         1. 未参与宴会：不显示按钮\n         2. 参与宴会且奖励可领取：正常显示按钮，点击领取全部可领取奖励\n         3. 参与宴会奖励不可领取：置灰显示","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"DgsKbiHzFoaheqxlsfOcG3WAnEg","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"},{"id":"1.3.1-img-2","label":"界面2","role":"正式界面","width":354,"height":612,"src":"assets/screen-027.png","entryRule":"入口规则：在盛宴界面点击奖励入口打开。","annotations":[{"id":"03","x":70.94,"y":22.15,"title":"红点提示","rule":"1. 红点：\n   1. 显示条件：存在可领取奖励时显示红点。\n   2. 消失条件：对应奖励领取后消失。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"Y1Ufbf448oi4h3x7GAzcbXc2nRb","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"1.3.2","name":"选择贺礼界面","groupId":"YH-3","groupName":"宴会界面","note":"","targetLink":"YH-3 宴会界面｜IaOJwocQehB0dKb9AWxceohknwd","status":"已完成","remark":"总览已加入；规则画板已生成；六张界面按规则组整理。","images":[{"id":"1.3.2-img-1","label":"界面1","role":"正式界面","width":620,"height":1072,"src":"assets/screen-028.png","entryRule":"入口规则：点击他人宴会的入座入口或空席位打开。","annotations":[{"id":"01","x":26.94,"y":32.12,"title":"标题与关闭","rule":"1. 弹窗标题：\n   1. 显示：文本“选择贺礼”。\n2. 关闭按钮：\n   1. 点击：关闭弹窗，返回宴会界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":18.08,"y":45.08,"title":"贺礼列表","rule":"1. 贺礼条目：\n   1. 排序：按配置顺序从上到下展示。\n   2. 显示：\n      1. 贺礼图标：道具图标+当前拥有数量角标\n      2. 贺礼名称\n      3. 宴会积分\n      4. 宴会人气\n      5. 赴宴消耗：拥有数量/赴宴消耗\n         1. 道具充足：正常文本\n         2. 道具不足：红色文本\n      6. 选择按钮：\n         1. 道具充足：消耗道具，进入赴宴流程\n         2. 道具不足：打开【道具不足】弹窗","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":48.29,"y":36.91,"title":"详情入口","rule":"1. 查看按钮：\n   1. 显示：放大镜按钮。\n   2. 点击：打开对应【贺礼详情】说明。\n2. 贺礼详情：【效果图1】\n   1. 显示：\n      1. 基础宴会积分\n      2. 身份加成\n      3. 基础人气\n      4. 身份加成\n      5. 门客天赋","extraImages":[{"src":"assets/extra-029.png","note":""}],"linkActions":[],"targetImageId":""}],"sourceImageToken":"IR7QbNXQBoffqQxx9k6cSv0WnY8","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"},{"id":"1.3.2-img-2","label":"界面2","role":"正式界面","width":624,"height":1072,"src":"assets/screen-030.png","entryRule":"","annotations":[],"sourceImageToken":"TcMab9O4cod1Ydxl5n9cSUt9nOg","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"1.3.3","name":"赴宴成功界面","groupId":"YH-3","groupName":"宴会界面","note":"","targetLink":"YH-3 宴会界面｜IaOJwocQehB0dKb9AWxceohknwd","status":"已完成","remark":"总览已加入；规则画板已生成；六张界面按规则组整理。","images":[{"id":"1.3.3-img-1","label":"界面1","role":"正式界面","width":354,"height":615,"src":"assets/screen-031.png","entryRule":"入口规则：参加聚会成功后自动展示。","annotations":[{"id":"01","x":14.02,"y":27.8,"title":"成功标题","rule":"1. 标题特效：\n   1. 显示：文本“赴宴成功”。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":14.02,"y":42.31,"title":"奖励道具","rule":"1. 奖励展示：\n   1. 显示：本次赴宴获得的奖励","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":14.02,"y":54.79,"title":"成功文本","rule":"1. 提示文案：\n   1. 显示：成功入座【玩家名称】的【宴会名称】。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":30.17,"y":92.85,"title":"关闭提示","rule":"1. 底部提示：\n   1. 显示：点击空白处返回。\n   2. 点击空白处：关闭成功弹窗，返回宴会界面。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"IWCybNWJ4o1kGAxJ98mcpEaGnOh","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"1.4.0","name":"宴会列表界面","groupId":"YH-4","groupName":"宴会列表","note":"","targetLink":"YH-4 宴会列表｜RXZQwqSyOhRS7bbrjXOcp9r8nIc","status":"已完成","remark":"总览已加入；规则画板已生成；图片已上传到目标画板。","images":[{"id":"1.4.0-img-1","label":"界面1","role":"正式界面","width":555,"height":958,"src":"assets/screen-032.png","entryRule":"入口规则：点击主界面的参加聚会入口打开。","annotations":[{"id":"01","x":49.82,"y":20.34,"title":"顶部表演区","rule":"1. 舞台主视觉：\n   1. 显示：宴会列表顶部包装表演区。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":19.11,"y":41.37,"title":"宴会卡片","rule":"1. 单个宴会条目：\n   1. 顺序：\n      1. 按开宴剩余时间，从小到大排序\n      2. 从上到下，从左到右的顺序排列\n   2. 显示：\n      1. 区服\n      2. 宴会名称：【玩家名称】的【宴会类型】\n      3. 宾客人数：参与人数/人数上限\n      4. 人气\n   3. 点击：进入对应宴会界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":71.53,"y":94.9,"title":"筛选入口","rule":"1. 筛选按钮：\n   1. 显示：当前筛选范围文本。\n   2. 点击：展开筛选选项【全部/公会】","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"05","x":16.84,"y":95.14,"title":"返回按钮","rule":"1. 返回按钮：\n   1. 显示：返回按钮。\n   2. 点击：关闭列表界面，返回上一界面。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"TGd0bxANnoVWI9xwLgccu0kmngc","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"1.5.0","name":"盛宴列表界面","groupId":"YH-4","groupName":"宴会列表","note":"","targetLink":"YH-4 宴会列表｜RXZQwqSyOhRS7bbrjXOcp9r8nIc","status":"已完成","remark":"总览已加入；规则画板已生成；图片已上传到目标画板。","images":[{"id":"1.5.0-img-1","label":"界面1","role":"正式界面","width":560,"height":965,"src":"assets/screen-033.png","entryRule":"入口规则：从盛宴相关入口打开。","annotations":[{"id":"01","x":31.47,"y":12.75,"title":"弹窗标题","rule":"1. 标题文本：\n   1. 显示：盛宴类型名称。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":94.3,"y":15.9,"title":"关闭按钮","rule":"1. 关闭按钮：\n   1. 显示：关闭按钮。\n   2. 点击：关闭弹窗，返回进入前界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":42.91,"y":32.82,"title":"盛宴条目","rule":"1. 单个条目：\n   1. 顺序：\n      1. 按开宴剩余时间，从小到大排序\n      2. 从上到下的顺序排列\n   2. 显示：\n      1. 玩家名称\n      2. 开宴剩余时间\n      3. 当前人数\n      4. 玩家Q版形象\n   3. 点击：进入对应宴会界面。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"E7asblfJJooWmZxmwbccFpCQnRg","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"1.6.0","name":"宴会结束界面","groupId":"YH-4","groupName":"宴会列表","note":"","targetLink":"YH-4 宴会列表｜RXZQwqSyOhRS7bbrjXOcp9r8nIc","status":"已完成","remark":"总览已加入；规则画板已生成；图片已上传到目标画板。","images":[{"id":"1.6.0-img-1","label":"界面1","role":"正式界面","width":619,"height":1077,"src":"assets/screen-034.png","entryRule":"入口规则：宴会结束并完成结算后自动展示。","annotations":[{"id":"01","x":26.7,"y":27.11,"title":"结束标题","rule":"1. 标题文本：\n   1. 显示：宴会结束提示。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":34.2,"y":39.59,"title":"奖励展示","rule":"1. 奖励道具：\n   1. 显示：本次宴会结算获得的奖励图标和数量。\n2. 人气文本：\n   1. 显示：本次宴会获得的人气数值。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":12.72,"y":55.58,"title":"来宾记录标题","rule":"1. 标题：\n   1. 显示：文本“来宾记录”。\n2. 记录条目：\n   1. 显示：\n      1. 宾客名称\n      2. 礼物档位和贡献人气。\n   2. 状态：按入座席位顺序显示","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":27.72,"y":92.69,"title":"返回提示","rule":"1. 底部提示：\n   1. 显示：点击空白处返回。\n   2. 点击：关闭结算界面，返回上一界面。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"BcHxb5EtPoYuxWxIAfucIBpOnye","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"2.0.0","name":"宴会记录-我的宴会","groupId":"YH-5","groupName":"宴会记录","note":"","targetLink":"YH-5 宴会记录｜KamJwjrGdhsCMIbBDEoc8MCfnUb","status":"已完成","remark":"总览已加入；规则画板已生成；四张界面按单层卡片+原生表格版式整理。","images":[{"id":"2.0.0-img-1","label":"界面1","role":"正式界面","width":560,"height":960,"src":"assets/screen-035.png","entryRule":"入口规则：点击主界面的记录入口打开，默认选中我的宴会页签。","annotations":[{"id":"01","x":44.88,"y":18,"title":"标题与关闭","rule":"1. 弹窗标题：\n   1. 显示：文本“我的宴会”。\n2. 关闭按钮：\n   1. 点击：关闭弹窗，返回宴会主界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":44.78,"y":33.94,"title":"我的宴会列表","rule":"1. 记录条目：\n   1. 排序：按宴会记录时间倒序展示。\n   2. 显示：\n      1. 宴会名称\n      2. 宾客数量\n      3. 宴会人气\n      4. 记录时间。\n   3. 状态：仅记录最近30场宴会。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":37.09,"y":52.78,"title":"宾客详情入口","rule":"1. 查看按钮：\n   1. 显示：每条宴会记录右侧的放大镜按钮。\n   2. 点击：打开对应的【宴会详情】弹窗。【跳转1：查看宴会详情】","extraImages":[],"linkActions":[{"label":"查看宴会详情","targetImageId":"2.0.1::2.0.1-img-1"}],"targetImageId":"2.0.1::2.0.1-img-1"},{"id":"04","x":43.48,"y":90.12,"title":"页签切换","rule":"1. 页签内容\n   1. 我的宴会\n   2. 互宴记录\n2. 状态\n   1. 默认：选中我的宴会\n   2. 高亮：选中的页签高亮显示\n   3. 正常：未选中的页签正常显示","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"E3WKb4Svlo6kSpx3BqTcNRPNn4d","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"2.0.1","name":"宴会详情弹窗","groupId":"YH-5","groupName":"宴会记录","note":"","targetLink":"YH-5 宴会记录｜KamJwjrGdhsCMIbBDEoc8MCfnUb","status":"已完成","remark":"总览已加入；规则画板已生成；四张界面按单层卡片+原生表格版式整理。","images":[{"id":"2.0.1-img-1","label":"界面1","role":"正式界面","width":555,"height":956,"src":"assets/screen-036.png","entryRule":"入口规则：在我的宴会记录中点击详情入口打开。","annotations":[{"id":"01","x":25.63,"y":22.91,"title":"标题与关闭","rule":"1. 弹窗标题：\n   1. 显示：文本“宴宾详情”。\n2. 关闭按钮：\n   1. 点击：关闭详情弹窗，返回宴会记录列表。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":47.51,"y":36.79,"title":"宾客列表","rule":"1. 列表条目：\n   1. 排序：按当前宴会宾客席位记录排序展示\n   2. 显示：\n      1. 宾客头像：不可点击\n      2. 玩家名称\n      3. 礼物档位\n      4. 宴会人气。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":73.39,"y":35.97,"title":"来宴/回宴次数","rule":"1. 次数展示：\n   1. 显示：该宾客来宴次数和回宴次数。\n   2. 点击：不可点击。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"Cytab2QAKoouGnxIB4qcJTuJnFe","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"2.1.0","name":"宴会记录-互宴记录","groupId":"YH-5","groupName":"宴会记录","note":"","targetLink":"YH-5 宴会记录｜KamJwjrGdhsCMIbBDEoc8MCfnUb","status":"已完成","remark":"总览已加入；规则画板已生成；四张界面按单层卡片+原生表格版式整理。","images":[{"id":"2.1.0-img-1","label":"界面1","role":"正式界面","width":444,"height":766,"src":"assets/screen-037.png","entryRule":"入口规则：在宴会记录中切换至互宴记录页签。","annotations":[{"id":"01","x":15.29,"y":14.08,"title":"标题与关闭","rule":"1. 弹窗标题：\n   1. 显示：文本“互宴记录”。\n2. 关闭按钮：\n   1. 点击：关闭弹窗，返回宴会主界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":15.22,"y":33.41,"title":"互宴记录列表","rule":"1. 记录条目：\n   1. 排序：按最近30天互宴记录展示，排序规则按时间从近到远排序\n   2. 显示：\n      1. 玩家头像：点击打开【玩家详情】弹窗\n      2. 玩家名称\n      3. 来宴次数和回宴次数。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":76.92,"y":34.11,"title":"回宴按钮","rule":"1. 回宴按钮：\n   1. 显示：每条互宴记录右侧的“回宴”按钮。\n   2. 点击：\n      1. 对方无开启宴会：tips提示“对方无进行中的宴会”\n      2. 对方有开启宴会：弹出二次确认弹窗。【跳转1：回宴确认】","extraImages":[],"linkActions":[{"label":"回宴确认","targetImageId":"2.1.1::2.1.1-img-1"}],"targetImageId":"2.1.1::2.1.1-img-1"},{"id":"04","x":69.34,"y":90.46,"title":"页签切换","rule":"1. 页签内容\n   1. 我的宴会\n   2. 互宴记录\n2. 状态\n   1. 默认：选中我的宴会\n   2. 高亮：选中的页签高亮显示\n   3. 正常：未选中的页签正常显示","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"XXn0bpSMoofVdxxjd8Mcvq4znvh","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"2.1.1","name":"二次确认弹窗","groupId":"YH-5","groupName":"宴会记录","note":"","targetLink":"YH-5 宴会记录｜KamJwjrGdhsCMIbBDEoc8MCfnUb","status":"已完成","remark":"总览已加入；规则画板已生成；四张界面按单层卡片+原生表格版式整理。","images":[{"id":"2.1.1-img-1","label":"界面1","role":"正式界面","width":443,"height":763,"src":"assets/screen-038.png","entryRule":"入口规则：在互宴记录中点击回宴按钮，且对方存在进行中的宴会时打开。","annotations":[{"id":"01","x":27.24,"y":38.66,"title":"标题与关闭","rule":"1. 弹窗标题：\n   1. 显示：文本“提示”。\n2. 关闭按钮：\n   1. 点击：关闭确认弹窗，停留在互宴记录列表。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":19.41,"y":48.11,"title":"提示文本","rule":"1. 确认文案：\n   1. 显示：是否前往指定玩家宴会的确认文案。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":44.72,"y":63.13,"title":"取消按钮","rule":"1. 取消按钮：\n   1. 显示：文本“取消”。\n   2. 点击：关闭弹窗，不执行跳转。\n2. 确认按钮：\n   1. 显示：文本“确认”。\n   2. 点击：进入目标玩家宴会界面","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"Bp1ybq5dkovR92xHCp4cCvIKn9d","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"2.2.0","name":"道具不足界面","groupId":"YH-6","groupName":"通用弹窗","note":"","targetLink":"YH-6 通用弹窗｜DsjjwV7DQhPc0DbHjSTcCRZknjh","status":"已完成","remark":"总览已加入；规则画板已生成；三张通用弹窗按单层卡片+原生表格版式整理。","images":[{"id":"2.2.0-img-1","label":"界面1","role":"正式界面","width":557,"height":960,"src":"assets/screen-039.png","entryRule":"入口规则：举办、参加或购买时道具不足触发。","annotations":[{"id":"01","x":24.64,"y":19.52,"title":"标题与关闭","rule":"1. 弹窗标题：\n   1. 显示：文本“获取途径”。\n2. 关闭按钮：\n   1. 点击：关闭弹窗，返回触发前界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":13.4,"y":28.16,"title":"道具信息","rule":"1. 道具展示：\n   1. 显示：缺少道具的相关信息\n      1. 道具图标\n      2. 道具名称\n      3. 当前拥有数量","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":15.61,"y":42.74,"title":"获取途径列表","rule":"1. 途径条目：\n   1. 排序：按配置顺序展示获取途径。\n   2. 显示：根据配置显示可获取的途径\n      1. 获取来源图标\n      2. 来源名称\n      3. 来源说明。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":78.65,"y":36.56,"title":"前往按钮","rule":"1. 前往按钮：\n   1. 显示：可跳转的获取途径显示“前往”。\n   2. 点击：跳转至对应获取入口。\n2. 购买按钮：\n   1. 显示：可直接购买的途径显示购买按钮、价格和限购数量。\n   2. 点击：执行购买流程；资源不足时进入对应不足提示。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"AydhbFaOho5t7hxvd29ce7g3nuc","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"2.3.0","name":"商店界面","groupId":"YH-6","groupName":"通用弹窗","note":"","targetLink":"YH-6 通用弹窗｜DsjjwV7DQhPc0DbHjSTcCRZknjh","status":"已完成","remark":"总览已加入；规则画板已生成；三张通用弹窗按单层卡片+原生表格版式整理。","images":[{"id":"2.3.0-img-1","label":"界面1","role":"正式界面","width":442,"height":765,"src":"assets/screen-040.png","entryRule":"入口规则：点击主界面的商店入口打开。","annotations":[{"id":"01","x":30.8,"y":9.49,"title":"标题与关闭","rule":"1. 界面标题：\n   1. 显示：文本“宴会商店”。\n2. 关闭按钮：\n   1. 点击：关闭商店，返回进入前界面。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":65.27,"y":14.97,"title":"货币栏","rule":"1. 货币数量：\n   1. 显示：当前拥有的商店货币数量。\n   2. 点击加号：打开【道具不足】弹窗","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":47.5,"y":26.49,"title":"主视图","rule":"1. 主视图\n   1. 显示：根据商店类型显示对应的主视图和文本","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":10.03,"y":42.86,"title":"商品列表","rule":"1. 商品网格：\n   1. 顺序：商品按配置顺序排列。\n2. 单个商品：\n   1. 显示：\n      1. 商品图标及出售数量\n      2. 商品名称\n      3. 限购类型及限购次数\n      4. 价格\n      5. 爆品角标：根据配置判断是否显示爆品角标\n   2. 点击价格按钮\n      1. 道具足够：打开【购买道具】弹窗。【跳转1：购买道具】\n      2. 道具不足：打开【道具不足】弹窗\n      3. 限购次数达到上限：点击tips提示“以达到限购次数”","extraImages":[],"linkActions":[{"label":"购买道具","targetImageId":"2.3.1::2.3.1-img-1"}],"targetImageId":"2.3.1::2.3.1-img-1"},{"id":"05","x":45.92,"y":93.15,"title":"商店页签","rule":"1. 底部页签：\n   1. 顺序：按配置顺序显示对应的商店页签\n   2. 显示：\n      1. 默认：根据入口决定进入时默认的页签\n      2. 高亮：选中的高亮显示\n      3. 正常：未选中的正常显示","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"E7GIbWfkeoymsExKJylcCtq5nY0","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"2.3.1","name":"购买道具界面","groupId":"YH-6","groupName":"通用弹窗","note":"","targetLink":"","status":"","remark":"","images":[{"id":"2.3.1-img-1","label":"界面1","role":"正式界面","width":620,"height":1071,"src":"assets/screen-041.png","entryRule":"入口规则：在商店中点击可购买商品打开。","annotations":[{"id":"01","x":56.09,"y":31.42,"title":"道具信息区","rule":"1. 道具：\n   1. 显示：\n      1. 当前购买道具图标及出售数量。\n      2. 当前购买道具名称\n2. 拥有数量：\n   1. 显示：当前已拥有该道具数量。\n3. 道具描述：\n   1. 显示：当前道具的功能说明文本。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":12.43,"y":49.51,"title":"购买数量选择","rule":"1. 数量滑条：\n   1. 显示：当前购买数量\n      1. 默认数量：1件\n      2. 数量上限：\n         1. 当前限购最大值\n         2. 当前可购买最大值\n         3. 以上两个数值取较小的数值\n   2. 操作：拖动滑条调整购买数量。\n2. 减号按钮：\n   1. 点击：购买数量减少；数量达到最小值时不可继续减少。\n3. 加号按钮：\n   1. 点击：购买数量增加；数量达到可购买上限时不可继续增加。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":69.37,"y":61.41,"title":"购买确认区","rule":"1. 消耗显示：\n   1. 显示：\n      1. 购买所需货币图标\n      2. 数值：拥有数量/当前消耗所需数量。\n         1. 道具足够：正常颜色\n         2. 道具不足：红色文本\n      3. 根据选择数量实时变更所需数量\n2. 购买按钮：\n   1. 显示：文本“购买”。\n   2. 点击：\n      1. 货币充足：点击购买道具，并显示【获得道具】弹窗\n      2. 货币不足或达到购买限制打不开此界面","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"04","x":92.51,"y":26.76,"title":"关闭按钮","rule":"1. 关闭按钮：点击关闭弹窗","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"ZCT7bYOxAoWfsfxqObzc65KfnqM","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]},{"id":"2.4.0","name":"获得奖励弹窗","groupId":"YH-6","groupName":"通用弹窗","note":"","targetLink":"YH-6 通用弹窗｜DsjjwV7DQhPc0DbHjSTcCRZknjh","status":"已完成","remark":"总览已加入；规则画板已生成；三张通用弹窗按单层卡片+原生表格版式整理。","images":[{"id":"2.4.0-img-1","label":"界面1","role":"正式界面","width":358,"height":611,"src":"assets/screen-042.png","entryRule":"入口规则：获得道具或奖励后自动展示。","annotations":[{"id":"01","x":19.95,"y":36.6,"title":"奖励标题","rule":"1. 标题特效：\n   1. 显示：获得奖励时播放“恭喜获得”表现。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"02","x":16.99,"y":47.77,"title":"奖励道具","rule":"1. 奖励展示：\n   1. 显示：本次获得的道具图标和数量。\n   2. 状态：多个奖励按配置顺序横向排列展示。","extraImages":[],"linkActions":[],"targetImageId":""},{"id":"03","x":30.08,"y":92.16,"title":"关闭提示","rule":"1. 底部提示：\n   1. 显示：点击空白处返回。\n   2. 点击空白处：关闭奖励弹窗，返回奖励来源界面。","extraImages":[],"linkActions":[],"targetImageId":""}],"sourceImageToken":"FIO5bS67BoI4WZxMVOMcxFIVnQG","sourceUpdatedAt":"2026-10-21T09:43:12.636Z"}]}],"ruleContentVersion":"mapping-sync-2026-10-27-031832","savedAt":"2026-10-27T07:53:27.888Z"};
+const storageKey = "banquet-ui-rules-editor-v1";
+const ruleContentVersion = seedData.ruleContentVersion || "object-first-rules-v2";
+let state = clone(seedData);
+let activeScreenId = null;
+let activeImageIndex = 0;
+let activeMarkerId = "01";
+let ruleDisplayMode = "overview";
+let moveMarkerId = null;
+let expandedExtraPanels = new Set();
+let jumpBackTarget = null;
+const systemSlug = "banquet-ui-rules";
+
+function clone(value) { return JSON.parse(JSON.stringify(value)); }
+function mergeRuleContentFromSeed(cached) {
+  const next = clone(seedData);
+  const cachedScreens = new Map((cached.interfaces || []).map(screen => [screen.id, screen]));
+
+  for (const nextScreen of next.interfaces || []) {
+    const cachedScreen = cachedScreens.get(nextScreen.id);
+    if (!cachedScreen) continue;
+    const cachedImages = new Map((cachedScreen.images || []).map(image => [image.id, image]));
+
+    for (const nextImage of nextScreen.images || []) {
+      const cachedImage = cachedImages.get(nextImage.id);
+      if (!cachedImage) continue;
+        const imageSourceChanged = nextImage.sourceImageToken && cachedImage.sourceImageToken !== nextImage.sourceImageToken;
+        if (cachedImage.src && !imageSourceChanged) nextImage.src = cachedImage.src;
+        if (cachedImage.entryRule !== undefined) nextImage.entryRule = cachedImage.entryRule;
+      const cachedMarkers = new Map((cachedImage.annotations || []).map(marker => [marker.id, marker]));
+
+      for (const nextMarker of nextImage.annotations || []) {
+        const cachedMarker = cachedMarkers.get(nextMarker.id);
+        if (!cachedMarker) continue;
+        nextMarker.x = cachedMarker.x ?? nextMarker.x;
+        nextMarker.y = cachedMarker.y ?? nextMarker.y;
+        nextMarker.extraImages = cachedMarker.extraImages || nextMarker.extraImages || [];
+        nextMarker.targetImageId = cachedMarker.targetImageId || nextMarker.targetImageId || "";
+          if (cachedMarker.title !== undefined) nextMarker.title = cachedMarker.title;
+          if (cachedMarker.rule !== undefined) nextMarker.rule = cachedMarker.rule;
+          nextMarker.linkActions = cachedMarker.linkActions || nextMarker.linkActions || [];
+      }
+
+      for (const cachedMarker of cachedImage.annotations || []) {
+        if (!nextImage.annotations?.some(marker => marker.id === cachedMarker.id)) {
+          nextImage.annotations.push(cachedMarker);
+        }
+      }
+    }
+
+    const knownImageIds = new Set((nextScreen.images || []).map(image => image.id));
+    for (const cachedImage of cachedScreen.images || []) {
+      if (!knownImageIds.has(cachedImage.id)) nextScreen.images.push(cachedImage);
+    }
+  }
+
+  next.ruleContentVersion = ruleContentVersion;
+  return next;
+}
+function loadState() {
+  try {
+    const cached = localStorage.getItem(storageKey);
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      const hasValidInterfaces = Array.isArray(parsed?.interfaces) && parsed.interfaces.length > 0;
+      if (!hasValidInterfaces) {
+        const backupKey = storageKey + "-invalid-" + Date.now();
+        localStorage.setItem(backupKey, cached);
+        localStorage.setItem(storageKey + "-last-invalid", backupKey);
+        localStorage.removeItem(storageKey);
+        throw new Error("Invalid cached state");
+      }
+      if (parsed && parsed.ruleContentVersion && parsed.ruleContentVersion !== ruleContentVersion) {
+        const backupKey = storageKey + "-backup-" + parsed.ruleContentVersion + "-" + Date.now();
+        localStorage.setItem(backupKey, cached);
+        localStorage.setItem(storageKey + "-last-backup", backupKey);
+      }
+      if (parsed.ruleContentVersion !== ruleContentVersion) {
+        const migrated = mergeRuleContentFromSeed(parsed);
+        localStorage.setItem(storageKey, JSON.stringify(migrated));
+        return migrated;
+      }
+      return parsed;
+    }
+  } catch (error) {}
+  const fresh = clone(seedData);
+  fresh.ruleContentVersion = ruleContentVersion;
+  return fresh;
+}
+let lastSaveError = "";
+function endpoint(path) {
+  return location.protocol === "file:" ? "http://127.0.0.1:5177" + path : path;
+}
+function downloadEditData(filename) {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename || (systemSlug + "-edit-data-backup.json");
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function saveState() {
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(state));
+    lastSaveError = "";
+    return true;
+  } catch (error) {
+    lastSaveError = error?.message || "浏览器本地缓存保存失败。";
+    console.warn("localStorage save failed:", error);
+    return false;
+  }
+}
+async function saveStateToLocalFile(button, options = {}) {
+  const browserSaved = saveState();
+  const saveEndpoint = endpoint("/save-state?system=" + encodeURIComponent(systemSlug));
+  const oldText = button?.textContent;
+  if (button) {
+    button.textContent = "保存中...";
+    button.disabled = true;
+  }
+  try {
+    const response = await fetch(saveEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ state }),
+    });
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(result.message || "写回本地 HTML 失败。");
+    }
+    if (!options.silent) {
+      alert(result.message + (browserSaved ? "" : "\n浏览器缓存空间不足，已跳过浏览器缓存；不影响重新打开本地 HTML 查看最新内容。"));
+    }
+    return { ok: true, browserSaved, result };
+  } catch (error) {
+    const message = (browserSaved ? "已保存到当前浏览器，但" : "浏览器缓存保存失败，且") + "未写回本地 HTML。\n" + (error?.message || "请确认本地服务已启动。");
+    if (!options.silent) {
+      if (confirm(message + "\n\n是否立刻导出当前编辑数据备份？")) {
+        downloadEditData(systemSlug + "-save-failed-backup.json");
+      }
+    }
+    return { ok: false, browserSaved, message };
+  } finally {
+    if (button) {
+      button.textContent = oldText;
+      button.disabled = false;
+    }
+  }
+}
+async function buildLocalPreview(button, options = {}) {
+  const oldText = button?.textContent;
+  if (button) {
+    button.textContent = "生成中...";
+    button.disabled = true;
+  }
+  try {
+    const saved = await saveStateToLocalFile(null, { silent: true });
+    if (!saved.ok) {
+      throw new Error(saved.message || "保存失败，已停止生成本地预览版。");
+    }
+    const response = await fetch(endpoint("/build-preview?system=" + encodeURIComponent(systemSlug)), { method: "POST" });
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(result.message || "生成本地预览版失败。");
+    }
+    if (!options.silent) {
+      alert(result.message + "\n\n预览地址：" + result.previewUrl);
+    }
+    return { ok: true, result };
+  } catch (error) {
+    if (!options.silent) alert("生成本地预览版失败。\n" + (error?.message || "请确认本地服务已启动。"));
+    return { ok: false, message: error?.message || "生成本地预览版失败。" };
+  } finally {
+    if (button) {
+      button.textContent = oldText;
+      button.disabled = false;
+    }
+  }
+}
+async function preparePublishFiles(button) {
+  const oldText = button?.textContent;
+  if (button) {
+    button.textContent = "准备中...";
+    button.disabled = true;
+  }
+  try {
+    const saved = await saveStateToLocalFile(null, { silent: true });
+    if (!saved.ok) {
+      throw new Error(saved.message || "保存失败，已停止准备发布文件。");
+    }
+    const response = await fetch(endpoint("/prepare-publish?system=" + encodeURIComponent(systemSlug)), { method: "POST" });
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(result.message || "准备发布文件失败。");
+    }
+    const githubTarget = result.githubPublish?.targetDir ? ("\nGitHub本地目录：" + result.githubPublish.targetDir) : "";
+    const indexNote = result.indexResult?.localIndexPath ? ("\n索引页：已更新本地管理索引和 GitHub 首页") : "";
+    alert(result.message + "\n\n本地预览：" + result.previewUrl + "\n发布目录：" + result.siteRoot + "\n发布包：" + result.archivePath + githubTarget + indexNote);
+  } catch (error) {
+    alert("准备发布文件失败。\n" + (error?.message || "请确认本地服务已启动。"));
+  } finally {
+    if (button) {
+      button.textContent = oldText;
+      button.disabled = false;
+    }
+  }
+}
+function openLocalPreview() {
+  window.open("/" + systemSlug + "/dist/index.html?v=" + Date.now(), "_blank", "noopener");
+}
+async function syncMappingTable(button) {
+  const oldText = button?.textContent;
+  if (button) {
+    button.textContent = "同步中...";
+    button.disabled = true;
+  }
+  try {
+    const saved = await saveStateToLocalFile(null, { silent: true });
+    if (!saved.ok) {
+      throw new Error(saved.message || "保存失败，已停止同步映射表。");
+    }
+    const response = await fetch(endpoint("/sync-mapping?system=" + encodeURIComponent(systemSlug)), { method: "POST" });
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(result.message || "同步映射表失败。");
+    }
+    const summary = [
+      result.message,
+      "",
+      "新增界面：" + result.addedInterfaces,
+      "显示名变化：" + result.updatedNames,
+      "替换图片：" + result.replacedImages,
+      "新增图片：" + result.addedImages,
+      "类型变化：" + result.roleChanges,
+      "补充图片基线：" + result.baselineTokens,
+      "",
+      "页面将刷新，以载入同步后的本地数据。"
+    ].join("\n");
+    alert(summary);
+    localStorage.removeItem(storageKey);
+    location.reload();
+  } catch (error) {
+    alert("同步映射表失败。\n" + (error?.message || "请确认本地服务已启动，并且当前账号可以访问飞书映射表。"));
+  } finally {
+    if (button) {
+      button.textContent = oldText;
+      button.disabled = false;
+    }
+  }
+}
+function pad2(n) { return String(n).padStart(2, "0"); }
+function byId(id) { return document.getElementById(id); }
+function screenTitle(screen) { return screen.id + " " + screen.name; }
+function isViewOnlyMode() { return document.body.classList.contains("view-only"); }
+function normalizeMarkerActions(marker) {
+  if (!marker) return [];
+  const actions = Array.isArray(marker.linkActions) ? marker.linkActions : [];
+  marker.linkActions = actions
+    .map((action, index) => ({
+      label: action?.label || ("点击动作 " + (index + 1)),
+      targetImageId: action?.targetImageId || action?.target || "",
+    }))
+    .filter(action => action.label || action.targetImageId);
+  if (!marker.linkActions.length && marker.targetImageId) {
+    marker.linkActions.push({ label: "点击动作 1", targetImageId: marker.targetImageId });
+  }
+  syncLegacyTarget(marker);
+  return marker.linkActions;
+}
+function syncLegacyTarget(marker) {
+  if (!marker) return;
+  marker.targetImageId = (marker.linkActions || []).find(action => action.targetImageId)?.targetImageId || "";
+}
+function buildTargetImageOptions(selectedValue) {
+  return '<option value="">不跳转</option>' + state.interfaces.map(targetScreen =>
+    '<optgroup label="' + escapeAttr(screenTitle(targetScreen)) + '">' +
+    targetScreen.images.map((img, index) =>
+      '<option value="' + escapeAttr(targetScreen.id + "::" + img.id) + '" ' + (selectedValue === targetScreen.id + "::" + img.id || selectedValue === img.id ? 'selected' : '') + '>' + escapeHtml(screenTitle(targetScreen) + " / " + (img.label || ("界面" + (index + 1))) + " · " + (img.role || "正式界面")) + '</option>'
+    ).join("") +
+    '</optgroup>'
+  ).join("");
+}
+function resolveTargetImage(targetValue, fallbackScreen) {
+  if (!targetValue) return null;
+  let targetScreen = fallbackScreen;
+  let targetImageId = targetValue;
+  if (targetValue.includes("::")) {
+    const parts = targetValue.split("::");
+    targetScreen = state.interfaces.find(item => item.id === parts[0]) || fallbackScreen;
+    targetImageId = parts[1];
+  } else {
+    targetScreen = state.interfaces.find(screen => (screen.images || []).some(img => img.id === targetValue)) || fallbackScreen;
+  }
+  const targetIndex = targetScreen?.images?.findIndex(img => img.id === targetImageId) ?? -1;
+  if (!targetScreen || targetIndex < 0) return null;
+  const image = targetScreen.images[targetIndex];
+  return {
+    screen: targetScreen,
+    image,
+    index: targetIndex,
+    value: targetScreen.id + "::" + image.id,
+    title: screenTitle(targetScreen),
+    meta: (image.label || ("界面" + (targetIndex + 1))) + " · " + (image.role || "正式界面"),
+  };
+}
+function renderActionTargetPreview(target, markerId, actionIndex) {
+  if (!target) return '<div class="action-target-empty">未选择目标界面</div>';
+  return '<div class="action-target-card">' +
+    '<button class="action-target-thumb" data-preview-action="' + escapeAttr(markerId) + '" data-action-index="' + actionIndex + '" title="查看大图"><img src="' + escapeAttr(target.image.src) + '" alt="' + escapeAttr(target.title) + '" /></button>' +
+    '<div><div class="action-target-title">' + escapeHtml(target.title) + '</div><div class="action-target-meta">' + escapeHtml(target.meta) + '</div></div>' +
+  '</div>';
+}
+function effectRefLabel(index) {
+  return "效果图" + (index + 1);
+}
+function jumpRefLabel(index) {
+  return "跳转" + (index + 1);
+}
+function findEffectReference(marker, index) {
+  const label = effectRefLabel(index);
+  const lines = String(marker?.rule || "").split("\n");
+  const lineIndex = lines.findIndex(line => line.includes("【" + label) || line.includes("[" + label));
+  if (lineIndex < 0) return null;
+  return {
+    label,
+    lineNumber: lineIndex + 1,
+    text: lines[lineIndex].trim(),
+  };
+}
+function renderRuleTextPreview(marker, fallbackScreen) {
+  const text = String(marker?.rule || "");
+  const pattern = /(【(效果图|跳转)(\d+)(?:[：:]([^】]+))?】|\[(效果图|跳转)(\d+)(?:[：:]([^\]]+))?\])/g;
+  let html = "";
+  let lastIndex = 0;
+  let match;
+  while ((match = pattern.exec(text))) {
+    html += escapeHtml(text.slice(lastIndex, match.index));
+    const type = match[2] || match[5];
+    const numberText = match[3] || match[6];
+    const caption = (match[4] || match[7] || "").trim();
+    const index = Number(numberText) - 1;
+    if (type === "效果图") {
+      const item = marker?.extraImages?.[index];
+      const label = caption || effectRefLabel(index);
+      if (item) {
+        const src = typeof item === "string" ? item : item.src;
+        html += '<button class="inline-effect-thumb" data-preview-extra="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '">' +
+          '<img src="' + escapeAttr(src) + '" alt="' + escapeAttr(label) + '" />' +
+          '<span>' + escapeHtml(label) + '</span>' +
+        '</button>';
+      } else {
+        html += '<span class="inline-effect-missing">' + escapeHtml(match[0]) + '</span>';
+      }
+    } else {
+      const action = normalizeMarkerActions(marker)[index];
+      const target = resolveTargetImage(action?.targetImageId || "", fallbackScreen);
+      const label = caption || action?.label || target?.title || jumpRefLabel(index);
+      if (action && target) {
+        html += '<button class="inline-jump-thumb" data-inline-jump="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">' +
+          '<img src="' + escapeAttr(target.image.src) + '" alt="' + escapeAttr(target.title) + '" />' +
+          '<span class="inline-jump-text"><strong>前往</strong><em>' + escapeHtml(label) + '</em></span>' +
+        '</button>';
+      } else {
+        html += '<span class="inline-jump-missing">' + escapeHtml(match[0]) + '</span>';
+      }
+    }
+    lastIndex = pattern.lastIndex;
+  }
+  html += escapeHtml(text.slice(lastIndex));
+  return '<div class="rule-text-preview">' + html + '</div>';
+}
+
+function render() {
+  renderNav();
+  if (activeScreenId) renderDetail(activeScreenId);
+  else renderOverview();
+}
+
+function renderNav() {
+  const nav = byId("navList");
+  nav.innerHTML = state.interfaces.map(screen =>
+    '<button class="nav-item ' + (screen.id === activeScreenId ? 'active' : '') + '" data-screen="' + escapeAttr(screen.id) + '">' +
+    '<span class="nav-id">' + escapeHtml(screen.id) + '</span><span>' + escapeHtml(screen.name) + '</span></button>'
+  ).join("");
+  nav.querySelectorAll("[data-screen]").forEach(btn => {
+    btn.addEventListener("click", () => openDetail(btn.dataset.screen));
+  });
+}
+
+function renderOverview() {
+  activeScreenId = null;
+  document.querySelector("[data-open-overview]").classList.add("active");
+  byId("overviewView").classList.add("active");
+  byId("detailView").classList.remove("active");
+  const grid = byId("overviewGrid");
+  grid.innerHTML = state.interfaces.map(screen => {
+    const thumbs = screen.images.length
+      ? screen.images.map((img, index) => '<button class="overview-thumb" data-overview-preview="' + escapeAttr(screen.id) + '" data-image-index="' + index + '" title="查看大图"><img src="' + escapeAttr(img.src) + '" alt="' + escapeAttr(screenTitle(screen) + " / " + (img.label || ("界面" + (index + 1)))) + '" /></button>').join("")
+      : '<div class="empty-thumb">待补图</div>';
+    return '<article class="overview-card" data-screen="' + escapeAttr(screen.id) + '">' +
+      '<h3>' + escapeHtml(screenTitle(screen)) + '</h3>' +
+      '<div class="tag-row"><span class="tag">' + escapeHtml(screen.groupId || "未分组") + '</span><span class="tag">' + escapeHtml(screen.status || "待处理") + '</span></div>' +
+      '<div class="thumb-strip">' + thumbs + '</div>' +
+      '<p class="hint">' + escapeHtml(screen.note || screen.remark || "点击进入界面规则。") + '</p>' +
+    '</article>';
+  }).join("");
+  grid.querySelectorAll("[data-screen]").forEach(card => card.addEventListener("click", () => openDetail(card.dataset.screen)));
+  grid.querySelectorAll("[data-overview-preview]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const screen = state.interfaces.find(item => item.id === btn.dataset.overviewPreview);
+      const imageIndex = Number(btn.dataset.imageIndex);
+      const image = screen?.images?.[imageIndex];
+      if (!screen || !image) return;
+      openImagePreview(image.src, screenTitle(screen) + " / " + (image.label || ("界面" + (imageIndex + 1))) + " · " + (image.role || "正式界面"));
+    });
+  });
+}
+
+function openDetail(screenId) {
+  jumpBackTarget = null;
+  activeScreenId = screenId;
+  activeImageIndex = 0;
+  activeMarkerId = "01";
+  document.querySelector("[data-open-overview]").classList.remove("active");
+  byId("overviewView").classList.remove("active");
+  byId("detailView").classList.add("active");
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderDetail(screenId) {
+  const screen = state.interfaces.find(item => item.id === screenId);
+  const view = byId("detailView");
+  if (!screen) {
+    view.innerHTML = '<div class="empty-detail">未找到界面。</div>';
+    return;
+  }
+  const image = screen.images[activeImageIndex];
+  const jumpOrigin = jumpBackTarget
+    ? '<div class="jump-origin"><span>从 ' + escapeHtml(jumpBackTarget.label || "上一界面") + ' 跳转而来</span><button class="ghost" data-return-jump>返回来源</button></div>'
+    : "";
+  view.innerHTML = '<div class="detail-head">' +
+    '<div><h2>' + escapeHtml(screenTitle(screen)) + '</h2><p class="hint">' + escapeHtml(screen.groupName || screen.note || "界面规则展示") + '</p></div>' +
+    '<button class="secondary" data-back>返回总览</button>' +
+  '</div>' +
+  jumpOrigin +
+  '<section class="screen-block">' +
+    '<div class="screen-title"><h3>' + escapeHtml(screenTitle(screen)) + '</h3><span class="tag">' + escapeHtml(screen.groupId || "未分组") + '</span></div>' +
+    (image ? renderImageWorkspace(screen, image) : renderEmptyImage(screen)) +
+  '</section>';
+  view.querySelector("[data-back]").addEventListener("click", () => { jumpBackTarget = null; activeScreenId = null; renderOverview(); renderNav(); });
+  bindDetailEvents(screen);
+}
+
+function renderEmptyImage(screen) {
+  return '<div class="empty-detail">' +
+    '<p>这个界面还没有图片。界面主图需要从映射表同步进来；本地编辑器只维护规则、标点、动作和效果图。</p>' +
+    '<button class="secondary" data-sync-mapping-inline>同步映射表</button>' +
+  '</div>';
+}
+
+function renderImageWorkspace(screen, image) {
+  const tabs = screen.images.map((img, index) =>
+    '<button class="' + (index === activeImageIndex ? 'active' : '') + '" data-image-index="' + index + '">' + escapeHtml(img.label || ("界面" + (index + 1))) + '</button>'
+  ).join("");
+  const markers = image.annotations.map(marker =>
+    '<button class="marker ' + (marker.id === activeMarkerId ? 'active' : '') + '" style="left:' + marker.x + '%;top:' + marker.y + '%" data-marker="' + escapeAttr(marker.id) + '">' + escapeHtml(marker.id) + '</button>'
+  ).join("");
+  const pointTabs = [{ id: "0", title: "入口规则" }].concat(image.annotations).map(marker =>
+    '<button class="' + (marker.id === activeMarkerId ? 'active' : '') + '" data-rule-tab="' + escapeAttr(marker.id) + '">' + escapeHtml(marker.id) + '</button>'
+  ).join("");
+  const rules = image.annotations.map(marker => {
+    const normalizedExtras = (marker.extraImages || []).map(item => typeof item === "string" ? { src: item, note: "" } : item);
+    marker.extraImages = normalizedExtras;
+    const linkActions = normalizeMarkerActions(marker);
+    const isExtraOpen = expandedExtraPanels.has(marker.id);
+    const previewImages = normalizedExtras.slice(0, 4).map((item, index) => {
+      const ref = findEffectReference(marker, index);
+      return '<button class="extra-preview-btn ' + (ref ? "linked" : "") + '" data-preview-extra="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '" title="' + escapeAttr((ref ? "已关联：" + ref.text : "查看" + effectRefLabel(index))) + '">' +
+        '<img src="' + escapeAttr(item.src) + '" alt="' + escapeAttr(marker.title + effectRefLabel(index)) + '" />' +
+      '</button>';
+    }).join("");
+    const previewStrip = previewImages || '<span class="extra-preview-empty">可上传、拖拽或导入截图</span>';
+    const extraImages = normalizedExtras.map((item, index) => {
+      const ref = findEffectReference(marker, index);
+      return '<div class="extra-image-card">' +
+        '<button class="extra-image-preview" data-preview-extra="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '"><img src="' + escapeAttr(item.src) + '" alt="' + escapeAttr(marker.title + effectRefLabel(index)) + '" /></button>' +
+        '<div class="extra-ref-status ' + (ref ? "linked" : "") + '">' + (ref ? "已关联：" + escapeHtml(ref.text) : "未在正文中引用，点击“插入引用”可绑定到当前光标位置。") + '</div>' +
+        '<textarea data-extra-note="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '" placeholder="补充这张效果图说明">' + escapeHtml(item.note || "") + '</textarea>' +
+        '<div class="mini-toolbar"><button class="ghost" data-insert-extra-ref="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '">插入引用</button><button class="danger" data-delete-extra="' + escapeAttr(marker.id) + '" data-extra-index="' + index + '">删除</button></div>' +
+      '</div>';
+    }).join("");
+    const actionRows = linkActions.map((action, index) => {
+      const target = resolveTargetImage(action.targetImageId || "", screen);
+      return '<div class="action-row" data-action-row="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">' +
+        '<input data-action-label="' + escapeAttr(marker.id) + '" data-action-index="' + index + '" value="' + escapeAttr(action.label || "") + '" placeholder="动作名，如点击详情" />' +
+        '<div class="action-target-cell">' +
+          '<select data-action-target="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">' + buildTargetImageOptions(action.targetImageId || "") + '</select>' +
+          renderActionTargetPreview(target, marker.id, index) +
+        '</div>' +
+        '<button class="secondary" data-insert-action-ref="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">插入跳转</button>' +
+        '<button class="ghost" data-jump-action="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">查看</button>' +
+        '<button class="danger" data-delete-action="' + escapeAttr(marker.id) + '" data-action-index="' + index + '">删除</button>' +
+      '</div>';
+    }).join("");
+    const ruleBody = isViewOnlyMode()
+      ? renderRuleTextPreview(marker, screen)
+      : '<textarea data-edit-rule="' + escapeAttr(marker.id) + '">' + escapeHtml(marker.rule) + '</textarea>';
+    return '<article class="rule-card ' + (marker.id === activeMarkerId ? 'active' : '') + '" data-rule="' + escapeAttr(marker.id) + '" data-rule-drop="' + escapeAttr(marker.id) + '">' +
+      '<div class="rule-head"><span class="rule-num">' + escapeHtml(marker.id) + '</span><input data-edit-title="' + escapeAttr(marker.id) + '" value="' + escapeAttr(marker.title) + '" /></div>' +
+      ruleBody +
+      '<div class="action-links">' +
+        '<div class="action-head"><strong>动作跳转</strong><button class="secondary" data-add-action="' + escapeAttr(marker.id) + '">新增动作</button></div>' +
+        '<div class="action-list">' + (actionRows || '<div class="action-empty">暂无动作。可添加多个点击区域或点击效果，并分别绑定目标界面。</div>') + '</div>' +
+      '</div>' +
+      '<div class="extra-attachment ' + (isExtraOpen ? "open" : "") + '" data-extra-attachment="' + escapeAttr(marker.id) + '">' +
+        '<div class="extra-summary">' +
+          '<span class="extra-count">效果图 ' + normalizedExtras.length + ' 张</span>' +
+          '<div class="extra-preview-strip">' + previewStrip + '</div>' +
+          '<button class="ghost" data-toggle-extra-panel="' + escapeAttr(marker.id) + '">' + (isExtraOpen ? "收起" : "展开") + '</button>' +
+          '<button class="secondary" data-upload-extra="' + escapeAttr(marker.id) + '">上传图片</button><input class="file-input" type="file" accept="image/*" data-extra-input="' + escapeAttr(marker.id) + '" />' +
+          '<button class="secondary" data-system-clipboard="' + escapeAttr(marker.id) + '">从系统剪贴板导入</button>' +
+        '</div>' +
+        '<div class="extra-panel">' +
+          '<div class="extra-images">' + (extraImages || '<p class="hint">暂无效果图。可以上传图片、拖拽图片到下方区域，或使用系统剪贴板导入。</p>') + '</div>' +
+          '<div class="paste-zone" tabindex="0" role="button" data-paste-zone="' + escapeAttr(marker.id) + '">复制截图后点这里按 Ctrl+V；localhost 模式会自动读取系统剪贴板</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="toolbar"><button class="ghost" data-focus-marker="' + escapeAttr(marker.id) + '">定位标注</button><button class="secondary" data-move-marker="' + escapeAttr(marker.id) + '">调整位置</button><button class="danger" data-delete-marker="' + escapeAttr(marker.id) + '">删除标注</button></div>' +
+    '</article>';
+  }).join("");
+  return '<div class="workspace">' +
+    '<div class="image-stage">' +
+      '<div class="image-tabs">' + tabs + '<button class="secondary" data-sync-mapping-inline>同步映射表</button></div>' +
+      '<div class="image-wrap" data-image-wrap><img src="' + image.src + '" alt="' + escapeAttr(screen.name) + '" />' + markers + '</div>' +
+      '<div class="move-tip ' + (moveMarkerId ? 'active' : '') + '">正在调整 ' + escapeHtml(moveMarkerId || "") + '：点击截图目标位置，或直接拖动红色标点。</div>' +
+      '<p class="hint">点击图片空白处可新增标注；可直接拖动标点调整位置；界面主图、状态图和参考图通过映射表同步，规则卡片内只添加效果图。</p>' +
+    '</div>' +
+    '<div class="rule-panel mode-' + ruleDisplayMode + '">' +
+      '<div class="rule-toolbar">' +
+        '<div class="toolbar"><button data-add-marker>新增标注</button><button class="secondary" data-renumber-markers>整理编号</button><button class="secondary" data-save>保存修改</button></div>' +
+        '<div class="segmented"><button class="' + (ruleDisplayMode === "overview" ? "active" : "") + '" data-rule-display="overview">总览</button><button class="' + (ruleDisplayMode === "point" ? "active" : "") + '" data-rule-display="point">分点</button></div>' +
+      '</div>' +
+      '<div class="point-tabs">' + pointTabs + '</div>' +
+      (image.role === "参考图" ? '<div class="reference-note">这张图标记为参考图：只用于对标或说明，不生成标点和规则。</div>' : '<div class="rule-card ' + (activeMarkerId === "0" ? "active" : "") + '" data-rule="0"><div class="rule-head"><span class="rule-num">0</span><strong>入口规则</strong></div><textarea data-entry-rule>' + escapeHtml(image.entryRule || "待补充：说明如何进入当前界面。") + '</textarea></div>') +
+      rules +
+    '</div>' +
+  '</div>';
+}
+
+function autoGrowTextarea(textarea) {
+  if (!textarea) return;
+  const minHeight = textarea.hasAttribute("data-extra-note") ? 84 : 180;
+  textarea.style.height = "auto";
+  textarea.style.height = Math.max(textarea.scrollHeight + 2, minHeight) + "px";
+}
+
+function bindAutoGrowTextarea(textarea) {
+  autoGrowTextarea(textarea);
+  textarea.addEventListener("input", () => autoGrowTextarea(textarea));
+}
+
+function bindDetailEvents(screen) {
+  const image = screen.images[activeImageIndex];
+  if (!image) {
+    document.querySelector("[data-sync-mapping-inline]")?.addEventListener("click", event => syncMappingTable(event.currentTarget));
+    return;
+  }
+  document.querySelectorAll("[data-image-index]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeImageIndex = Number(btn.dataset.imageIndex);
+      activeMarkerId = screen.images[activeImageIndex].annotations[0]?.id || "01";
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-marker], [data-focus-marker]").forEach(el => {
+    el.addEventListener("click", event => {
+      event.stopPropagation();
+      const id = el.dataset.marker || el.dataset.rule || el.dataset.focusMarker;
+      if (id) {
+        activeMarkerId = id;
+        renderDetail(screen.id);
+      }
+    });
+  });
+  document.querySelectorAll("[data-marker]").forEach(markerEl => {
+    markerEl.addEventListener("pointerdown", event => {
+      if (isViewOnlyMode()) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const marker = image.annotations.find(item => item.id === markerEl.dataset.marker);
+      if (!marker) return;
+      activeMarkerId = marker.id;
+      markerEl.classList.add("dragging");
+      markerEl.setPointerCapture(event.pointerId);
+      const move = moveEvent => {
+        const rect = wrap.getBoundingClientRect();
+        const x = ((moveEvent.clientX - rect.left) / rect.width) * 100;
+        const y = ((moveEvent.clientY - rect.top) / rect.height) * 100;
+        marker.x = Number(Math.max(0, Math.min(100, x)).toFixed(2));
+        marker.y = Number(Math.max(0, Math.min(100, y)).toFixed(2));
+        markerEl.style.left = marker.x + "%";
+        markerEl.style.top = marker.y + "%";
+      };
+      const up = upEvent => {
+        markerEl.classList.remove("dragging");
+        markerEl.releasePointerCapture(upEvent.pointerId);
+        markerEl.removeEventListener("pointermove", move);
+        markerEl.removeEventListener("pointerup", up);
+        markerEl.removeEventListener("pointercancel", up);
+        moveMarkerId = null;
+        saveState();
+        renderDetail(screen.id);
+      };
+      markerEl.addEventListener("pointermove", move);
+      markerEl.addEventListener("pointerup", up);
+      markerEl.addEventListener("pointercancel", up);
+    });
+  });
+  document.querySelectorAll("[data-rule-tab]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeMarkerId = btn.dataset.ruleTab;
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-action-label]").forEach(input => {
+    input.addEventListener("input", () => {
+      const marker = image.annotations.find(item => item.id === input.dataset.actionLabel);
+      const index = Number(input.dataset.actionIndex);
+      const actions = normalizeMarkerActions(marker);
+      if (!actions[index]) return;
+      actions[index].label = input.value;
+      syncLegacyTarget(marker);
+      saveState();
+    });
+  });
+  document.querySelectorAll("[data-action-target]").forEach(select => {
+    select.addEventListener("change", () => {
+      const marker = image.annotations.find(item => item.id === select.dataset.actionTarget);
+      const index = Number(select.dataset.actionIndex);
+      const actions = normalizeMarkerActions(marker);
+      if (!actions[index]) return;
+      actions[index].targetImageId = select.value;
+      syncLegacyTarget(marker);
+      saveState();
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-preview-action]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      const marker = image.annotations.find(item => item.id === btn.dataset.previewAction);
+      const index = Number(btn.dataset.actionIndex);
+      const action = normalizeMarkerActions(marker)[index];
+      const target = resolveTargetImage(action?.targetImageId || "", screen);
+      if (!target) return;
+      openImagePreview(target.image.src, target.title + " / " + target.meta);
+    });
+  });
+  document.querySelectorAll("[data-preview-extra]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const marker = image.annotations.find(item => item.id === btn.dataset.previewExtra);
+      const index = Number(btn.dataset.extraIndex);
+      const item = marker?.extraImages?.[index];
+      if (!marker || !item) return;
+      const src = typeof item === "string" ? item : item.src;
+      const note = typeof item === "string" ? "" : item.note || "";
+      const ref = findEffectReference(marker, index);
+      openImagePreview(src, marker.id + " " + marker.title + " / " + effectRefLabel(index), {
+        referenceText: ref?.text || "",
+        note,
+        emptyText: "这张效果图尚未在正文中引用。可以在规则正文对应状态后插入【" + effectRefLabel(index) + "】来建立关联。",
+      });
+    });
+  });
+  document.querySelectorAll("[data-jump-action]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const marker = image.annotations.find(item => item.id === btn.dataset.jumpAction);
+      const index = Number(btn.dataset.actionIndex);
+      const action = normalizeMarkerActions(marker)[index];
+      if (!action?.targetImageId) return;
+      jumpToTargetImage(action.targetImageId, marker.id, screen, action.label);
+    });
+  });
+  document.querySelectorAll("[data-inline-jump]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const marker = image.annotations.find(item => item.id === btn.dataset.inlineJump);
+      const index = Number(btn.dataset.actionIndex);
+      const action = normalizeMarkerActions(marker)[index];
+      if (!action?.targetImageId) return;
+      jumpToTargetImage(action.targetImageId, marker.id, screen, action.label);
+    });
+  });
+  document.querySelectorAll("[data-insert-action-ref]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const marker = image.annotations.find(item => item.id === btn.dataset.insertActionRef);
+      const index = Number(btn.dataset.actionIndex);
+      const action = normalizeMarkerActions(marker)[index];
+      if (!marker || !action) return;
+      const target = resolveTargetImage(action.targetImageId || "", screen);
+      const textarea = document.querySelector('[data-edit-rule="' + CSS.escape(marker.id) + '"]');
+      if (!textarea) return;
+      const label = action.label || target?.title || jumpRefLabel(index);
+      const ref = "【跳转" + (index + 1) + (label ? "：" + label : "") + "】";
+      replaceTextareaRange(textarea, textarea.selectionStart, textarea.selectionEnd, ref);
+      marker.rule = textarea.value;
+      saveState();
+      activeMarkerId = marker.id;
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-delete-action]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const marker = image.annotations.find(item => item.id === btn.dataset.deleteAction);
+      const index = Number(btn.dataset.actionIndex);
+      const actions = normalizeMarkerActions(marker);
+      actions.splice(index, 1);
+      syncLegacyTarget(marker);
+      activeMarkerId = marker.id;
+      saveState();
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-add-action]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (isViewOnlyMode()) return;
+      const marker = image.annotations.find(item => item.id === btn.dataset.addAction);
+      const actions = normalizeMarkerActions(marker);
+      actions.push({ label: "点击动作 " + (actions.length + 1), targetImageId: "" });
+      activeMarkerId = marker.id;
+      saveState();
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-move-marker]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      moveMarkerId = btn.dataset.moveMarker;
+      activeMarkerId = moveMarkerId;
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-upload-extra]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      expandedExtraPanels.add(btn.dataset.uploadExtra);
+      const input = document.querySelector('[data-extra-input="' + CSS.escape(btn.dataset.uploadExtra) + '"]');
+      input?.click();
+    });
+  });
+  document.querySelectorAll("[data-toggle-extra-panel]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.toggleExtraPanel;
+      if (expandedExtraPanels.has(id)) expandedExtraPanels.delete(id);
+      else expandedExtraPanels.add(id);
+      activeMarkerId = id;
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-system-clipboard]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      expandedExtraPanels.add(btn.dataset.systemClipboard);
+      importSystemClipboardImage(image, btn.dataset.systemClipboard, screen.id, btn);
+    });
+  });
+  document.querySelectorAll("[data-rule-drop]").forEach(card => {
+    card.addEventListener("dragover", event => {
+      if (!hasImageLikeDragData(event.dataTransfer)) return;
+      event.preventDefault();
+      expandedExtraPanels.add(card.dataset.ruleDrop);
+      card.classList.add("active");
+      const box = card.querySelector("[data-extra-attachment]");
+      box?.classList.add("drag-over");
+    }, true);
+    card.addEventListener("dragleave", event => {
+      if (card.contains(event.relatedTarget)) return;
+      const box = card.querySelector("[data-extra-attachment]");
+      box?.classList.remove("drag-over");
+    }, true);
+    card.addEventListener("drop", event => {
+      if (!hasImageLikeDragData(event.dataTransfer)) return;
+      event.preventDefault();
+      const box = card.querySelector("[data-extra-attachment]");
+      box?.classList.remove("drag-over");
+      expandedExtraPanels.add(card.dataset.ruleDrop);
+      handleDropImageToMarker(image, card.dataset.ruleDrop, event, screen.id, null);
+    }, true);
+  });
+  document.querySelectorAll("[data-extra-attachment]").forEach(box => {
+    box.addEventListener("dragover", event => {
+      event.preventDefault();
+      expandedExtraPanels.add(box.dataset.extraAttachment);
+      box.classList.add("drag-over");
+    });
+    box.addEventListener("dragleave", () => {
+      box.classList.remove("drag-over");
+    });
+    box.addEventListener("drop", event => {
+      event.preventDefault();
+      box.classList.remove("drag-over");
+      expandedExtraPanels.add(box.dataset.extraAttachment);
+      handleDropImageToMarker(image, box.dataset.extraAttachment, event, screen.id, null);
+    });
+  });
+  document.querySelectorAll("[data-paste-zone]").forEach(zone => {
+    zone.addEventListener("paste", event => handlePasteImageToMarker(image, zone.dataset.pasteZone, event, screen.id, zone));
+    zone.addEventListener("keydown", event => {
+      if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== "v") return;
+      event.preventDefault();
+      activeMarkerId = zone.dataset.pasteZone;
+      expandedExtraPanels.add(activeMarkerId);
+      importSystemClipboardImage(image, activeMarkerId, screen.id, null, zone);
+    });
+    zone.addEventListener("focus", () => {
+      activeMarkerId = zone.dataset.pasteZone;
+      saveState();
+    });
+    zone.addEventListener("dragover", event => {
+      event.preventDefault();
+      zone.classList.add("drag-over");
+      zone.textContent = "松开鼠标添加图片";
+    });
+    zone.addEventListener("dragleave", () => {
+      zone.classList.remove("drag-over");
+      zone.textContent = "复制截图后点这里按 Ctrl+V；localhost 模式会自动读取系统剪贴板";
+    });
+    zone.addEventListener("drop", event => {
+      event.preventDefault();
+      zone.classList.remove("drag-over");
+      handleDropImageToMarker(image, zone.dataset.pasteZone, event, screen.id, zone);
+    });
+  });
+  document.querySelectorAll("[data-extra-note]").forEach(textarea => {
+    bindAutoGrowTextarea(textarea);
+    textarea.addEventListener("input", () => {
+      const marker = image.annotations.find(item => item.id === textarea.dataset.extraNote);
+      const index = Number(textarea.dataset.extraIndex);
+      if (!marker?.extraImages?.[index]) return;
+      if (typeof marker.extraImages[index] === "string") marker.extraImages[index] = { src: marker.extraImages[index], note: "" };
+      marker.extraImages[index].note = textarea.value;
+      saveState();
+    });
+  });
+  document.querySelectorAll("[data-delete-extra]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const marker = image.annotations.find(item => item.id === btn.dataset.deleteExtra);
+      const index = Number(btn.dataset.extraIndex);
+      if (!marker?.extraImages) return;
+      marker.extraImages.splice(index, 1);
+      activeMarkerId = marker.id;
+      saveState();
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-insert-extra-ref]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const marker = image.annotations.find(item => item.id === btn.dataset.insertExtraRef);
+      const index = Number(btn.dataset.extraIndex);
+      const item = marker?.extraImages?.[index];
+      if (!marker || !item) return;
+      const note = typeof item === "string" ? "" : item.note || "";
+      const textarea = document.querySelector('[data-edit-rule="' + CSS.escape(marker.id) + '"]');
+      if (!textarea) return;
+      const ref = "【效果图" + (index + 1) + (note ? "：" + note : "") + "】";
+      replaceTextareaRange(textarea, textarea.selectionStart, textarea.selectionEnd, ref);
+      marker.rule = textarea.value;
+      saveState();
+      activeMarkerId = marker.id;
+      expandedExtraPanels.add(marker.id);
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-extra-input]").forEach(input => {
+    input.addEventListener("change", event => handleExtraUpload(image, input.dataset.extraInput, event, screen.id));
+  });
+  document.querySelectorAll("[data-rule-display]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      ruleDisplayMode = btn.dataset.ruleDisplay;
+      if (ruleDisplayMode === "point" && !activeMarkerId) {
+        activeMarkerId = image.annotations[0]?.id || "0";
+      }
+      renderDetail(screen.id);
+    });
+  });
+  document.querySelectorAll("[data-edit-title]").forEach(input => {
+    input.addEventListener("input", () => {
+      const marker = image.annotations.find(item => item.id === input.dataset.editTitle);
+      marker.title = input.value;
+      saveState();
+    });
+  });
+  document.querySelectorAll("[data-edit-rule]").forEach(textarea => {
+    bindAutoGrowTextarea(textarea);
+    textarea.addEventListener("keydown", handleRuleEditorKeydown);
+    textarea.addEventListener("input", () => {
+      const marker = image.annotations.find(item => item.id === textarea.dataset.editRule);
+      marker.rule = textarea.value;
+      saveState();
+    });
+  });
+  const entryRule = document.querySelector("[data-entry-rule]");
+  if (entryRule) {
+    bindAutoGrowTextarea(entryRule);
+    entryRule.addEventListener("keydown", handleRuleEditorKeydown);
+    entryRule.addEventListener("input", event => {
+      image.entryRule = event.target.value;
+      saveState();
+    });
+  }
+  const returnJump = document.querySelector("[data-return-jump]");
+  if (returnJump) {
+    returnJump.addEventListener("click", () => {
+      if (!jumpBackTarget) return;
+      activeScreenId = jumpBackTarget.screenId;
+      activeImageIndex = jumpBackTarget.imageIndex;
+      activeMarkerId = jumpBackTarget.markerId;
+      jumpBackTarget = null;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+  document.querySelector("[data-add-marker]").addEventListener("click", () => {
+    if (isViewOnlyMode()) return;
+    addMarker(image, 50, 50, screen.id);
+  });
+  document.querySelector("[data-renumber-markers]").addEventListener("click", () => {
+    const result = renumberMarkersSequential(image);
+    if (!result.ok) {
+      alert(result.reason || "当前标注不适合自动整理编号。");
+      return;
+    }
+    activeMarkerId = result.idMap.get(activeMarkerId) || activeMarkerId;
+    moveMarkerId = moveMarkerId ? result.idMap.get(moveMarkerId) || moveMarkerId : null;
+    expandedExtraPanels = remapIdSet(expandedExtraPanels, result.idMap);
+    saveState();
+    renderDetail(screen.id);
+  });
+  document.querySelector("[data-save]").addEventListener("click", event => {
+    saveStateToLocalFile(event.currentTarget);
+  });
+  document.querySelectorAll("[data-sync-mapping-inline]").forEach(btn => {
+    btn.addEventListener("click", event => syncMappingTable(event.currentTarget));
+  });
+  document.querySelectorAll("[data-delete-marker]").forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const deletedId = btn.dataset.deleteMarker;
+      image.annotations = image.annotations.filter(marker => marker.id !== deletedId);
+      const result = renumberMarkersSequential(image, { silent: true });
+      if (result.ok) {
+        activeMarkerId = result.idMap.get(activeMarkerId) || image.annotations[0]?.id || "0";
+        moveMarkerId = moveMarkerId ? result.idMap.get(moveMarkerId) || null : null;
+        expandedExtraPanels = remapIdSet(expandedExtraPanels, result.idMap);
+      } else {
+        activeMarkerId = image.annotations[0]?.id || "0";
+        moveMarkerId = null;
+      }
+      moveMarkerId = null;
+      saveState();
+      renderDetail(screen.id);
+    });
+  });
+  const wrap = document.querySelector("[data-image-wrap]");
+  wrap.addEventListener("click", event => {
+    if (event.target.closest(".marker")) return;
+    if (isViewOnlyMode()) return;
+    const rect = wrap.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    if (moveMarkerId) {
+      const marker = image.annotations.find(item => item.id === moveMarkerId);
+      if (marker) {
+        marker.x = Number(Math.max(0, Math.min(100, x)).toFixed(2));
+        marker.y = Number(Math.max(0, Math.min(100, y)).toFixed(2));
+        activeMarkerId = marker.id;
+        moveMarkerId = null;
+        saveState();
+        renderDetail(screen.id);
+      }
+      return;
+    }
+    addMarker(image, Math.max(0, Math.min(100, x)), Math.max(0, Math.min(100, y)), screen.id);
+  });
+}
+
+function addMarker(image, x, y, screenId) {
+  const used = new Set(image.annotations.map(item => item.id));
+  let next = 1;
+  while (used.has(pad2(next))) next++;
+  const id = pad2(next);
+  image.annotations.push({
+    id,
+    x: Number(x.toFixed(2)),
+    y: Number(y.toFixed(2)),
+    title: "新增标注",
+    rule: "待补充：显示规则、点击规则、状态规则。",
+  });
+  activeMarkerId = id;
+  saveState();
+  renderDetail(screenId);
+}
+
+function renumberMarkersSequential(image, options = {}) {
+  const annotations = image.annotations || [];
+  const ids = annotations.map(marker => String(marker.id || ""));
+  const numericMarkers = annotations.filter(marker => /^\d+$/.test(String(marker.id || "")));
+  const numericIds = numericMarkers.map(marker => String(marker.id || ""));
+  if (!numericMarkers.length) {
+    return { ok: false, reason: "当前没有可整理的数字编号。", idMap: new Map() };
+  }
+  if (new Set(numericIds).size !== numericIds.length) {
+    return { ok: false, reason: "当前存在重复编号，已保留现状，避免破坏同一位置不同状态的标注。", idMap: new Map() };
+  }
+  const idMap = new Map();
+  numericMarkers.forEach((marker, index) => {
+    const nextId = pad2(index + 1);
+    idMap.set(marker.id, nextId);
+    marker.id = nextId;
+  });
+  return { ok: true, idMap };
+}
+
+function remapIdSet(sourceSet, idMap) {
+  const next = new Set();
+  for (const id of sourceSet || []) next.add(idMap.get(id) || id);
+  return next;
+}
+
+function openImagePreview(src, title, context = {}) {
+  const old = document.querySelector(".image-modal");
+  old?.remove();
+  const noteParts = [];
+  if (context.referenceText) {
+    noteParts.push('<div><strong>关联正文</strong><p>' + escapeHtml(context.referenceText) + '</p></div>');
+  }
+  if (context.note) {
+    noteParts.push('<div><strong>效果说明</strong><p>' + escapeHtml(context.note) + '</p></div>');
+  }
+  if (!noteParts.length && context.emptyText) {
+    noteParts.push('<div><strong>关联正文</strong><p>' + escapeHtml(context.emptyText) + '</p></div>');
+  }
+  const sideNote = noteParts.length ? '<aside class="image-modal-note">' + noteParts.join("") + '</aside>' : "";
+  const modal = document.createElement("div");
+  modal.className = "image-modal";
+  modal.innerHTML = '<div class="image-modal-card" role="dialog" aria-modal="true">' +
+    '<div class="image-modal-head"><strong>' + escapeHtml(title || "查看图片") + '</strong><button class="ghost" data-close-image-modal>关闭</button></div>' +
+    '<div class="image-modal-body"><div class="image-modal-content"><img src="' + escapeAttr(src) + '" alt="' + escapeAttr(title || "查看图片") + '" />' + sideNote + '</div></div>' +
+  '</div>';
+  modal.addEventListener("click", event => {
+    if (event.target === modal || event.target.closest("[data-close-image-modal]")) modal.remove();
+  });
+  document.addEventListener("keydown", function closeOnEsc(event) {
+    if (event.key !== "Escape") return;
+    modal.remove();
+    document.removeEventListener("keydown", closeOnEsc);
+  });
+  document.body.appendChild(modal);
+}
+
+function jumpToTargetImage(targetValue, sourceMarkerId, fallbackScreen, actionLabel = "") {
+  if (!targetValue) return;
+  const target = resolveTargetImage(targetValue, fallbackScreen);
+  if (!target) return;
+  const sourceScreen = state.interfaces.find(item => item.id === activeScreenId) || fallbackScreen;
+  const sourceImage = sourceScreen?.images?.[activeImageIndex];
+  const sourceMarker = sourceImage?.annotations?.find(item => item.id === sourceMarkerId);
+  jumpBackTarget = {
+    screenId: sourceScreen.id,
+    imageIndex: activeImageIndex,
+    markerId: sourceMarkerId,
+    label: screenTitle(sourceScreen) + " / " + (sourceImage?.label || "当前图片") + " / " + sourceMarkerId + (sourceMarker?.title ? " " + sourceMarker.title : "") + (actionLabel ? " / " + actionLabel : ""),
+  };
+  const targetScreen = target.screen;
+  const targetIndex = target.index;
+  activeScreenId = targetScreen.id;
+  activeImageIndex = targetIndex;
+  activeMarkerId = targetScreen.images[targetIndex].annotations.find(item => item.id === sourceMarkerId)?.id || targetScreen.images[targetIndex].annotations[0]?.id || "0";
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function replaceTextareaRange(textarea, start, end, value) {
+  textarea.value = textarea.value.slice(0, start) + value + textarea.value.slice(end);
+  textarea.selectionStart = textarea.selectionEnd = start + value.length;
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function adjustTextareaIndent(textarea, outdent = false) {
+  const value = textarea.value;
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const lineStart = value.lastIndexOf("\n", start - 1) + 1;
+  const lineEnd = end === start ? value.indexOf("\n", end) : end;
+  const realLineEnd = lineEnd < 0 ? value.length : lineEnd;
+  const block = value.slice(lineStart, realLineEnd);
+  const lines = block.split("\n");
+  const nextLines = lines.map(line => {
+    if (outdent) return line.replace(/^ {1,3}/, "");
+    return "   " + line;
+  });
+  textarea.value = value.slice(0, lineStart) + nextLines.join("\n") + value.slice(realLineEnd);
+  const delta = nextLines.join("\n").length - block.length;
+  textarea.selectionStart = Math.max(lineStart, start + (outdent ? -Math.min(3, start - lineStart) : 3));
+  textarea.selectionEnd = Math.max(textarea.selectionStart, end + delta);
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function handleRuleEditorKeydown(event) {
+  const textarea = event.currentTarget;
+  if (event.key === "Tab") {
+    event.preventDefault();
+    adjustTextareaIndent(textarea, event.shiftKey);
+    return;
+  }
+  if (event.key !== "Enter") return;
+
+  const value = textarea.value;
+  const cursor = textarea.selectionStart;
+  const lineStart = value.lastIndexOf("\n", cursor - 1) + 1;
+  const currentLine = value.slice(lineStart, cursor);
+  const numbered = currentLine.match(/^(\s*)(\d+)\.\s+(.*)$/);
+  const bullet = currentLine.match(/^(\s*)([-*])\s+(.*)$/);
+
+  if (numbered) {
+    event.preventDefault();
+    if (!numbered[3].trim()) {
+      replaceTextareaRange(textarea, lineStart, cursor, "");
+      return;
+    }
+    const next = Number(numbered[2]) + 1;
+    replaceTextareaRange(textarea, cursor, cursor, "\n" + numbered[1] + next + ". ");
+    return;
+  }
+  if (bullet) {
+    event.preventDefault();
+    if (!bullet[3].trim()) {
+      replaceTextareaRange(textarea, lineStart, cursor, "");
+      return;
+    }
+    replaceTextareaRange(textarea, cursor, cursor, "\n" + bullet[1] + bullet[2] + " ");
+  }
+}
+
+function handleUpload(screen, event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    screen.images.push({
+      id: screen.id + "-local-" + Date.now(),
+      label: "本地图片",
+      width: 0,
+      height: 0,
+      src: reader.result,
+      annotations: [{ id: "01", x: 50, y: 50, title: "新增标注", rule: "待补充：显示规则、点击规则、状态规则。" }],
+    });
+    activeImageIndex = screen.images.length - 1;
+    activeMarkerId = "01";
+    saveState();
+    renderDetail(screen.id);
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleExtraUpload(image, markerId, event, screenId) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    addExtraImageToMarker(image, markerId, reader.result, screenId);
+  };
+  reader.readAsDataURL(file);
+}
+
+function addExtraImageToMarker(image, markerId, src, screenId) {
+  const marker = image.annotations.find(item => item.id === markerId);
+  if (!marker) return;
+  marker.extraImages = marker.extraImages || [];
+  marker.extraImages.push({ src, note: "" });
+  activeMarkerId = marker.id;
+  expandedExtraPanels.add(marker.id);
+  saveState();
+  renderDetail(screenId);
+}
+
+function readImageFileToMarker(image, markerId, file, screenId) {
+  if (!file) return false;
+  const reader = new FileReader();
+  reader.onload = () => addExtraImageToMarker(image, markerId, reader.result, screenId);
+  reader.readAsDataURL(file);
+  return true;
+}
+
+function addDataUrlToMarker(image, markerId, dataUrl, screenId) {
+  if (!dataUrl || !dataUrl.startsWith("data:image/")) return false;
+  addExtraImageToMarker(image, markerId, dataUrl, screenId);
+  return true;
+}
+
+function clipboardDebugText(dataTransfer) {
+  const files = Array.from(dataTransfer?.files || []).map(file => file.type || file.name || "unknown-file");
+  const items = Array.from(dataTransfer?.items || []).map(item => item.type || item.kind || "unknown-item");
+  const types = Array.from(dataTransfer?.types || []);
+  return files.concat(items, types).filter(Boolean).join(" / ") || "未检测到剪贴板类型";
+}
+
+function hasImageLikeDragData(dataTransfer) {
+  const files = Array.from(dataTransfer?.files || []);
+  if (files.some(file => file.type.startsWith("image/"))) return true;
+  const items = Array.from(dataTransfer?.items || []);
+  if (items.some(item => item.type.startsWith("image/"))) return true;
+  const types = Array.from(dataTransfer?.types || []);
+  return types.includes("text/uri-list") || types.includes("text/html");
+}
+
+function firstImageUrlFromTransfer(dataTransfer) {
+  const uri = dataTransfer?.getData("text/uri-list")?.split("\n").map(line => line.trim()).find(line => line && !line.startsWith("#"));
+  if (uri && /\.(png|jpe?g|gif|webp|bmp|svg)(\?|#|$)/i.test(uri)) return uri;
+  const html = dataTransfer?.getData("text/html") || "";
+  const srcMatch = html.match(new RegExp('<img[^>]+src=["\']([^"\']+)["\']', 'i'));
+  if (srcMatch?.[1]) return srcMatch[1];
+  const text = dataTransfer?.getData("text/plain")?.trim() || "";
+  if (text && (text.startsWith("data:image/") || /\.(png|jpe?g|gif|webp|bmp|svg)(\?|#|$)/i.test(text))) return text;
+  return "";
+}
+
+function addImageUrlToMarker(image, markerId, url, screenId, zone) {
+  if (!url) return false;
+  if (url.startsWith("data:image/")) return addDataUrlToMarker(image, markerId, url, screenId);
+  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("blob:")) {
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        if (!blob.type.startsWith("image/")) throw new Error("not-image");
+        const reader = new FileReader();
+        reader.onload = () => addExtraImageToMarker(image, markerId, reader.result, screenId);
+        reader.readAsDataURL(blob);
+      })
+      .catch(() => {
+        const message = "检测到图片链接，但浏览器不允许读取。请改用上传图片。";
+        if (zone) zone.textContent = message;
+        else alert(message);
+      });
+    return true;
+  }
+  return false;
+}
+
+function tryReadDefaultPastedImage(image, markerId, screenId, zone) {
+  const img = zone.querySelector("img");
+  const src = img?.getAttribute("src") || "";
+  if (src.startsWith("data:image/")) {
+    addDataUrlToMarker(image, markerId, src, screenId);
+    return true;
+  }
+  if (src.startsWith("blob:")) {
+    fetch(src)
+      .then(response => response.blob())
+      .then(blob => {
+        const reader = new FileReader();
+        reader.onload = () => addExtraImageToMarker(image, markerId, reader.result, screenId);
+        reader.readAsDataURL(blob);
+      })
+      .catch(() => {
+        zone.textContent = "浏览器插入了图片，但无法读取该图片数据。请改用上传图片。";
+      });
+    return true;
+  }
+  return false;
+}
+
+function handlePasteImageToMarker(image, markerId, event, screenId, zone) {
+  const data = event.clipboardData;
+  const files = Array.from(data?.files || []).filter(file => file.type.startsWith("image/"));
+  if (files[0]) {
+    event.preventDefault();
+    readImageFileToMarker(image, markerId, files[0], screenId);
+    return;
+  }
+
+  const items = Array.from(data?.items || []);
+  const imageItem = items.find(item => item.type.startsWith("image/"));
+  if (imageItem) {
+    const file = imageItem.getAsFile();
+    if (file) {
+      event.preventDefault();
+      readImageFileToMarker(image, markerId, file, screenId);
+      return;
+    }
+    zone.textContent = "检测到图片类型，但浏览器没有提供图片文件。正在尝试默认粘贴...";
+    setTimeout(() => {
+      if (!tryReadDefaultPastedImage(image, markerId, screenId, zone)) {
+        zone.textContent = "检测到图片类型，但无法读取图片数据。请改用上传图片或拖拽图片文件。";
+      }
+    }, 80);
+    return;
+  }
+
+  const html = data?.getData("text/html") || "";
+  const dataUrlMatch = html.match(new RegExp('<img[^>]+src=["\'](data:image/[^"\']+)["\']', 'i'));
+  if (dataUrlMatch) {
+    event.preventDefault();
+    addDataUrlToMarker(image, markerId, dataUrlMatch[1], screenId);
+    return;
+  }
+
+  const text = data?.getData("text/plain") || "";
+  if (text.startsWith("data:image/")) {
+    event.preventDefault();
+    addDataUrlToMarker(image, markerId, text.trim(), screenId);
+    return;
+  }
+
+  setTimeout(() => {
+    if (!tryReadDefaultPastedImage(image, markerId, screenId, zone)) {
+      zone.textContent = "浏览器没有提供图片，正在尝试读取系统剪贴板...";
+      importSystemClipboardImage(image, markerId, screenId, null, zone);
+    }
+  }, 80);
+}
+
+function handleDropImageToMarker(image, markerId, event, screenId, zone) {
+  const files = Array.from(event.dataTransfer?.files || []).filter(file => file.type.startsWith("image/"));
+  if (files[0]) {
+    if (zone) zone.textContent = "正在添加图片...";
+    readImageFileToMarker(image, markerId, files[0], screenId);
+    return;
+  }
+  const items = Array.from(event.dataTransfer?.items || []);
+  const imageItem = items.find(item => item.type.startsWith("image/"));
+  const itemFile = imageItem?.getAsFile?.();
+  if (itemFile) {
+    if (zone) zone.textContent = "正在添加图片...";
+    readImageFileToMarker(image, markerId, itemFile, screenId);
+    return;
+  }
+  const imageUrl = firstImageUrlFromTransfer(event.dataTransfer);
+  if (addImageUrlToMarker(image, markerId, imageUrl, screenId, zone)) {
+    if (zone) zone.textContent = "正在添加图片...";
+    return;
+  }
+  if (zone) zone.textContent = "拖入内容不是图片。检测到：" + clipboardDebugText(event.dataTransfer);
+  else alert("拖入内容不是图片。检测到：" + clipboardDebugText(event.dataTransfer));
+}
+
+async function importSystemClipboardImage(image, markerId, screenId, button, zone) {
+  const oldText = button?.textContent;
+  if (button) {
+    button.textContent = "读取中...";
+    button.disabled = true;
+  }
+  if (zone) zone.textContent = "正在读取系统剪贴板...";
+  try {
+    const endpoint = location.protocol === "file:" ? "http://127.0.0.1:5177/clipboard-image" : "/clipboard-image";
+    const response = await fetch(endpoint, { cache: "no-store" });
+    const result = await response.json();
+    if (!result.ok || !result.dataUrl) {
+      const message = result.message || "系统剪贴板里没有可读取的图片。";
+      if (zone) zone.textContent = message;
+      else alert(message);
+      return;
+    }
+    if (zone) zone.textContent = "已读取图片，正在添加...";
+    addExtraImageToMarker(image, markerId, result.dataUrl, screenId);
+  } catch (error) {
+    const message = "无法连接本地剪贴板助手。请双击“启动界面规则网页.bat”后使用 localhost 页面，或改用上传图片。";
+    if (zone) zone.textContent = message;
+    else alert(message);
+  } finally {
+    if (button) {
+      button.textContent = oldText;
+      button.disabled = false;
+    }
+  }
+}
+
+async function pasteClipboardImageToMarker(image, markerId, screenId) {
+  if (!navigator.clipboard?.read) {
+    alert("当前浏览器不支持直接读取剪贴板图片，请使用“上传图片”。");
+    return;
+  }
+  try {
+    const items = await navigator.clipboard.read();
+    for (const item of items) {
+      const imageType = item.types.find(type => type.startsWith("image/"));
+      if (!imageType) continue;
+      const blob = await item.getType(imageType);
+      const reader = new FileReader();
+      reader.onload = () => {
+        const marker = image.annotations.find(item => item.id === markerId);
+        if (!marker) return;
+        marker.extraImages = marker.extraImages || [];
+        marker.extraImages.push(reader.result);
+        activeMarkerId = marker.id;
+        saveState();
+        renderDetail(screenId);
+      };
+      reader.readAsDataURL(blob);
+      return;
+    }
+    alert("剪贴板里没有可读取的图片。");
+  } catch (error) {
+    alert("读取剪贴板图片失败。可以先确认浏览器权限，或改用“上传图片”。");
+  }
+}
+
+function handlePasteImage(event) {
+  const items = Array.from(event.clipboardData?.items || []);
+  const imageItem = items.find(item => item.type.startsWith("image/"));
+  if (!activeScreenId || activeMarkerId === "0") return;
+  const activeElement = document.activeElement;
+  if (!imageItem && activeElement && (activeElement.tagName === "TEXTAREA" || activeElement.tagName === "INPUT" || activeElement.isContentEditable)) return;
+  const screen = state.interfaces.find(item => item.id === activeScreenId);
+  const image = screen?.images?.[activeImageIndex];
+  const marker = image?.annotations?.find(item => item.id === activeMarkerId);
+  if (!marker) return;
+  event.preventDefault();
+  if (!imageItem) {
+    importSystemClipboardImage(image, marker.id, screen.id, null, null);
+    return;
+  }
+  const file = imageItem.getAsFile();
+  const reader = new FileReader();
+  reader.onload = () => {
+    addExtraImageToMarker(image, marker.id, reader.result, screen.id);
+  };
+  reader.readAsDataURL(file);
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch]));
+}
+function escapeAttr(value) { return escapeHtml(value); }
+
+document.querySelector("[data-open-overview]").addEventListener("click", () => {
+  activeScreenId = null;
+  renderOverview();
+  renderNav();
+});
+byId("exportJsonBtn").addEventListener("click", () => {
+  downloadEditData(systemSlug + "-edit-data-backup.json");
+});
+byId("importJsonBtn").addEventListener("click", () => byId("importJsonInput").click());
+byId("saveTopBtn").addEventListener("click", event => saveStateToLocalFile(event.currentTarget));
+byId("syncMappingBtn").addEventListener("click", event => syncMappingTable(event.currentTarget));
+byId("buildPreviewBtn").addEventListener("click", event => buildLocalPreview(event.currentTarget));
+byId("openPreviewBtn").addEventListener("click", openLocalPreview);
+byId("preparePublishBtn").addEventListener("click", event => preparePublishFiles(event.currentTarget));
+byId("importJsonInput").addEventListener("change", event => {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    state = JSON.parse(reader.result);
+    saveState();
+    activeScreenId = null;
+    render();
+  };
+  reader.readAsText(file);
+});
+byId("resetBtn").addEventListener("click", () => {
+  if (!confirm("确认恢复初始数据？当前浏览器本地编辑会被清空。")) return;
+  localStorage.removeItem(storageKey);
+  state = clone(seedData);
+  activeScreenId = null;
+  render();
+});
+document.addEventListener("paste", handlePasteImage);
+
+(function(){
+  document.body.classList.add('view-only');
+  try { localStorage.removeItem("banquet-ui-rules-editor-v1"); } catch (error) {}
+  function applyViewOnlyMode(){
+    document.body.classList.add('view-only');
+    document.querySelectorAll('textarea').forEach(function(el){
+      el.readOnly = true;
+      el.style.height = 'auto';
+      el.style.height = Math.max(el.scrollHeight, 96) + 'px';
+      el.style.overflow = 'hidden';
+    });
+    document.querySelectorAll('input').forEach(function(el){ if (el.type !== 'file') el.readOnly = true; });
+    document.querySelectorAll('select').forEach(function(el){ el.disabled = true; });
+    document.querySelectorAll('.canvas-panel .hint').forEach(function(el){
+      el.textContent = '点击截图标注可高亮对应规则；右侧可切换总览或分点查看。';
+    });
+  }
+  var oldRender = render;
+  render = function(){ oldRender(); applyViewOnlyMode(); };
+  var oldRenderDetail = renderDetail;
+  renderDetail = function(screenId){ oldRenderDetail(screenId); applyViewOnlyMode(); };
+  var oldRenderOverview = renderOverview;
+  renderOverview = function(){ oldRenderOverview(); applyViewOnlyMode(); };
+  applyViewOnlyMode();
+})();
+render();
+</script>
+</body>
+</html>
