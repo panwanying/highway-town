@@ -5,62 +5,215 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>公路小镇规则文档总览</title>
 <style>
-:root{--ink:#1f2933;--muted:#607080;--line:#d9e2ec;--brand:#25384e}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font:15px/1.7 "Inter","Microsoft YaHei","PingFang SC",Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#fff8ea 0%,#eef8f7 55%,#f7fbff 100%)}.page{max-width:1120px;margin:0 auto;padding:48px 28px}.hero{border-radius:18px;padding:34px 40px;background:linear-gradient(100deg,#ffe5a9 0%,#edf2d7 46%,#cdeff3 100%);box-shadow:0 18px 40px rgba(37,56,78,.10)}.eyebrow{color:#6a7b88;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}h1{margin:8px 0 8px;font-size:34px;line-height:1.25}.hero p{margin:0;color:#526575;max-width:760px}.section{margin-top:30px}.section h2{margin:0 0 14px;font-size:22px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}.card{display:block;min-height:170px;padding:22px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.88);color:inherit;text-decoration:none;box-shadow:0 12px 28px rgba(37,56,78,.08)}.card:hover{border-color:#efc76b;transform:translateY(-1px)}.tag{display:inline-block;padding:3px 9px;border-radius:999px;background:#fce8dc;color:#a7432f;font-size:12px;font-weight:700}.card h3{margin:12px 0 8px;font-size:20px}.card p{margin:0 0 12px;color:var(--muted)}.card small{color:#81909d}.card-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:18px}.document-button{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:8px 13px;border:1px solid var(--line);border-radius:8px;background:#f7fafc;color:var(--brand);text-decoration:none;font-weight:700}.document-button.primary{background:var(--brand);border-color:var(--brand);color:#fff}.document-button:hover{border-color:#c8983e}.document-button:focus-visible{outline:3px solid #d9aa45;outline-offset:3px}.link-pending{color:var(--muted);font-size:13px}.empty{border-style:dashed;color:var(--muted)}@media(max-width:640px){.page{padding:24px 16px}.hero{padding:26px 22px;border-radius:14px}h1{font-size:28px}}
+:root{--ink:#203244;--muted:#697b8c;--line:#dce5eb;--navy:#17283a;--paper:#f3f6f8;--gold:#d9b86e;--teal:#27776b}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font:15px/1.6 "Microsoft YaHei","PingFang SC",sans-serif;color:var(--ink);background:var(--paper)}
+a{color:inherit}
+.layout{display:grid;grid-template-columns:264px minmax(0,1fr);height:100vh;height:100dvh;min-height:0}
+.sidebar{height:100%;min-height:0;overflow-y:auto;padding:34px 24px 26px;background:var(--navy);color:#e9f1f6;scrollbar-color:#4c6072 transparent}
+.project-name{margin:0;color:var(--gold);font-size:14px;font-weight:700;letter-spacing:.08em}
+.sidebar-title{margin:8px 0 30px;font-size:25px;line-height:1.4;color:#fff;font-weight:700}
+.nav-overview,.nav-item{display:flex;align-items:center;justify-content:space-between;gap:12px;text-decoration:none;border:1px solid transparent;border-radius:7px;padding:11px 13px;transition:background .15s,border-color .15s}
+.nav-overview{margin-bottom:26px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12)}
+.directory-label{margin:0 0 10px;padding:0 13px;color:#97aabd;font-size:12px;letter-spacing:.1em}
+.directory{display:grid;gap:5px}
+.nav-item small{font:12px/1.4 "Segoe UI",sans-serif;color:#98adbf;white-space:nowrap}
+.nav-overview:hover,.nav-item:hover{background:rgba(255,255,255,.08)}
+.nav-overview[aria-current],.nav-item[aria-current]{background:#294257;border-color:#456076;color:#fff}
+.nav-item[aria-current] small{color:#e6cb8c}
+.sidebar-note{margin:32px 13px 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.12);color:#9eb0c0;font-size:12px;line-height:1.8}
+.main{height:100%;min-height:0;overflow-y:auto;padding:42px 48px 48px;scroll-behavior:smooth;scrollbar-gutter:stable}
+.content{max-width:1080px;margin:0 auto}
+.page-heading{padding:0 0 26px;margin-bottom:26px;border-bottom:1px solid var(--line);scroll-margin-top:48px}
+.page-heading h1{margin:0 0 10px;font-size:30px;line-height:1.4;letter-spacing:-.025em}
+.page-heading p{margin:0;color:var(--muted);font-size:14px}
+.systems{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+.system-card{min-width:0;scroll-margin-top:28px;border:1px solid var(--line);border-radius:11px;background:#fff;box-shadow:0 5px 18px rgba(31,49,66,.035)}
+.system-heading{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:20px 26px;border-bottom:1px solid #e8edf1;background:#fbfcfd;border-radius:11px 11px 0 0}
+.system-heading h2{margin:0;font-size:21px;line-height:1.5;font-weight:700}
+.version{padding:2px 8px;border-radius:5px;background:#edf2f6;color:#718292;font:12px/1.8 "Segoe UI",sans-serif}
+.resources{padding:0 26px}
+.resource-row{display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;gap:16px;min-height:91px;padding:18px 0}
+.resource-row+.resource-row{border-top:1px solid #edf1f4}
+.resource-icon{display:flex;align-items:center;justify-content:center;width:36px;height:40px;border-radius:7px;background:#edf3f8;color:#416783}
+.resource-icon.doc{background:#ecf5f1;color:var(--teal)}
+.resource-icon svg{display:block;width:23px;height:25px}
+.resource-copy{min-width:0}
+.resource-copy h3{margin:0 0 2px;font-size:15px;font-weight:700}
+.resource-copy p{margin:0;color:var(--muted);font-size:13px}
+.link-button{display:inline-flex;align-items:center;justify-content:center;gap:14px;min-height:40px;min-width:158px;padding:8px 14px;border:1px solid #cbd8e2;border-radius:7px;background:#f7fafc;color:#244762;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:background .15s,border-color .15s}
+.link-button:hover{background:#edf4f8;border-color:#7c9db5}
+.link-button span{color:#6a8599;font-size:17px;line-height:1}
+.resource-status{min-width:158px;text-align:center;color:#8a98a5;font-size:13px}
+a:focus-visible,.system-card:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.empty{padding:28px;border:1px dashed var(--line);border-radius:10px;background:#fff}
+.empty h2{margin:0 0 8px;font-size:20px}.empty p{margin:0;color:var(--muted)}
+@media(max-width:1050px){.main{padding:32px 28px 38px}.resource-row{gap:12px}.resource-copy p{font-size:12px}.link-button,.resource-status{min-width:148px}}
+@media(max-width:760px){.layout{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}.sidebar{height:auto;max-height:210px;overflow:hidden;padding:18px 20px 14px}.project-name{font-size:12px}.sidebar-title{margin:3px 0 12px;font-size:20px}.nav-overview,.directory-label,.sidebar-note{display:none}.directory{display:flex;gap:7px;overflow-x:auto;padding:2px 3px 6px;scrollbar-width:thin}.nav-item{flex:0 0 auto;gap:10px;padding:8px 11px;background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.1);font-size:13px}.nav-item small{font-size:10px}.main{padding:25px 17px 28px}.page-heading{margin-bottom:20px;padding-bottom:20px}.page-heading h1{font-size:23px}.page-heading p{font-size:12px}.systems{gap:18px}.system-heading{padding:16px 18px}.system-heading h2{font-size:19px}.resources{padding:0 18px}.resource-row{grid-template-columns:minmax(0,1fr) auto;min-height:83px;gap:10px;padding:16px 0}.resource-icon{display:none}.resource-copy p{font-size:11px}.link-button,.resource-status{min-width:132px;font-size:12px}.link-button{gap:9px;padding:8px 10px}}
+@media(prefers-reduced-motion:reduce){.main{scroll-behavior:auto}.nav-item,.nav-overview,.link-button{transition:none}}
 </style>
 </head>
-<body>
-<main class="page">
-  <section class="hero">
-    <div class="eyebrow">Highway Town Documents</div>
-    <h1>公路小镇规则文档总览</h1>
-    <p>这里汇总各系统的飞书规则文档和界面规则展示页。点击对应按钮打开，飞书文档按原有权限访问。</p>
-  </section>
-  <section class="section">
-    <h2>系统入口</h2>
-    <div class="grid"><article class="card" id="system-tv-ui-rules">
-  <span class="tag">已发布</span>
-  <h3>【V0.2】小镇电视台</h3>
-  <p>小镇电视台界面规则展示版，支持目录浏览、截图标注、规则切换和内联效果图查看。</p>
-  <small>16 个界面 · 26 张图</small>
-  <div class="card-actions"><a class="document-button primary" href="https://dianchukeji.feishu.cn/docx/HiSqdvcevoJr4FxLs0xcbk9In2d?from=from_copylink" target="_blank" rel="noopener noreferrer">飞书规则文档</a><a class="document-button" href="./tv-ui-rules/" target="_blank" rel="noopener noreferrer">界面规则</a></div>
-</article>
-<article class="card" id="system-youth-center-ui-rules">
-  <span class="tag">待推送</span>
-  <h3>【V0.2】青少年中心</h3>
-  <p>青少年中心界面规则展示版，包含界面截图、标点规则、动作跳转和效果图说明。</p>
-  <small>25 个界面 · 41 张图</small>
-  <div class="card-actions"><a class="document-button primary" href="https://dianchukeji.feishu.cn/docx/DzQxd2BEXo1Socx24ebcjOQXnff" target="_blank" rel="noopener noreferrer">飞书规则文档</a><a class="document-button" href="./youth-center-ui-rules/" target="_blank" rel="noopener noreferrer">界面规则</a></div>
-</article>
-<article class="card" id="system-town-museum-ui-rules">
-  <span class="tag">未发布</span>
-  <h3>【V0.2】小镇博物馆</h3>
-  <p>小镇博物馆界面规则展示版，包含探索地图、门客派遣、博物馆勋章与藏品图鉴规则。</p>
-  <small>10 个界面 · 14 张图</small>
-  <div class="card-actions"><a class="document-button primary" href="https://dianchukeji.feishu.cn/docx/JFTLdxUtOow5NRxPqMXcEygSnef" target="_blank" rel="noopener noreferrer">飞书规则文档</a><a class="document-button" href="./town-museum-ui-rules/" target="_blank" rel="noopener noreferrer">界面规则</a></div>
-</article>
-<article class="card" id="system-task-ui-rules">
-  <span class="tag">未发布</span>
-  <h3>【V0.2】任务系统</h3>
-  <p>任务系统界面规则初版，依据飞书界面映射表建立主线任务、每日任务、成就及通用规则目录。</p>
-  <small>5 个界面 · 6 张图</small>
-  <div class="card-actions"><span class="link-pending">飞书文档待补充</span><a class="document-button" href="./task-ui-rules/" target="_blank" rel="noopener noreferrer">界面规则</a></div>
-</article>
-<article class="card" id="system-invitational-ui-rules">
-  <span class="tag">未发布</span>
-  <h3>【V0.3】名流之争</h3>
-  <p>名流之争界面规则，包含主界面、公会宝箱、世界榜、名流履历与门客赚速战斗。</p>
-  <small>12 个界面 · 14 张图</small>
-  <div class="card-actions"><a class="document-button primary" href="https://dianchukeji.feishu.cn/docx/K5lXduacxoI4H8xJ9hrcqk7enLb" target="_blank" rel="noopener noreferrer">飞书规则文档</a><span class="link-pending">界面规则未发布</span></div>
-</article>
-<article class="card" id="system-banquet-ui-rules">
-  <span class="tag">未发布</span>
-  <h3>【V0.3】宴会系统</h3>
-  <p>宴会系统界面规则展示版，包含主界面、举办、参加、记录、商店及通用弹窗。</p>
-  <small>26 个界面 · 34 张图</small>
-  <div class="card-actions"><a class="document-button primary" href="https://dianchukeji.feishu.cn/docx/VDvzd5aMJoVtFrxC1tGcDXbGn5C" target="_blank" rel="noopener noreferrer">飞书规则文档</a><a class="document-button" href="./banquet-ui-rules/" target="_blank" rel="noopener noreferrer">界面规则</a></div>
-</article></div>
-  </section>
-</main>
+<body data-overview-layout="directory-v2">
+<div class="layout">
+  <aside class="sidebar" aria-label="项目目录">
+    <p class="project-name">公路小镇</p>
+    <div class="sidebar-title">系统文档总览</div>
+    <a class="nav-overview" href="#overview" aria-current="location">全部系统<span aria-hidden="true">↑</span></a>
+    <p class="directory-label" id="directory-label">系统目录</p>
+    <nav class="directory" aria-labelledby="directory-label"><a class="nav-item" data-system-nav href="#system-tv-ui-rules"><span>小镇电视台</span><small>V0.2</small></a>
+<a class="nav-item" data-system-nav href="#system-youth-center-ui-rules"><span>青少年中心</span><small>V0.2</small></a>
+<a class="nav-item" data-system-nav href="#system-town-museum-ui-rules"><span>小镇博物馆</span><small>V0.2</small></a>
+<a class="nav-item" data-system-nav href="#system-task-ui-rules"><span>任务系统</span><small>V0.2</small></a>
+<a class="nav-item" data-system-nav href="#system-invitational-ui-rules"><span>名流之争</span><small>V0.3</small></a>
+<a class="nav-item" data-system-nav href="#system-banquet-ui-rules"><span>宴会系统</span><small>V0.3</small></a></nav>
+    <p class="sidebar-note">飞书文档按原有权限访问。</p>
+  </aside>
+  <main class="main" id="main-content">
+    <div class="content">
+      <header class="page-heading" id="overview">
+        <h1>公路小镇规则文档总览</h1>
+        <p>通过系统目录定位，选择线上展示页或飞书文档打开。</p>
+      </header>
+      <div class="systems"><section class="system-card" id="system-tv-ui-rules" aria-labelledby="title-tv-ui-rules" tabindex="-1">
+  <header class="system-heading">
+    <h2 id="title-tv-ui-rules">小镇电视台</h2>
+    <span class="version">V0.2</span>
+  </header>
+  <div class="resources">
+    <div class="resource-row">
+    <div class="resource-icon ui"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8M12 18v4M3 9h18"/></svg></div>
+    <div class="resource-copy"><h3>线上展示页</h3><p>界面截图、标点与交互说明</p></div>
+    <a class="link-button" data-link-kind="ui" href="./tv-ui-rules/" target="_blank" rel="noopener noreferrer" aria-label="打开小镇电视台线上展示页">打开线上展示页<span aria-hidden="true">↗</span></a>
+  </div>
+    <div class="resource-row">
+    <div class="resource-icon doc"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4M10 12h5M10 16h5"/></svg></div>
+    <div class="resource-copy"><h3>飞书文档</h3><p>系统逻辑与玩法规则</p></div>
+    <a class="link-button" data-link-kind="doc" href="https://dianchukeji.feishu.cn/docx/HiSqdvcevoJr4FxLs0xcbk9In2d?from=from_copylink" target="_blank" rel="noopener noreferrer" aria-label="打开小镇电视台飞书文档">打开飞书文档<span aria-hidden="true">↗</span></a>
+  </div>
+  </div>
+</section>
+<section class="system-card" id="system-youth-center-ui-rules" aria-labelledby="title-youth-center-ui-rules" tabindex="-1">
+  <header class="system-heading">
+    <h2 id="title-youth-center-ui-rules">青少年中心</h2>
+    <span class="version">V0.2</span>
+  </header>
+  <div class="resources">
+    <div class="resource-row">
+    <div class="resource-icon ui"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8M12 18v4M3 9h18"/></svg></div>
+    <div class="resource-copy"><h3>线上展示页</h3><p>界面截图、标点与交互说明</p></div>
+    <a class="link-button" data-link-kind="ui" href="./youth-center-ui-rules/" target="_blank" rel="noopener noreferrer" aria-label="打开青少年中心线上展示页">打开线上展示页<span aria-hidden="true">↗</span></a>
+  </div>
+    <div class="resource-row">
+    <div class="resource-icon doc"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4M10 12h5M10 16h5"/></svg></div>
+    <div class="resource-copy"><h3>飞书文档</h3><p>系统逻辑与玩法规则</p></div>
+    <a class="link-button" data-link-kind="doc" href="https://dianchukeji.feishu.cn/docx/DzQxd2BEXo1Socx24ebcjOQXnff" target="_blank" rel="noopener noreferrer" aria-label="打开青少年中心飞书文档">打开飞书文档<span aria-hidden="true">↗</span></a>
+  </div>
+  </div>
+</section>
+<section class="system-card" id="system-town-museum-ui-rules" aria-labelledby="title-town-museum-ui-rules" tabindex="-1">
+  <header class="system-heading">
+    <h2 id="title-town-museum-ui-rules">小镇博物馆</h2>
+    <span class="version">V0.2</span>
+  </header>
+  <div class="resources">
+    <div class="resource-row">
+    <div class="resource-icon ui"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8M12 18v4M3 9h18"/></svg></div>
+    <div class="resource-copy"><h3>线上展示页</h3><p>界面截图、标点与交互说明</p></div>
+    <a class="link-button" data-link-kind="ui" href="./town-museum-ui-rules/" target="_blank" rel="noopener noreferrer" aria-label="打开小镇博物馆线上展示页">打开线上展示页<span aria-hidden="true">↗</span></a>
+  </div>
+    <div class="resource-row">
+    <div class="resource-icon doc"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4M10 12h5M10 16h5"/></svg></div>
+    <div class="resource-copy"><h3>飞书文档</h3><p>系统逻辑与玩法规则</p></div>
+    <a class="link-button" data-link-kind="doc" href="https://dianchukeji.feishu.cn/docx/JFTLdxUtOow5NRxPqMXcEygSnef" target="_blank" rel="noopener noreferrer" aria-label="打开小镇博物馆飞书文档">打开飞书文档<span aria-hidden="true">↗</span></a>
+  </div>
+  </div>
+</section>
+<section class="system-card" id="system-task-ui-rules" aria-labelledby="title-task-ui-rules" tabindex="-1">
+  <header class="system-heading">
+    <h2 id="title-task-ui-rules">任务系统</h2>
+    <span class="version">V0.2</span>
+  </header>
+  <div class="resources">
+    <div class="resource-row">
+    <div class="resource-icon ui"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8M12 18v4M3 9h18"/></svg></div>
+    <div class="resource-copy"><h3>线上展示页</h3><p>界面截图、标点与交互说明</p></div>
+    <a class="link-button" data-link-kind="ui" href="./task-ui-rules/" target="_blank" rel="noopener noreferrer" aria-label="打开任务系统线上展示页">打开线上展示页<span aria-hidden="true">↗</span></a>
+  </div>
+    <div class="resource-row">
+    <div class="resource-icon doc"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4M10 12h5M10 16h5"/></svg></div>
+    <div class="resource-copy"><h3>飞书文档</h3><p>系统逻辑与玩法规则</p></div>
+    <span class="resource-status">待补充</span>
+  </div>
+  </div>
+</section>
+<section class="system-card" id="system-invitational-ui-rules" aria-labelledby="title-invitational-ui-rules" tabindex="-1">
+  <header class="system-heading">
+    <h2 id="title-invitational-ui-rules">名流之争</h2>
+    <span class="version">V0.3</span>
+  </header>
+  <div class="resources">
+    <div class="resource-row">
+    <div class="resource-icon ui"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8M12 18v4M3 9h18"/></svg></div>
+    <div class="resource-copy"><h3>线上展示页</h3><p>界面截图、标点与交互说明</p></div>
+    <span class="resource-status">未发布</span>
+  </div>
+    <div class="resource-row">
+    <div class="resource-icon doc"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4M10 12h5M10 16h5"/></svg></div>
+    <div class="resource-copy"><h3>飞书文档</h3><p>系统逻辑与玩法规则</p></div>
+    <a class="link-button" data-link-kind="doc" href="https://dianchukeji.feishu.cn/docx/K5lXduacxoI4H8xJ9hrcqk7enLb" target="_blank" rel="noopener noreferrer" aria-label="打开名流之争飞书文档">打开飞书文档<span aria-hidden="true">↗</span></a>
+  </div>
+  </div>
+</section>
+<section class="system-card" id="system-banquet-ui-rules" aria-labelledby="title-banquet-ui-rules" tabindex="-1">
+  <header class="system-heading">
+    <h2 id="title-banquet-ui-rules">宴会系统</h2>
+    <span class="version">V0.3</span>
+  </header>
+  <div class="resources">
+    <div class="resource-row">
+    <div class="resource-icon ui"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8M12 18v4M3 9h18"/></svg></div>
+    <div class="resource-copy"><h3>线上展示页</h3><p>界面截图、标点与交互说明</p></div>
+    <a class="link-button" data-link-kind="ui" href="./banquet-ui-rules/" target="_blank" rel="noopener noreferrer" aria-label="打开宴会系统线上展示页">打开线上展示页<span aria-hidden="true">↗</span></a>
+  </div>
+    <div class="resource-row">
+    <div class="resource-icon doc"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4M10 12h5M10 16h5"/></svg></div>
+    <div class="resource-copy"><h3>飞书文档</h3><p>系统逻辑与玩法规则</p></div>
+    <a class="link-button" data-link-kind="doc" href="https://dianchukeji.feishu.cn/docx/VDvzd5aMJoVtFrxC1tGcDXbGn5C" target="_blank" rel="noopener noreferrer" aria-label="打开宴会系统飞书文档">打开飞书文档<span aria-hidden="true">↗</span></a>
+  </div>
+  </div>
+</section></div>
+    </div>
+  </main>
+</div>
+<script>
+const main = document.getElementById("main-content");
+const cards = Array.from(document.querySelectorAll(".system-card"));
+const navigation = Array.from(document.querySelectorAll(".sidebar a[href^='#']"));
+let scrollFrame = 0;
+function updateDirectory() {
+  scrollFrame = 0;
+  let current = "#overview";
+  if (main.scrollTop > 50) {
+    current = cards.length ? "#" + cards[0].id : current;
+    const top = main.getBoundingClientRect().top;
+    for (const card of cards) {
+      if (card.getBoundingClientRect().top - top <= 85) current = "#" + card.id;
+    }
+    if (cards.length && main.scrollTop + main.clientHeight >= main.scrollHeight - 4) current = "#" + cards[cards.length - 1].id;
+  }
+  for (const link of navigation) {
+    if (link.getAttribute("href") === current) link.setAttribute("aria-current", "location");
+    else link.removeAttribute("aria-current");
+  }
+}
+function scheduleDirectoryUpdate() {
+  if (!scrollFrame) scrollFrame = requestAnimationFrame(updateDirectory);
+}
+main.addEventListener("scroll", scheduleDirectoryUpdate, { passive: true });
+window.addEventListener("resize", scheduleDirectoryUpdate);
+window.addEventListener("hashchange", scheduleDirectoryUpdate);
+scheduleDirectoryUpdate();
+</script>
 </body>
 </html>
