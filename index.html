@@ -6,48 +6,60 @@
 <title>公路小镇规则文档总览</title>
 <style>
 :root{--ink:#1f2933;--muted:#607080;--line:#d9e2ec;--brand:#25384e}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font:15px/1.7 "Inter","Microsoft YaHei","PingFang SC",Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#fff8ea 0%,#eef8f7 55%,#f7fbff 100%)}.page{max-width:1120px;margin:0 auto;padding:48px 28px}.hero{border-radius:18px;padding:34px 40px;background:linear-gradient(100deg,#ffe5a9 0%,#edf2d7 46%,#cdeff3 100%);box-shadow:0 18px 40px rgba(37,56,78,.10)}.eyebrow{color:#6a7b88;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}h1{margin:8px 0 8px;font-size:34px;line-height:1.25}.hero p{margin:0;color:#526575;max-width:760px}.section{margin-top:30px}.section h2{margin:0 0 14px;font-size:22px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}.card{display:block;min-height:170px;padding:22px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.88);color:inherit;text-decoration:none;box-shadow:0 12px 28px rgba(37,56,78,.08)}.card:hover{border-color:#efc76b;transform:translateY(-1px)}.tag{display:inline-block;padding:3px 9px;border-radius:999px;background:#fce8dc;color:#a7432f;font-size:12px;font-weight:700}.card h3{margin:12px 0 8px;font-size:20px}.card p{margin:0 0 12px;color:var(--muted)}.card small{color:#81909d}.empty{border-style:dashed;color:var(--muted)}@media(max-width:640px){.page{padding:24px 16px}.hero{padding:26px 22px;border-radius:14px}h1{font-size:28px}}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font:15px/1.7 "Inter","Microsoft YaHei","PingFang SC",Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#fff8ea 0%,#eef8f7 55%,#f7fbff 100%)}.page{max-width:1120px;margin:0 auto;padding:48px 28px}.hero{border-radius:18px;padding:34px 40px;background:linear-gradient(100deg,#ffe5a9 0%,#edf2d7 46%,#cdeff3 100%);box-shadow:0 18px 40px rgba(37,56,78,.10)}.eyebrow{color:#6a7b88;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}h1{margin:8px 0 8px;font-size:34px;line-height:1.25}.hero p{margin:0;color:#526575;max-width:760px}.section{margin-top:30px}.section h2{margin:0 0 14px;font-size:22px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}.card{display:block;min-height:170px;padding:22px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.88);color:inherit;text-decoration:none;box-shadow:0 12px 28px rgba(37,56,78,.08)}.card:hover{border-color:#efc76b;transform:translateY(-1px)}.tag{display:inline-block;padding:3px 9px;border-radius:999px;background:#fce8dc;color:#a7432f;font-size:12px;font-weight:700}.card h3{margin:12px 0 8px;font-size:20px}.card p{margin:0 0 12px;color:var(--muted)}.card small{color:#81909d}.card-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:18px}.document-button{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:8px 13px;border:1px solid var(--line);border-radius:8px;background:#f7fafc;color:var(--brand);text-decoration:none;font-weight:700}.document-button.primary{background:var(--brand);border-color:var(--brand);color:#fff}.document-button:hover{border-color:#c8983e}.document-button:focus-visible{outline:3px solid #d9aa45;outline-offset:3px}.link-pending{color:var(--muted);font-size:13px}.empty{border-style:dashed;color:var(--muted)}@media(max-width:640px){.page{padding:24px 16px}.hero{padding:26px 22px;border-radius:14px}h1{font-size:28px}}
 </style>
 </head>
 <body>
 <main class="page">
   <section class="hero">
-    <div class="eyebrow">Highway Town UI Rules</div>
+    <div class="eyebrow">Highway Town Documents</div>
     <h1>公路小镇规则文档总览</h1>
-    <p>这里收录各系统的界面规则展示页。每个系统使用独立目录发布，方便后续单独更新、分享和嵌入飞书。</p>
+    <p>这里汇总各系统的飞书规则文档和界面规则展示页。点击对应按钮打开，飞书文档按原有权限访问。</p>
   </section>
   <section class="section">
     <h2>系统入口</h2>
-    <div class="grid"><a class="card" href="./tv-ui-rules/">
+    <div class="grid"><article class="card" id="system-tv-ui-rules">
   <span class="tag">已发布</span>
   <h3>【V0.2】小镇电视台</h3>
   <p>小镇电视台界面规则展示版，支持目录浏览、截图标注、规则切换和内联效果图查看。</p>
   <small>16 个界面 · 26 张图</small>
-</a>
-<a class="card" href="./youth-center-ui-rules/">
+  <div class="card-actions"><a class="document-button primary" href="https://dianchukeji.feishu.cn/docx/HiSqdvcevoJr4FxLs0xcbk9In2d?from=from_copylink" target="_blank" rel="noopener noreferrer">飞书规则文档</a><a class="document-button" href="./tv-ui-rules/" target="_blank" rel="noopener noreferrer">界面规则</a></div>
+</article>
+<article class="card" id="system-youth-center-ui-rules">
   <span class="tag">待推送</span>
   <h3>【V0.2】青少年中心</h3>
   <p>青少年中心界面规则展示版，包含界面截图、标点规则、动作跳转和效果图说明。</p>
   <small>25 个界面 · 41 张图</small>
-</a>
-<a class="card" href="./town-museum-ui-rules/">
+  <div class="card-actions"><a class="document-button primary" href="https://dianchukeji.feishu.cn/docx/DzQxd2BEXo1Socx24ebcjOQXnff" target="_blank" rel="noopener noreferrer">飞书规则文档</a><a class="document-button" href="./youth-center-ui-rules/" target="_blank" rel="noopener noreferrer">界面规则</a></div>
+</article>
+<article class="card" id="system-town-museum-ui-rules">
   <span class="tag">未发布</span>
   <h3>【V0.2】小镇博物馆</h3>
   <p>小镇博物馆界面规则展示版，包含探索地图、门客派遣、博物馆勋章与藏品图鉴规则。</p>
   <small>10 个界面 · 14 张图</small>
-</a>
-<a class="card" href="./task-ui-rules/">
+  <div class="card-actions"><a class="document-button primary" href="https://dianchukeji.feishu.cn/docx/JFTLdxUtOow5NRxPqMXcEygSnef" target="_blank" rel="noopener noreferrer">飞书规则文档</a><a class="document-button" href="./town-museum-ui-rules/" target="_blank" rel="noopener noreferrer">界面规则</a></div>
+</article>
+<article class="card" id="system-task-ui-rules">
   <span class="tag">未发布</span>
   <h3>【V0.2】任务系统</h3>
   <p>任务系统界面规则初版，依据飞书界面映射表建立主线任务、每日任务、成就及通用规则目录。</p>
   <small>5 个界面 · 6 张图</small>
-</a>
-<a class="card" href="./banquet-ui-rules/">
+  <div class="card-actions"><span class="link-pending">飞书文档待补充</span><a class="document-button" href="./task-ui-rules/" target="_blank" rel="noopener noreferrer">界面规则</a></div>
+</article>
+<article class="card" id="system-invitational-ui-rules">
+  <span class="tag">未发布</span>
+  <h3>【V0.3】名流之争</h3>
+  <p>名流之争界面规则，包含主界面、公会宝箱、世界榜、名流履历与门客赚速战斗。</p>
+  <small>12 个界面 · 14 张图</small>
+  <div class="card-actions"><a class="document-button primary" href="https://dianchukeji.feishu.cn/docx/K5lXduacxoI4H8xJ9hrcqk7enLb" target="_blank" rel="noopener noreferrer">飞书规则文档</a><span class="link-pending">界面规则未发布</span></div>
+</article>
+<article class="card" id="system-banquet-ui-rules">
   <span class="tag">未发布</span>
   <h3>【V0.3】宴会系统</h3>
   <p>宴会系统界面规则展示版，包含主界面、举办、参加、记录、商店及通用弹窗。</p>
   <small>26 个界面 · 34 张图</small>
-</a></div>
+  <div class="card-actions"><a class="document-button primary" href="https://dianchukeji.feishu.cn/docx/VDvzd5aMJoVtFrxC1tGcDXbGn5C" target="_blank" rel="noopener noreferrer">飞书规则文档</a><a class="document-button" href="./banquet-ui-rules/" target="_blank" rel="noopener noreferrer">界面规则</a></div>
+</article></div>
   </section>
 </main>
 </body>
